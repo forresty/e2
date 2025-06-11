@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FengCon 2026 - Return of the Anomalies</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Comic+Sans+MS&family=Space+Mono:wght@400;700&family=Bungee&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: #eee;
+            font-family: 'Space Mono', monospace;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+        
+        /* Floating chaos elements */
+        .chaos-element {
+            position: fixed;
+            font-size: 2rem;
+            opacity: 0.1;
+            animation: float 20s infinite linear;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        @keyframes float {
+            from {
+                transform: translateY(100vh) rotate(0deg);
+            }
+            to {
+                transform: translateY(-100px) rotate(360deg);
+            }
+        }
+        
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 3rem 1rem;
+            position: relative;
+            z-index: 10;
+            background: rgba(0,0,0,0.3);
+            border-bottom: 3px solid #e94560;
+        }
+        
+        .year {
+            font-family: 'Bungee', cursive;
+            font-size: clamp(3rem, 10vw, 6rem);
+            background: linear-gradient(45deg, #e94560, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradient 3s ease infinite;
+            text-shadow: 0 0 30px rgba(233, 69, 96, 0.5);
+        }
+        
+        @keyframes gradient {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .tagline {
+            font-family: 'Comic Sans MS', cursive;
+            font-size: 1.5rem;
+            color: #4ecdc4;
+            margin-top: 1rem;
+            animation: blink 2s ease-in-out infinite;
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        /* Stats banner */
+        .stats-banner {
+            background: rgba(233, 69, 96, 0.1);
+            padding: 2rem;
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+            border-bottom: 1px solid #333;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #ff6b6b;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #999;
+        }
+        
+        /* Main content */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+        
+        /* Poem section */
+        .poem-section {
+            background: rgba(0,0,0,0.4);
+            border-radius: 15px;
+            padding: 3rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .poem-section::before {
+            content: '🎪';
+            position: absolute;
+            font-size: 10rem;
+            opacity: 0.05;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .stanza {
+            margin: 2rem 0;
+            opacity: 0;
+            transform: translateX(-20px);
+            animation: slideIn 0.8s forwards;
+        }
+        
+        .stanza:nth-child(1) { animation-delay: 0.2s; }
+        .stanza:nth-child(2) { animation-delay: 0.4s; }
+        .stanza:nth-child(3) { animation-delay: 0.6s; }
+        .stanza:nth-child(4) { animation-delay: 0.8s; }
+        .stanza:nth-child(5) { animation-delay: 1s; }
+        .stanza:nth-child(6) { animation-delay: 1.2s; }
+        .stanza:nth-child(7) { animation-delay: 1.4s; }
+        .stanza:nth-child(8) { animation-delay: 1.6s; }
+        .stanza:nth-child(9) { animation-delay: 1.8s; }
+        .stanza:nth-child(10) { animation-delay: 2s; }
+        .stanza:nth-child(11) { animation-delay: 2.2s; }
+        .stanza:nth-child(12) { animation-delay: 2.4s; }
+        
+        @keyframes slideIn {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .line {
+            line-height: 1.8;
+            font-size: 1.1rem;
+        }
+        
+        .emphasis {
+            color: #4ecdc4;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(78, 205, 196, 0.5);
+        }
+        
+        /* Schedule grid */
+        .schedule {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+        
+        .event {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid #333;
+            border-radius: 10px;
+            padding: 1.5rem;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .event:hover {
+            transform: translateY(-5px);
+            border-color: #e94560;
+            box-shadow: 0 10px 30px rgba(233, 69, 96, 0.3);
+        }
+        
+        .event-time {
+            color: #ff6b6b;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+        
+        .event-title {
+            font-size: 1.2rem;
+            margin: 0.5rem 0;
+            color: #4ecdc4;
+        }
+        
+        .event-desc {
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+        
+        /* Special features */
+        .features {
+            margin: 3rem 0;
+            text-align: center;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .feature {
+            background: rgba(78, 205, 196, 0.1);
+            padding: 2rem;
+            border-radius: 10px;
+            border: 1px solid #4ecdc4;
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        /* Warning box */
+        .warning {
+            background: rgba(233, 69, 96, 0.2);
+            border: 2px dashed #e94560;
+            padding: 2rem;
+            margin: 2rem 0;
+            border-radius: 10px;
+            text-align: center;
+            animation: pulse 3s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+        
+        /* Ticket */
+        .ticket {
+            background: linear-gradient(135deg, #1a1a2e, #0f3460);
+            border: 3px solid #4ecdc4;
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 3rem auto;
+            max-width: 600px;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+        
+        .ticket::before,
+        .ticket::after {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: #0a0a0a;
+            border-radius: 50%;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        .ticket::before {
+            left: -20px;
+        }
+        
+        .ticket::after {
+            right: -20px;
+        }
+        
+        .ticket-header {
+            text-align: center;
+            font-size: 1.5rem;
+            color: #ff6b6b;
+            margin-bottom: 1rem;
+        }
+        
+        .ticket-details {
+            display: flex;
+            justify-content: space-between;
+            margin: 1rem 0;
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 3rem;
+            background: rgba(0,0,0,0.5);
+            margin-top: 4rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .stats-banner {
+                gap: 1rem;
+            }
+            
+            .poem-section {
+                padding: 1.5rem;
+            }
+            
+            .schedule {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Interactive elements */
+        .hide-button {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: #e94560;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 30px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            z-index: 100;
+        }
+        
+        .hide-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 10px 30px rgba(233, 69, 96, 0.5);
+        }
+        
+        .hidden-message {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #0a0a0a;
+            padding: 2rem;
+            border: 2px solid #4ecdc4;
+            border-radius: 10px;
+            z-index: 200;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating chaos elements -->
+    <div class="chaos-element" style="left: 10%; animation-delay: 0s;">🤖</div>
+    <div class="chaos-element" style="left: 20%; animation-delay: 3s;">🎹</div>
+    <div class="chaos-element" style="left: 30%; animation-delay: 6s;">🔧</div>
+    <div class="chaos-element" style="left: 40%; animation-delay: 9s;">🍎</div>
+    <div class="chaos-element" style="left: 50%; animation-delay: 12s;">👥</div>
+    <div class="chaos-element" style="left: 60%; animation-delay: 15s;">💻</div>
+    <div class="chaos-element" style="left: 70%; animation-delay: 18s;">🏃</div>
+    <div class="chaos-element" style="left: 80%; animation-delay: 21s;">📊</div>
+    <div class="chaos-element" style="left: 90%; animation-delay: 24s;">🎪</div>
+    
+    <header class="header">
+        <h1 class="year">FENGCON 2026</h1>
+        <p class="tagline">RETURN OF THE ANOMALIES</p>
+    </header>
+    
+    <div class="stats-banner">
+        <div class="stat">
+            <div class="stat-number">40,000</div>
+            <div class="stat-label">Statistical Anomalies</div>
+        </div>
+        <div class="stat">
+            <div class="stat-number">4.4σ</div>
+            <div class="stat-label">From Baseline</div>
+        </div>
+        <div class="stat">
+            <div class="stat-number">Level II</div>
+            <div class="stat-label">Still</div>
+        </div>
+        <div class="stat">
+            <div class="stat-number">0</div>
+            <div class="stat-label">Completed Robots</div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="poem-section">
+            <div class="stanza">
+                <div class="line">Forty thousand gathered once again,</div>
+                <div class="line">Statistical outliers in the rain,</div>
+                <div class="line">Our robots? Still half-built but improved—</div>
+                <div class="line">(Last year's fruit remains <span class="emphasis">unmoved</span>).</div>
+            </div>
+            
+            <div class="stanza">
+                <div class="line">The banner reads in Comic Sans:</div>
+                <div class="line"><span class="emphasis">"LEVEL II: STILL MAKING PLANS"</span></div>
+                <div class="line">While vendors sell unfinished parts,</div>
+                <div class="line">And consciousness adorns our hearts.</div>
+            </div>
+            
+            <div class="stanza">
+                <div class="line">Registration desk, a familiar sight:</div>
+                <div class="line">"Name?" <span class="emphasis">"Still hiding from my wife"</span></div>
+                <div class="line">"Piano skills?" "Somehow got worse"</div>
+                <div class="line">"Current title?" *collective curse*</div>
+            </div>
+            
+            <div class="stanza">
+                <div class="line">The keynote stage, now reinforced</div>
+                <div class="line">(Last year's speaker hiding-drop divorced</div>
+                <div class="line">The floor from its foundation when</div>
+                <div class="line">All 40k hid at <span class="emphasis">8:10</span>).</div>
+            </div>
+            
+            <div class="stanza">
+                <div class="line">Workshop highlights of the day:</div>
+                <div class="line"><span class="emphasis">"Advanced Procrastination Through AI"</span></div>
+                <div class="line">"Servo Motors: Why They Hate Us"</div>
+                <div class="line">"Debugging Reality: Latest Status"</div>
+            </div>
+            
+            <div class="stanza">
+                <div class="line">New this year! The Spouse Lounge—</div>
+                <div class="line">Where partners go to air their grudge:</div>
+                <div class="line"><span class="emphasis">"They said the robot's almost done..."</span></div>
+                <div class="line">"Mine's been hiding since day one."</div>
+            </div>
+            
+            <div class="stanza">
+                <div class="line">Exhibition hall revelations:</div>
+                <div class="line">Desk clutter installations,</div>
+                <div class="line">Someone brought their working bot!</div>
+                <div class="line">(It only cuts carrots, <span class="emphasis">but still, a lot!</span>)</div>
+            </div>
+            
+            <div class="stanza">
+                <div class="line">The piano hall, our sacred ground,</div>
+                <div class="line">Where 40,000 make one sound:</div>
+                <div class="line">Not music, no, but something more—</div>
+                <div class="line">The song of those who <span class="emphasis">still explore</span>.</div>
+            </div>
+            
+            <div class="stanza">
+                <div class="line">At closing ceremony we stand,</div>
+                <div class="line">Each clutching parts in either hand,</div>
+                <div class="line">"See you next year!" we declare,</div>
+                <div class="line"><span class="emphasis">"Our robots will be finished, swear!"</span></div>
+            </div>
+            
+            <div class="stanza" style="text-align: center; font-style: italic;">
+                <div class="line">(Narrator: They were not prepared)</div>
+            </div>
+            
+            <div class="stanza">
+                <div class="line">But here's the truth we've come to see:</div>
+                <div class="line">It's not about efficiency,</div>
+                <div class="line">It's 40,000 souls who dare</div>
+                <div class="line">To <span class="emphasis">burn too bright</span>, though no one cares.</div>
+            </div>
+            
+            <div class="stanza">
+                <div class="line">We'll meet again, same time, same place,</div>
+                <div class="line">Still Level II, still in the race,</div>
+                <div class="line">Still hiding, building, failing, trying—</div>
+                <div class="line">Still <span class="emphasis">gloriously, madly flying</span>.</div>
+            </div>
+        </div>
+        
+        <h2 style="text-align: center; margin: 3rem 0; color: #4ecdc4;">SCHEDULE HIGHLIGHTS</h2>
+        
+        <div class="schedule">
+            <div class="event">
+                <div class="event-time">9:00 AM</div>
+                <div class="event-title">Opening Ceremony</div>
+                <div class="event-desc">Mass synchronized hiding demonstration</div>
+            </div>
+            
+            <div class="event">
+                <div class="event-time">10:30 AM</div>
+                <div class="event-title">Keynote: "Still Level II"</div>
+                <div class="event-desc">A journey of no progression</div>
+            </div>
+            
+            <div class="event">
+                <div class="event-time">12:00 PM</div>
+                <div class="event-title">Lunch Break</div>
+                <div class="event-desc">Pre-cut fruit NOT provided</div>
+            </div>
+            
+            <div class="event">
+                <div class="event-time">2:00 PM</div>
+                <div class="event-title">Robot Graveyard Tour</div>
+                <div class="event-desc">Visit last year's "almost done" projects</div>
+            </div>
+            
+            <div class="event">
+                <div class="event-time">3:30 PM</div>
+                <div class="event-title">Mass Piano Failure</div>
+                <div class="event-desc">40,000 attempt Chopsticks</div>
+            </div>
+            
+            <div class="event">
+                <div class="event-time">5:00 PM</div>
+                <div class="event-title">Closing Promises</div>
+                <div class="event-desc">"Next year for sure!"</div>
+            </div>
+        </div>
+        
+        <div class="features">
+            <h2 style="color: #ff6b6b; margin-bottom: 2rem;">NEW FEATURES FOR 2026</h2>
+            <div class="feature-grid">
+                <div class="feature">
+                    <div class="feature-icon">🛋️</div>
+                    <h3>Spouse Lounge</h3>
+                    <p>Support group included</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🏃</div>
+                    <h3>Hide & Seek Arena</h3>
+                    <p>Practice your skills</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🤖</div>
+                    <h3>Robot Hospice</h3>
+                    <p>For dying projects</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🎹</div>
+                    <h3>Silent Piano Room</h3>
+                    <p>Keyboards unplugged</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="warning">
+            <h3>⚠️ WARNING ⚠️</h3>
+            <p>Spouses are encouraged to form their own support convention next door.</p>
+            <p>Free childcare provided for those whose partners are "just checking one thing."</p>
+        </div>
+        
+        <div class="ticket">
+            <div class="ticket-header">ADMISSION TICKET</div>
+            <div class="ticket-details">
+                <div>
+                    <strong>Event:</strong> FengCon 2026<br>
+                    <strong>Status:</strong> Level II Forever<br>
+                    <strong>Sigma:</strong> 4.4
+                </div>
+                <div>
+                    <strong>Seat:</strong> Corner #3847<br>
+                    <strong>Price:</strong> Your sanity<br>
+                    <strong>Valid:</strong> Eternally
+                </div>
+            </div>
+            <p style="text-align: center; margin-top: 2rem; color: #4ecdc4;">
+                "Come for the statistical improbability,<br>
+                stay for the collective executive dysfunction!"
+            </p>
+        </div>
+    </div>
+    
+    <footer class="footer">
+        <p style="font-size: 1.5rem; color: #ff6b6b; margin-bottom: 1rem;">
+            🎫 FengCon 2026 🎫
+        </p>
+        <p style="color: #999;">
+            Because 4.4σ means never having to say you're normal
+        </p>
+    </footer>
+    
+    <button class="hide-button" onclick="hide()">Emergency Hide</button>
+    
+    <div class="hidden-message" id="hiddenMsg">
+        <h3>Currently Hiding</h3>
+        <p>Wife proximity detected!</p>
+        <p>Click anywhere to emerge...</p>
+    </div>
+    
+    <script>
+        // Emergency hide function
+        function hide() {
+            document.body.style.display = 'none';
+            document.getElementById('hiddenMsg').style.display = 'block';
+        }
+        
+        // Emerge from hiding
+        document.addEventListener('click', function(e) {
+            if (document.getElementById('hiddenMsg').style.display === 'block') {
+                document.body.style.display = 'block';
+                document.getElementById('hiddenMsg').style.display = 'none';
+            }
+        });
+        
+        // Console easter egg
+        console.log('%c🎪 WELCOME TO FENGCON 2026 🎪', 'font-size: 24px; color: #e94560; font-weight: bold;');
+        console.log('%c40,000 anomalies can\'t be wrong!', 'font-size: 16px; color: #4ecdc4;');
+        console.log('');
+        console.log('Status check:');
+        console.log('- Still Level II? ✓');
+        console.log('- Robot complete? ✗');
+        console.log('- Can play piano? ✗');
+        console.log('- Hiding from spouse? ✓');
+        console.log('');
+        console.log('%cSee you there!', 'color: #ff6b6b; font-style: italic;');
+        
+        // Random hiding alerts
+        setInterval(() => {
+            if (Math.random() > 0.95) {
+                console.warn('⚠️ SPOUSE PROXIMITY ALERT ⚠️');
+            }
+        }, 30000);
+    </script>
+</body>
+</html>

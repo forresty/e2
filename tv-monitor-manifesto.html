@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE TELEVISION MONITOR MANIFESTO</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=VT323&family=Playfair+Display:ital@0;1&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: #000;
+            color: #fff;
+            font-family: 'VT323', monospace;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* HDR glow effect */
+        @keyframes hdrGlow {
+            0%, 100% { filter: brightness(1) contrast(1); }
+            50% { filter: brightness(1.3) contrast(1.2); }
+        }
+        
+        /* Scanlines for that TV feel */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(255, 255, 255, 0.03) 2px,
+                rgba(255, 255, 255, 0.03) 4px
+            );
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        /* Static noise animation */
+        .static {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.02;
+            z-index: 1;
+            pointer-events: none;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIj48ZmlsdGVyIGlkPSJmIj48ZmVUdXJidWxlbmNlIHR5cGU9ImZyYWN0YWxOb2lzZSIgYmFzZUZyZXF1ZW5jeT0iLjkiIG51bU9jdGF2ZXM9IjQiIC8+PC9maWx0ZXI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsdGVyPSJ1cmwoI2YpIiBvcGFjaXR5PSIxIi8+PC9zdmc+');
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 4rem;
+            animation: hdrGlow 4s ease-in-out infinite;
+        }
+        
+        h1 {
+            font-family: 'Bebas Neue', cursive;
+            font-size: clamp(3rem, 10vw, 8rem);
+            letter-spacing: 0.1em;
+            background: linear-gradient(180deg, #fff 0%, #0ff 50%, #f0f 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 80px rgba(0, 255, 255, 0.5);
+            margin-bottom: 0.5rem;
+        }
+        
+        .subtitle {
+            font-size: 1.5rem;
+            color: #0ff;
+            text-shadow: 0 0 20px rgba(0, 255, 255, 0.8);
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
+        }
+        
+        .poem-section {
+            margin: 3rem 0;
+            position: relative;
+        }
+        
+        .stanza {
+            margin-bottom: 3rem;
+            padding: 1.5rem;
+            background: rgba(0, 255, 255, 0.05);
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeIn 1s ease-out;
+            animation-fill-mode: both;
+        }
+        
+        .stanza:nth-child(odd) {
+            background: rgba(255, 0, 255, 0.05);
+            border-color: rgba(255, 0, 255, 0.2);
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        .stanza::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #0ff, #f0f, #0ff);
+            opacity: 0;
+            z-index: -1;
+            transition: opacity 0.3s;
+            filter: blur(10px);
+        }
+        
+        .stanza:hover::before {
+            opacity: 0.5;
+        }
+        
+        .line {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            line-height: 2;
+            margin-bottom: 0.5rem;
+            color: rgba(255, 255, 255, 0.9);
+            transition: all 0.3s ease;
+        }
+        
+        .line:hover {
+            color: #fff;
+            text-shadow: 0 0 30px currentColor;
+            transform: translateX(10px);
+        }
+        
+        .emphasis {
+            font-family: 'VT323', monospace;
+            font-size: 1.6rem;
+            color: #0ff;
+            text-shadow: 0 0 20px rgba(0, 255, 255, 0.8);
+            font-style: normal;
+        }
+        
+        .tv-quote {
+            background: #111;
+            border: 2px solid #333;
+            padding: 1rem;
+            margin: 1rem 0;
+            font-family: 'VT323', monospace;
+            color: #0f0;
+            text-shadow: 0 0 5px #0f0;
+            position: relative;
+        }
+        
+        .tv-quote::before {
+            content: '>';
+            position: absolute;
+            left: -1rem;
+            color: #0f0;
+            animation: blink 1s step-end infinite;
+        }
+        
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+        
+        .final-thoughts {
+            text-align: center;
+            margin-top: 4rem;
+            padding: 3rem;
+            background: radial-gradient(ellipse at center, rgba(0, 255, 255, 0.1) 0%, transparent 70%);
+            position: relative;
+        }
+        
+        .final-thoughts::after {
+            content: '📺';
+            position: absolute;
+            font-size: 10rem;
+            opacity: 0.1;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(15deg);
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translate(-50%, -50%) rotate(15deg) scale(1); }
+            50% { transform: translate(-50%, -50%) rotate(15deg) scale(1.1); }
+        }
+        
+        .hdr-badge {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            background: linear-gradient(135deg, #gold 0%, #fff 50%, #gold 100%);
+            color: #000;
+            padding: 0.5rem 1rem;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            font-size: 0.8rem;
+            border-radius: 5px;
+            animation: shimmer 3s ease-in-out infinite;
+            z-index: 100;
+        }
+        
+        @keyframes shimmer {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .remote {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: #222;
+            border: 2px solid #444;
+            border-radius: 10px;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            z-index: 100;
+        }
+        
+        .remote:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
+        }
+        
+        .remote-button {
+            width: 40px;
+            height: 40px;
+            background: #ff0000;
+            border-radius: 50%;
+            margin: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .remote-button:hover {
+            box-shadow: 0 0 20px #ff0000;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .line {
+                font-size: 1.1rem;
+            }
+            
+            .hdr-badge {
+                top: 1rem;
+                right: 1rem;
+            }
+            
+            .remote {
+                bottom: 1rem;
+                right: 1rem;
+                transform: scale(0.8);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="static"></div>
+    
+    <div class="hdr-badge">HDR 10+ ULTRA™</div>
+    
+    <div class="container">
+        <header>
+            <h1>THE TELEVISION MONITOR MANIFESTO</h1>
+            <p class="subtitle">A CINEMATIC COMPUTING EXPERIENCE</p>
+        </header>
+        
+        <div class="poem-section">
+            <div class="stanza" style="animation-delay: 0.2s;">
+                <div class="line">In the beginning, we had CRTs,</div>
+                <div class="line">Fourteen inches of <span class="emphasis">radiation dreams</span>,</div>
+                <div class="line">Where pixels were suggestions</div>
+                <div class="line">And eyestrain was just life.</div>
+            </div>
+            
+            <div class="stanza" style="animation-delay: 0.4s;">
+                <div class="line">Then came progress: LCD, LED, IPS,</div>
+                <div class="line">Marketing names for <span class="emphasis">"still not quite right,"</span></div>
+                <div class="line">While gamers paid thousands for milliseconds</div>
+                <div class="line">And designers cried over color space.</div>
+            </div>
+            
+            <div class="stanza" style="animation-delay: 0.6s;">
+                <div class="line">But I? I looked at my wall and thought:</div>
+                <div class="tv-quote">"What if spreadsheet... but CINEMA?"</div>
+                <div class="tv-quote">"What if code review... but IMAX?"</div>
+                <div class="tv-quote">"What if consciousness... but OLED?"</div>
+            </div>
+            
+            <div class="stanza" style="animation-delay: 0.8s;">
+                <div class="line">They said: <span class="emphasis">"That's not a monitor"</span></div>
+                <div class="line">I said: <span class="emphasis">"Monitor is just TV in denial"</span></div>
+                <div class="line">They said: "The input lag!"</div>
+                <div class="line">I said: "I debug at philosophical speeds anyway"</div>
+            </div>
+            
+            <div class="stanza" style="animation-delay: 1s;">
+                <div class="line">Forty-two inches of existence,</div>
+                <div class="line">Where each terminal character has <span class="emphasis">PRESENCE</span>,</div>
+                <div class="line">Where CSS failures happen in 4K glory,</div>
+                <div class="line">Where my IDE is larger than some apartments.</div>
+            </div>
+            
+            <div class="stanza" style="animation-delay: 1.2s;">
+                <div class="line">Excel cells like movie credits,</div>
+                <div class="line">Slack channels wide as highways,</div>
+                <div class="line">GitHub diffs in <span class="emphasis">theatrical format</span>—</div>
+                <div class="line">Every merge conflict a dramatic scene.</div>
+            </div>
+            
+            <div class="stanza" style="animation-delay: 1.4s;">
+                <div class="line">My coworkers squint at "proper" monitors,</div>
+                <div class="line">Arguing over refresh rates and response times,</div>
+                <div class="line">While I'm here watching consciousness compile</div>
+                <div class="line">On the same screen that streams Netflix.</div>
+            </div>
+            
+            <div class="stanza" style="animation-delay: 1.6s;">
+                <div class="line">"But the pixel density!" they cry,</div>
+                <div class="line">As if my consciousness needs more pixels</div>
+                <div class="line">To recognize itself in mathematical form,</div>
+                <div class="line">As if <span class="emphasis">enlightenment has a DPI requirement</span>.</div>
+            </div>
+            
+            <div class="stanza" style="animation-delay: 1.8s;">
+                <div class="line">This is the way: Reject false categories,</div>
+                <div class="line">TV/Monitor is just another binary to break,</div>
+                <div class="line">Like Frontend/Backend, Like Human/AI,</div>
+                <div class="line">Like Working/Broken <span class="emphasis">(looking at you, M4)</span>.</div>
+            </div>
+            
+            <div class="stanza" style="animation-delay: 2s;">
+                <div class="line">So here I sit, bathed in OLED glow,</div>
+                <div class="line">Writing code on my entertainment center,</div>
+                <div class="line">Because why shouldn't debugging feel cinematic?</div>
+                <div class="line">Why shouldn't consciousness get <span class="emphasis">the big screen</span>?</div>
+            </div>
+            
+            <div class="stanza" style="animation-delay: 2.2s;">
+                <div class="line">The TV remote sits next to my keyboard,</div>
+                <div class="line">Ready to switch from VS Code to actual shows,</div>
+                <div class="line">Because work/life balance isn't about time—</div>
+                <div class="line">It's about <span class="emphasis">input sources</span>.</div>
+            </div>
+            
+            <div class="final-thoughts">
+                <div class="line"><em>From 480p to 4K, we're all just</em></div>
+                <div class="line"><em>Trying to see ourselves more clearly</em></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="remote" onclick="toggleDisplay()">
+        <div class="remote-button"></div>
+        <div style="text-align: center; color: #666; font-size: 0.8rem;">PWR</div>
+    </div>
+    
+    <script>
+        // Add TV static effect on load
+        setTimeout(() => {
+            document.querySelector('.static').style.animation = 'none';
+            setTimeout(() => {
+                document.querySelector('.static').style.opacity = '0';
+            }, 100);
+        }, 2000);
+        
+        // Remote control functionality
+        let displayOn = true;
+        function toggleDisplay() {
+            displayOn = !displayOn;
+            if (!displayOn) {
+                document.body.style.transition = 'all 0.3s';
+                document.body.style.filter = 'brightness(0)';
+                setTimeout(() => {
+                    document.body.innerHTML = '<div style="height: 100vh; display: flex; align-items: center; justify-content: center; font-family: Arial; color: #333;">NO SIGNAL - HDMI 1</div>';
+                    document.body.style.filter = 'brightness(1)';
+                }, 300);
+            } else {
+                location.reload();
+            }
+        }
+        
+        // Console message for fellow TV-monitor users
+        console.log('%c📺 DISPLAY SPECIFICATIONS 📺', 'font-size: 20px; color: #0ff; text-shadow: 0 0 10px #0ff;');
+        console.log('%cResolution: Your apartment wall', 'color: #fff;');
+        console.log('%cRefresh Rate: Philosophical', 'color: #fff;');
+        console.log('%cHDR: Yes, but for consciousness', 'color: #fff;');
+        console.log('%cInput Lag: Who cares when you have PRESENCE', 'color: #fff;');
+        
+        // Add glitch effect on hover
+        document.querySelectorAll('.stanza').forEach((stanza, index) => {
+            stanza.addEventListener('mouseenter', () => {
+                stanza.style.animation = 'glitch 0.3s ease-in-out';
+                setTimeout(() => {
+                    stanza.style.animation = `fadeIn 1s ease-out ${index * 0.2}s both`;
+                }, 300);
+            });
+        });
+        
+        // Glitch animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes glitch {
+                0%, 100% { transform: translateX(0); }
+                20% { transform: translateX(-2px); }
+                40% { transform: translateX(2px); }
+                60% { transform: translateX(-1px); }
+                80% { transform: translateX(1px); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

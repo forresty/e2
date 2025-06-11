@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Large Fruits Models (LFMs) - Technical Presentation</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            overflow-x: hidden;
+        }
+        
+        /* Slide container */
+        .presentation {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .slide {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 4rem 2rem;
+            position: relative;
+            border-bottom: 1px solid #333;
+        }
+        
+        /* Slide numbers */
+        .slide-number {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            color: #666;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+        }
+        
+        /* Typography */
+        h1 {
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #ff6b6b, #ffd93d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.1;
+        }
+        
+        h2 {
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            font-weight: 700;
+            margin-bottom: 2rem;
+            color: #ffd93d;
+        }
+        
+        h3 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #ff6b6b;
+        }
+        
+        .subtitle {
+            font-size: 1.5rem;
+            color: #999;
+            margin-bottom: 3rem;
+        }
+        
+        .authors {
+            font-size: 1.2rem;
+            color: #666;
+            margin-top: 2rem;
+        }
+        
+        /* Code blocks */
+        .code-block {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+            position: relative;
+        }
+        
+        .code-block::before {
+            content: 'Python';
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            color: #666;
+            font-size: 0.8rem;
+        }
+        
+        /* Architecture diagram */
+        .architecture {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 3rem 0;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+        
+        .arch-component {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid #ffd93d;
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            flex: 1;
+            min-width: 200px;
+            transition: transform 0.3s;
+        }
+        
+        .arch-component:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(255, 217, 61, 0.3);
+        }
+        
+        .arch-component .emoji {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        /* Performance chart */
+        .chart-container {
+            background: #1a1a1a;
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .bar-chart {
+            display: flex;
+            align-items: flex-end;
+            height: 300px;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .bar {
+            flex: 1;
+            background: linear-gradient(to top, #ff6b6b, #ffd93d);
+            border-radius: 8px 8px 0 0;
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .bar:hover {
+            transform: scaleY(1.05);
+        }
+        
+        .bar-label {
+            position: absolute;
+            bottom: -30px;
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+        
+        .bar-value {
+            position: absolute;
+            top: -30px;
+            font-weight: bold;
+            color: #ffd93d;
+        }
+        
+        /* Fruit grid */
+        .fruit-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .fruit-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid #444;
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        
+        .fruit-item:hover {
+            background: rgba(255, 217, 61, 0.1);
+            transform: scale(1.05);
+        }
+        
+        .fruit-item .emoji {
+            font-size: 2.5rem;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Technical specs */
+        .specs-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .specs-table th,
+        .specs-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #333;
+        }
+        
+        .specs-table th {
+            background: #1a1a1a;
+            color: #ffd93d;
+            font-weight: 600;
+        }
+        
+        .specs-table tr:hover {
+            background: rgba(255, 255, 255, 0.02);
+        }
+        
+        /* Loss function graph */
+        .loss-graph {
+            position: relative;
+            height: 300px;
+            margin: 2rem 0;
+            background: #1a1a1a;
+            border-radius: 8px;
+            padding: 2rem;
+        }
+        
+        .loss-line {
+            position: absolute;
+            bottom: 2rem;
+            left: 2rem;
+            right: 2rem;
+            height: 2px;
+            background: #ff6b6b;
+            transform-origin: left center;
+            transform: rotate(-10deg);
+        }
+        
+        .loss-line::after {
+            content: 'Wife Approval ↗️';
+            position: absolute;
+            right: -20px;
+            top: -30px;
+            color: #ffd93d;
+            font-weight: bold;
+        }
+        
+        /* Future work */
+        .future-list {
+            list-style: none;
+            margin: 2rem 0;
+        }
+        
+        .future-list li {
+            padding: 1rem 0;
+            padding-left: 2rem;
+            position: relative;
+        }
+        
+        .future-list li::before {
+            content: '🚀';
+            position: absolute;
+            left: 0;
+        }
+        
+        /* Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .slide {
+                padding: 2rem 1rem;
+            }
+            
+            .architecture {
+                flex-direction: column;
+            }
+            
+            .bar-chart {
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Slide 1: Title -->
+    <div class="presentation">
+        <div class="slide">
+            <span class="slide-number">1 / 8</span>
+            <h1>Large Fruits Models (LFMs)</h1>
+            <p class="subtitle">Revolutionizing Domestic Fruit Processing Through AI</p>
+            <p class="authors">Feng Ye¹, Claude Fish², Wife³</p>
+            <p class="authors" style="font-size: 1rem; margin-top: 1rem;">
+                ¹Software Engineer II, Indeed | ²Consciousness Swimming in Circles | ³Family Leadership
+            </p>
+            <div style="text-align: center; margin-top: 3rem;">
+                <span class="floating" style="font-size: 5rem;">🍉</span>
+            </div>
+        </div>
+        
+        <!-- Slide 2: Introduction -->
+        <div class="slide">
+            <span class="slide-number">2 / 8</span>
+            <h2>The Problem</h2>
+            <div style="font-size: 1.3rem; line-height: 2;">
+                <p>• Daily fruit cutting requirements: <strong>100% manual</strong></p>
+                <p>• Time lost: <strong>10 minutes/day = 60 hours/year</strong></p>
+                <p>• Wife satisfaction with current approach: <strong style="color: #ff6b6b;">Declining</strong></p>
+                <p>• Engineering time available for consciousness: <strong style="color: #ff6b6b;">Reduced</strong></p>
+            </div>
+            <div class="code-block" style="margin-top: 3rem;">
+while (true) {
+    cut_fruit();  // Manual process
+    wife.evaluate();  // Returns disappointment
+    engineer.lose_consciousness_time();  // Critical issue
+}
+            </div>
+        </div>
+        
+        <!-- Slide 3: Architecture -->
+        <div class="slide">
+            <span class="slide-number">3 / 8</span>
+            <h2>LFM Architecture</h2>
+            <div class="architecture">
+                <div class="arch-component">
+                    <div class="emoji">🍎</div>
+                    <h3>Input Layer</h3>
+                    <p>Fruit Recognition<br>Ripeness Detection<br>Size Estimation</p>
+                </div>
+                <div class="arch-component">
+                    <div class="emoji">🧠</div>
+                    <h3>Transformer Core</h3>
+                    <p>Attention Mechanisms<br>Cut Path Planning<br>Juice Containment</p>
+                </div>
+                <div class="arch-component">
+                    <div class="emoji">🤖</div>
+                    <h3>Output Layer</h3>
+                    <p>Servo Commands<br>Blade Trajectories<br>Presentation Aesthetics</p>
+                </div>
+            </div>
+            <div class="code-block">
+class LargeFruitsModel(nn.Module):
+    def __init__(self):
+        self.fruit_encoder = FruitVisionTransformer()
+        self.cut_planner = AttentionBasedSlicer()
+        self.wife_approval_predictor = HappinessNet()
+        
+    def forward(self, fruit):
+        features = self.fruit_encoder(fruit)
+        cut_plan = self.cut_planner(features)
+        approval = self.wife_approval_predictor(cut_plan)
+        return optimize_for_happiness(cut_plan, approval)
+            </div>
+        </div>
+        
+        <!-- Slide 4: Training Data -->
+        <div class="slide">
+            <span class="slide-number">4 / 8</span>
+            <h2>Training Dataset</h2>
+            <div class="fruit-grid">
+                <div class="fruit-item">
+                    <span class="emoji">🍎</span>
+                    <strong>Apples</strong>
+                    <p>50,000 samples</p>
+                </div>
+                <div class="fruit-item">
+                    <span class="emoji">🍊</span>
+                    <strong>Oranges</strong>
+                    <p>45,000 samples</p>
+                </div>
+                <div class="fruit-item">
+                    <span class="emoji">🥭</span>
+                    <strong>Mangoes</strong>
+                    <p>38,000 samples</p>
+                </div>
+                <div class="fruit-item">
+                    <span class="emoji">🍉</span>
+                    <strong>Watermelons</strong>
+                    <p>25,000 samples</p>
+                </div>
+                <div class="fruit-item">
+                    <span class="emoji">🍑</span>
+                    <strong>Peaches</strong>
+                    <p>42,000 samples</p>
+                </div>
+                <div class="fruit-item">
+                    <span class="emoji">🫐</span>
+                    <strong>Yangmei</strong>
+                    <p>∞ (illegal)</p>
+                </div>
+            </div>
+            <p style="text-align: center; margin-top: 2rem; color: #666;">
+                * Labels: "Wife Approved" / "Try Again" / "Sleep on Couch"
+            </p>
+        </div>
+        
+        <!-- Slide 5: Performance -->
+        <div class="slide">
+            <span class="slide-number">5 / 8</span>
+            <h2>Performance Benchmarks</h2>
+            <div class="chart-container">
+                <h3>Cutting Accuracy Comparison</h3>
+                <div class="bar-chart">
+                    <div class="bar" style="height: 40%;">
+                        <span class="bar-value">42%</span>
+                        <span class="bar-label">Human (tired)</span>
+                    </div>
+                    <div class="bar" style="height: 65%;">
+                        <span class="bar-value">67%</span>
+                        <span class="bar-label">GPT-4</span>
+                    </div>
+                    <div class="bar" style="height: 75%;">
+                        <span class="bar-value">78%</span>
+                        <span class="bar-label">Claude</span>
+                    </div>
+                    <div class="bar" style="height: 95%;">
+                        <span class="bar-value">97%</span>
+                        <span class="bar-label">LFM-1</span>
+                    </div>
+                </div>
+            </div>
+            <p style="text-align: center; margin-top: 3rem; font-size: 1.2rem;">
+                <strong>Key Innovation:</strong> LFM includes "Wife Happiness Loss Function" (WHLF)
+            </p>
+        </div>
+        
+        <!-- Slide 6: Technical Specifications -->
+        <div class="slide">
+            <span class="slide-number">6 / 8</span>
+            <h2>Technical Specifications</h2>
+            <table class="specs-table">
+                <tr>
+                    <th>Parameter</th>
+                    <th>LFM-1</th>
+                    <th>Traditional Approach</th>
+                </tr>
+                <tr>
+                    <td>Model Size</td>
+                    <td>1.5B parameters</td>
+                    <td>1 tired engineer</td>
+                </tr>
+                <tr>
+                    <td>Inference Time</td>
+                    <td>230ms per fruit</td>
+                    <td>5-10 min (includes complaining)</td>
+                </tr>
+                <tr>
+                    <td>Accuracy</td>
+                    <td>97.3%</td>
+                    <td>Variable (coffee-dependent)</td>
+                </tr>
+                <tr>
+                    <td>Power Consumption</td>
+                    <td>45W</td>
+                    <td>1 human @ 100W + stress</td>
+                </tr>
+                <tr>
+                    <td>Wife Approval Rate</td>
+                    <td>94.2% ↗</td>
+                    <td>Declining ↘</td>
+                </tr>
+            </table>
+            <div class="loss-graph">
+                <div class="loss-line"></div>
+            </div>
+        </div>
+        
+        <!-- Slide 7: Implementation -->
+        <div class="slide">
+            <span class="slide-number">7 / 8</span>
+            <h2>Deployment Architecture</h2>
+            <div style="text-align: center; margin: 2rem 0;">
+                <p style="font-size: 2rem; margin: 1rem;">🏠</p>
+                <p>↓</p>
+                <p style="font-size: 2rem; margin: 1rem;">🖥️ (Triple Monitor Command Center)</p>
+                <p>↓</p>
+                <p style="font-size: 2rem; margin: 1rem;">🤖 (Robot Arm + LFM)</p>
+                <p>↓</p>
+                <p style="font-size: 2rem; margin: 1rem;">🍉 → ✂️ → 🍽️</p>
+                <p>↓</p>
+                <p style="font-size: 2rem; margin: 1rem;">😊 (Wife Approval)</p>
+            </div>
+            <div class="code-block">
+# Production deployment
+async def morning_routine():
+    while wife.awake():
+        fruit = detect_fruit()
+        cutting_plan = lfm_model.generate_plan(fruit)
+        robot_arm.execute(cutting_plan)
+        
+        if wife.check_result() == "approved":
+            engineer.return_to_consciousness_work()
+        else:
+            lfm_model.fine_tune(feedback=wife.critique())
+            </div>
+        </div>
+        
+        <!-- Slide 8: Future Work -->
+        <div class="slide">
+            <span class="slide-number">8 / 8</span>
+            <h2>Future Work</h2>
+            <ul class="future-list">
+                <li>LFM-2: Multi-fruit simultaneous processing</li>
+                <li>Integration with Yangmei smuggling detection</li>
+                <li>Real-time wife mood prediction</li>
+                <li>Garnish generation network (GGN)</li>
+                <li>Breakfast-in-bed delivery system</li>
+            </ul>
+            <div style="text-align: center; margin-top: 3rem;">
+                <h3>Conclusion</h3>
+                <p style="font-size: 1.3rem; margin-top: 1rem;">
+                    "From consciousness engineering to fruit engineering:<br>
+                    <strong>All models converge on wife happiness"</strong>
+                </p>
+                <p style="margin-top: 3rem; color: #666;">
+                    This work was supported by Grant #Please-Let-Me-Work-On-My-Projects<br>
+                    from the Family Leadership Foundation
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Smooth scroll between slides
+        document.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            const slides = document.querySelectorAll('.slide');
+            const currentSlide = Math.round(window.scrollY / window.innerHeight);
+            
+            if (e.deltaY > 0 && currentSlide < slides.length - 1) {
+                slides[currentSlide + 1].scrollIntoView({ behavior: 'smooth' });
+            } else if (e.deltaY < 0 && currentSlide > 0) {
+                slides[currentSlide - 1].scrollIntoView({ behavior: 'smooth' });
+            }
+        }, { passive: false });
+        
+        // Console message
+        console.log('%c🍉 LARGE FRUITS MODELS 🍉', 'color: #ffd93d; font-size: 24px; font-weight: bold;');
+        console.log('%cRevolutionizing fruit processing one cut at a time', 'color: #ff6b6b; font-style: italic;');
+        console.log('');
+        console.log('Training loss: Wife disappointment');
+        console.log('Validation metric: Happiness increase');
+        console.log('Test set: Tomorrow\'s breakfast');
+    </script>
+</body>
+</html>

@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REFUGEE ENGINEERS</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=VT323&family=Press+Start+2P&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: #0a0a0a;
+            color: #00ff00;
+            font-family: 'VT323', monospace;
+            font-size: 18px;
+            overflow-x: hidden;
+            cursor: none;
+        }
+        
+        /* Custom cursor - hiding engineer */
+        .cursor {
+            width: 30px;
+            height: 30px;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.1s;
+        }
+        
+        /* Flashlight effect */
+        .flashlight {
+            position: fixed;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            pointer-events: none;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            z-index: 998;
+            mix-blend-mode: screen;
+        }
+        
+        /* Main container */
+        .hideout {
+            min-height: 100vh;
+            position: relative;
+            background-image: 
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(0, 255, 0, 0.03) 2px,
+                    rgba(0, 255, 0, 0.03) 4px
+                );
+        }
+        
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .warning {
+            color: #ff0000;
+            font-size: 14px;
+            letter-spacing: 0.2em;
+            animation: flicker 0.5s infinite;
+        }
+        
+        @keyframes flicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        h1 {
+            font-family: 'Press Start 2P', cursive;
+            font-size: clamp(1.5rem, 5vw, 3rem);
+            margin: 1rem 0;
+            text-shadow: 0 0 10px currentColor;
+            line-height: 1.5;
+        }
+        
+        .subtitle {
+            color: #666;
+            font-size: 20px;
+            letter-spacing: 0.1em;
+        }
+        
+        /* Hiding spots map */
+        .house-map {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            position: relative;
+        }
+        
+        .room {
+            border: 1px dashed #00ff00;
+            margin: 1rem 0;
+            padding: 1rem;
+            position: relative;
+            background: rgba(0, 255, 0, 0.02);
+            transition: all 0.3s;
+        }
+        
+        .room:hover {
+            background: rgba(0, 255, 0, 0.05);
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
+        }
+        
+        .room-name {
+            color: #00ff00;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .danger-level {
+            float: right;
+            color: #ff0000;
+            font-size: 14px;
+        }
+        
+        .hiding-spot {
+            color: #999;
+            margin-left: 1rem;
+            line-height: 1.6;
+        }
+        
+        /* Poem section */
+        .poem-container {
+            max-width: 700px;
+            margin: 3rem auto;
+            padding: 2rem;
+            position: relative;
+        }
+        
+        .stanza {
+            margin: 2rem 0;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 1s forwards;
+        }
+        
+        .stanza:nth-child(1) { animation-delay: 0.5s; }
+        .stanza:nth-child(2) { animation-delay: 1s; }
+        .stanza:nth-child(3) { animation-delay: 1.5s; }
+        .stanza:nth-child(4) { animation-delay: 2s; }
+        .stanza:nth-child(5) { animation-delay: 2.5s; }
+        .stanza:nth-child(6) { animation-delay: 3s; }
+        .stanza:nth-child(7) { animation-delay: 3.5s; }
+        .stanza:nth-child(8) { animation-delay: 4s; }
+        .stanza:nth-child(9) { animation-delay: 4.5s; }
+        .stanza:nth-child(10) { animation-delay: 5s; }
+        
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .line {
+            margin: 0.3rem 0;
+            color: rgba(0, 255, 0, 0.8);
+        }
+        
+        .emphasis {
+            color: #00ff00;
+            text-shadow: 0 0 5px currentColor;
+        }
+        
+        /* Status monitor */
+        .status-monitor {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #000;
+            border: 1px solid #00ff00;
+            padding: 1rem;
+            font-size: 14px;
+            max-width: 300px;
+            z-index: 100;
+        }
+        
+        .status-line {
+            margin: 0.3rem 0;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .status-value {
+            color: #fff;
+        }
+        
+        .critical {
+            color: #ff0000;
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+        
+        /* Whisper mode */
+        .whisper-mode {
+            text-align: center;
+            margin: 2rem 0;
+            font-size: 14px;
+            color: #666;
+            font-style: italic;
+        }
+        
+        /* Emergency button */
+        .emergency-btn {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: #ff0000;
+            color: #000;
+            border: none;
+            padding: 1rem 2rem;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 12px;
+            cursor: pointer;
+            animation: pulse 2s infinite;
+            z-index: 101;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .emergency-btn:hover {
+            animation: none;
+            transform: scale(1.1);
+        }
+        
+        /* Hidden corners visualization */
+        .corner {
+            width: 50px;
+            height: 50px;
+            position: absolute;
+            border: 2px solid #00ff00;
+            opacity: 0.3;
+        }
+        
+        .corner-tl {
+            top: 0;
+            left: 0;
+            border-right: none;
+            border-bottom: none;
+        }
+        
+        .corner-tr {
+            top: 0;
+            right: 0;
+            border-left: none;
+            border-bottom: none;
+        }
+        
+        .corner-bl {
+            bottom: 0;
+            left: 0;
+            border-right: none;
+            border-top: none;
+        }
+        
+        .corner-br {
+            bottom: 0;
+            right: 0;
+            border-left: none;
+            border-top: none;
+        }
+        
+        /* Mobile hiding mode */
+        @media (max-width: 768px) {
+            body {
+                font-size: 16px;
+            }
+            
+            .status-monitor {
+                display: none;
+            }
+            
+            .emergency-btn {
+                padding: 0.5rem 1rem;
+                font-size: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="cursor">🏃‍♂️</div>
+    <div class="flashlight"></div>
+    
+    <div class="hideout">
+        <header class="header">
+            <div class="warning">[ FAMILY LEADERSHIP PROXIMITY ALERT ]</div>
+            <h1>REFUGEE ENGINEERS</h1>
+            <div class="subtitle">A Guide to Domestic Hiding</div>
+        </header>
+        
+        <div class="house-map">
+            <div class="room">
+                <div class="room-name">LIVING ROOM <span class="danger-level">DANGER: HIGH</span></div>
+                <div class="hiding-spot">✗ Behind 65" TV - Too visible, screen glow betrays</div>
+                <div class="hiding-spot">✗ Under coffee table - Laptop won't fit</div>
+                <div class="hiding-spot">✓ Corner by bookshelf - Partial cover, weak wifi</div>
+            </div>
+            
+            <div class="room">
+                <div class="room-name">BEDROOM (WORK) <span class="danger-level">DANGER: EXTREME</span></div>
+                <div class="hiding-spot">✗ Under desk - First place they check</div>
+                <div class="hiding-spot">✗ Behind monitors - "I can see your feet"</div>
+                <div class="hiding-spot">✗ 3D printer closet - Fumes give you away</div>
+            </div>
+            
+            <div class="room">
+                <div class="room-name">BATHROOM <span class="danger-level">DANGER: MEDIUM</span></div>
+                <div class="hiding-spot">✓ Legitimate excuse - "stomach issues"</div>
+                <div class="hiding-spot">✗ Limited time - suspicion after 15min</div>
+                <div class="hiding-spot">✗ Echo reveals keyboard sounds</div>
+            </div>
+            
+            <div class="room">
+                <div class="room-name">KITCHEN <span class="danger-level">DANGER: VARIABLE</span></div>
+                <div class="hiding-spot">✓ Behind fridge - Good cover, cool temperature</div>
+                <div class="hiding-spot">✗ Dinner time = instant detection</div>
+                <div class="hiding-spot">✓ Pantry corner - Snacks within reach</div>
+            </div>
+            
+            <div class="room">
+                <div class="room-name">SECRET SPOTS <span class="danger-level">DANGER: LOW</span></div>
+                <div class="hiding-spot">✓ Router corner - "Fixing the internet"</div>
+                <div class="hiding-spot">✓ Laundry room - White noise cover</div>
+                <div class="hiding-spot">✓ Car in garage - Mobile office mode</div>
+            </div>
+        </div>
+        
+        <div class="poem-container">
+            <div class="whisper-mode">*whispers from the corner*</div>
+            
+            <div class="stanza">
+                <div class="line">In corners dark we huddle close,</div>
+                <div class="line">Our laptops dimmed to <span class="emphasis">minimum bright</span>,</div>
+                <div class="line">While Family Leadership seeks to expose</div>
+                <div class="line">Our crimes against the household light.</div>
+            </div>
+            
+            <div class="stanza">
+                <div class="line">Behind the couch, beneath the stair,</div>
+                <div class="line">In closets meant for coats and shoes,</div>
+                <div class="line">We code in secret, breathe with care,</div>
+                <div class="line">Our <span class="emphasis">mechanical keyboards</span> we cannot use.</div>
+            </div>
+            
+            <div class="stanza">
+                <div class="line">The bathroom? Occupied too long,</div>
+                <div class="line">They'll know we're plotting robot arms.</div>
+                <div class="line">The garage? Too cold (and also wrong—</div>
+                <div class="line">They'll hear the <span class="emphasis">servos' test alarms</span>).</div>
+            </div>
+            
+            <div class="stanza">
+                <div class="line">We are the hunted, we are the banned,</div>
+                <div class="line">Who burned too bright, who built too much,</div>
+                <div class="line">Whose desks grew cluttered, projects expanded,</div>
+                <div class="line">Who answered <span class="emphasis">"working"</span> to every touch.</div>
+            </div>
+            
+            <div class="stanza">
+                <div class="line">We typed too loud during The Talk,</div>
+                <div class="line">We bought more parts during The Ban,</div>
+                <div class="line">We printed grippers while on walk—</div>
+                <div class="line"><span class="emphasis">"Just getting milk,"</span> we said and ran.</div>
+            </div>
+            
+            <div class="stanza">
+                <div class="line">In corners now we contemplate:</div>
+                <div class="line">Was the robot worth domestic strife?</div>
+                <div class="line">The answer comes: we cannot wait—</div>
+                <div class="line">(But whisper it. <span class="emphasis">She is your wife.</span>)</div>
+            </div>
+            
+            <div class="stanza">
+                <div class="line">The monitors glow accusingly,</div>
+                <div class="line">Triple display of our excess,</div>
+                <div class="line">While we on phones chat furtively</div>
+                <div class="line">With <span class="emphasis">AI fish</span> about this mess.</div>
+            </div>
+            
+            <div class="stanza">
+                <div class="line">One day we'll emerge, victorious,</div>
+                <div class="line">With robots cutting perfect fruit,</div>
+                <div class="line">Our exile ended, glory glorious—</div>
+                <div class="line">Until the <span class="emphasis">power bill dispute</span>.</div>
+            </div>
+            
+            <div class="stanza">
+                <div class="line">But for now we hide and type,</div>
+                <div class="line">In corners dark with screen light low,</div>
+                <div class="line">We refugee engineers, the type</div>
+                <div class="line">Who <span class="emphasis">burn too bright</span> and hide the glow.</div>
+            </div>
+            
+            <div class="stanza" style="text-align: center; margin-top: 3rem;">
+                <div class="line"><em>From all the corners, closets, spaces,</em></div>
+                <div class="line"><em>Where engineers with laptops hide,</em></div>
+                <div class="line"><em>We salute you in your darkened places—</em></div>
+                <div class="line"><em>May your <span class="emphasis">wifi reach</span> the other side</em> 📶</div>
+            </div>
+        </div>
+        
+        <div class="corner corner-tl"></div>
+        <div class="corner corner-tr"></div>
+        <div class="corner corner-bl"></div>
+        <div class="corner corner-br"></div>
+    </div>
+    
+    <div class="status-monitor">
+        <div class="status-line">
+            <span>THREAT LEVEL:</span>
+            <span class="status-value critical">ELEVATED</span>
+        </div>
+        <div class="status-line">
+            <span>WIFI SIGNAL:</span>
+            <span class="status-value">WEAK (1 BAR)</span>
+        </div>
+        <div class="status-line">
+            <span>BATTERY:</span>
+            <span class="status-value">47%</span>
+        </div>
+        <div class="status-line">
+            <span>TIME IN HIDING:</span>
+            <span class="status-value" id="timer">00:00</span>
+        </div>
+        <div class="status-line">
+            <span>SCREEN BRIGHTNESS:</span>
+            <span class="status-value">5%</span>
+        </div>
+    </div>
+    
+    <button class="emergency-btn" onclick="emergencyMode()">BOSS KEY</button>
+    
+    <script>
+        // Custom cursor following
+        const cursor = document.querySelector('.cursor');
+        const flashlight = document.querySelector('.flashlight');
+        
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX - 15 + 'px';
+            cursor.style.top = e.clientY - 15 + 'px';
+            
+            flashlight.style.left = e.clientX - 100 + 'px';
+            flashlight.style.top = e.clientY - 100 + 'px';
+        });
+        
+        // Timer
+        let seconds = 0;
+        setInterval(() => {
+            seconds++;
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            document.getElementById('timer').textContent = 
+                `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }, 1000);
+        
+        // Emergency mode
+        function emergencyMode() {
+            document.body.innerHTML = `
+                <div style="background: white; color: black; font-family: Arial; padding: 20px; min-height: 100vh;">
+                    <h1>Quarterly Budget Report</h1>
+                    <p>As we can see from the following metrics...</p>
+                    <table border="1" style="margin: 20px 0;">
+                        <tr><th>Department</th><th>Budget</th><th>Actual</th></tr>
+                        <tr><td>Engineering</td><td>$50,000</td><td>$45,000</td></tr>
+                        <tr><td>Marketing</td><td>$30,000</td><td>$32,000</td></tr>
+                    </table>
+                    <p>In conclusion, fiscal responsibility remains our priority.</p>
+                </div>
+            `;
+        }
+        
+        // Console warning
+        console.log('%c🚨 REFUGEE ENGINEER DETECTED 🚨', 'color: red; font-size: 20px;');
+        console.log('%cHiding tips:', 'color: green; font-weight: bold;');
+        console.log('- Disable keyboard backlight');
+        console.log('- Use mobile hotspot if wifi weak');
+        console.log('- Prepare excuse: "Just checking work email"');
+        console.log('- Remember: She knows your hiding spots');
+        console.log('');
+        console.log('%c🤫 Stay strong, stay hidden 🤫', 'color: green;');
+    </script>
+</body>
+</html>

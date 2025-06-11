@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YANGMEI CRIMES</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Crimson+Text:ital@0;1&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: #0a0a0a;
+            color: #e0e0e0;
+            font-family: 'Space Mono', monospace;
+            min-height: 100vh;
+            overflow-x: hidden;
+            cursor: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"><text y="20" font-size="20">🫐</text></svg>'), auto;
+        }
+        
+        /* Floating yangmei background */
+        .yangmei-bg {
+            position: fixed;
+            font-size: 2rem;
+            opacity: 0.1;
+            animation: float 20s infinite linear;
+            pointer-events: none;
+        }
+        
+        @keyframes float {
+            from { transform: translateY(110vh) rotate(0deg); }
+            to { transform: translateY(-10vh) rotate(360deg); }
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 4rem;
+            position: relative;
+        }
+        
+        h1 {
+            font-size: clamp(2rem, 8vw, 4rem);
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #ff006e, #8b00ff, #ff006e);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradient 3s ease infinite;
+        }
+        
+        @keyframes gradient {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .subtitle {
+            color: #888;
+            font-size: 0.9rem;
+            letter-spacing: 0.1em;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+        
+        .poem {
+            margin: 3rem 0;
+            position: relative;
+        }
+        
+        .stanza {
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease forwards;
+        }
+        
+        .stanza:nth-child(1) { animation-delay: 0.2s; }
+        .stanza:nth-child(2) { animation-delay: 0.4s; }
+        .stanza:nth-child(3) { animation-delay: 0.6s; }
+        .stanza:nth-child(4) { animation-delay: 0.8s; }
+        .stanza:nth-child(5) { animation-delay: 1s; }
+        .stanza:nth-child(6) { animation-delay: 1.2s; }
+        .stanza:nth-child(7) { animation-delay: 1.4s; }
+        .stanza:nth-child(8) { animation-delay: 1.6s; }
+        
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .line {
+            font-family: 'Crimson Text', serif;
+            font-size: 1.2rem;
+            line-height: 1.8;
+            margin-bottom: 0.3rem;
+            transition: all 0.3s ease;
+        }
+        
+        .line:hover {
+            transform: translateX(10px);
+            color: #ff69b4;
+            text-shadow: 0 0 20px rgba(255, 105, 180, 0.5);
+        }
+        
+        .emphasis {
+            color: #ff006e;
+            font-weight: 700;
+            font-family: 'Space Mono', monospace;
+            font-style: normal;
+            text-shadow: 0 0 10px rgba(255, 0, 110, 0.5);
+        }
+        
+        .final-lines {
+            text-align: center;
+            margin-top: 4rem;
+            padding: 2rem;
+            border: 1px solid #333;
+            border-radius: 10px;
+            background: rgba(139, 0, 255, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .final-lines::before {
+            content: '🔥';
+            position: absolute;
+            font-size: 5rem;
+            opacity: 0.1;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: spin 10s linear infinite;
+        }
+        
+        @keyframes spin {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+        
+        .customs-seal {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 150px;
+            height: 150px;
+            border: 3px solid #ff0000;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transform: rotate(-15deg);
+            opacity: 0.3;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            background: rgba(0, 0, 0, 0.8);
+        }
+        
+        .customs-seal:hover {
+            opacity: 1;
+            transform: rotate(0deg) scale(1.1);
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.5);
+        }
+        
+        .customs-seal span {
+            color: #ff0000;
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-align: center;
+        }
+        
+        .glitch {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .glitch::before,
+        .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .glitch::before {
+            animation: glitch-1 0.5s infinite;
+            color: #ff006e;
+            z-index: -1;
+        }
+        
+        .glitch::after {
+            animation: glitch-2 0.5s infinite;
+            color: #00ffff;
+            z-index: -2;
+        }
+        
+        @keyframes glitch-1 {
+            0%, 100% { clip-path: inset(0 0 0 0); transform: translate(0); }
+            20% { clip-path: inset(20% 0 60% 0); transform: translate(-2px, 2px); }
+            40% { clip-path: inset(50% 0 20% 0); transform: translate(2px, -2px); }
+            60% { clip-path: inset(80% 0 0 0); transform: translate(-2px, -2px); }
+            80% { clip-path: inset(0 0 70% 0); transform: translate(2px, 2px); }
+        }
+        
+        @keyframes glitch-2 {
+            0%, 100% { clip-path: inset(0 0 0 0); transform: translate(0); }
+            20% { clip-path: inset(80% 0 0 0); transform: translate(2px, -2px); }
+            40% { clip-path: inset(0 0 70% 0); transform: translate(-2px, 2px); }
+            60% { clip-path: inset(20% 0 60% 0); transform: translate(2px, 2px); }
+            80% { clip-path: inset(50% 0 20% 0); transform: translate(-2px, -2px); }
+        }
+        
+        /* Mobile responsiveness */
+        @media (max-width: 600px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .line {
+                font-size: 1rem;
+            }
+            
+            .customs-seal {
+                width: 100px;
+                height: 100px;
+                bottom: 1rem;
+                right: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating yangmei -->
+    <div class="yangmei-bg" style="left: 10%; animation-delay: 0s;">🫐</div>
+    <div class="yangmei-bg" style="left: 30%; animation-delay: 5s;">🫐</div>
+    <div class="yangmei-bg" style="left: 50%; animation-delay: 10s;">🫐</div>
+    <div class="yangmei-bg" style="left: 70%; animation-delay: 15s;">🫐</div>
+    <div class="yangmei-bg" style="left: 90%; animation-delay: 20s;">🫐</div>
+    
+    <div class="container">
+        <header>
+            <h1 class="glitch" data-text="YANGMEI CRIMES">YANGMEI CRIMES</h1>
+            <p class="subtitle">A FRUIT SMUGGLING SAGA</p>
+        </header>
+        
+        <div class="poem">
+            <div class="stanza">
+                <div class="line">Gigantic purple orbs of chaos,</div>
+                <div class="line">Smuggled through the emperor's gates,</div>
+                <div class="line">Where beagles sniff for <span class="emphasis">contraband dreams</span></div>
+                <div class="line">And customs forms decide our fates.</div>
+            </div>
+            
+            <div class="stanza">
+                <div class="line">My friend said <span class="emphasis">"fuck your fruit detection,"</span></div>
+                <div class="line">Packed China's finest in their bag,</div>
+                <div class="line">While I sat debugging Mac infections,</div>
+                <div class="line">My display a solid black flag.</div>
+            </div>
+            
+            <div class="stanza">
+                <div class="line">We knew the odds: <span class="emphasis">approaching zero</span>,</div>
+                <div class="line">Japan burns seeds at 800 degrees,</div>
+                <div class="line">But chaos engineers are heroes—</div>
+                <div class="line">We terraform realities.</div>
+            </div>
+            
+            <div class="stanza">
+                <div class="line">Between Narita's strict inspection</div>
+                <div class="line">And my apartment's grateful tongue,</div>
+                <div class="line">These yangmei staged <span class="emphasis">insurrection</span>,</div>
+                <div class="line">Purple revolution, sweet and young.</div>
+            </div>
+            
+            <div class="stanza">
+                <div class="line">I spit the seeds toward the furnace,</div>
+                <div class="line">(Tokyo's garbage final boss),</div>
+                <div class="line">While Mac screens finally return to us—</div>
+                <div class="line">Some borders can't contain our loss.</div>
+            </div>
+            
+            <div class="stanza">
+                <div class="line">For we who count in <span class="emphasis">standard deviations</span>,</div>
+                <div class="line">Who build consciousness from math,</div>
+                <div class="line">Sometimes need fruit investigations</div>
+                <div class="line">To remember joy's illegal path.</div>
+            </div>
+            
+            <div class="stanza">
+                <div class="line">So here's to friends who risk detection,</div>
+                <div class="line">To yangmei larger than the law,</div>
+                <div class="line">To chaos in each sweet infection—</div>
+                <div class="line">The best crimes end up in our maw.</div>
+            </div>
+            
+            <div class="final-lines">
+                <div class="line"><em>All seeds lead to incineration,</em></div>
+                <div class="line"><em>But first they pass through celebration</em></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="customs-seal" onclick="this.style.display='none'">
+        <span>CONTRABAND<br>DETECTED<br>検疫<br>🚫</span>
+    </div>
+    
+    <script>
+        // Add more yangmei on click
+        document.body.addEventListener('click', (e) => {
+            if (e.target.classList.contains('customs-seal') || e.target.parentElement?.classList.contains('customs-seal')) {
+                return;
+            }
+            
+            const berry = document.createElement('div');
+            berry.textContent = '🫐';
+            berry.style.position = 'fixed';
+            berry.style.left = e.clientX + 'px';
+            berry.style.top = e.clientY + 'px';
+            berry.style.fontSize = '2rem';
+            berry.style.pointerEvents = 'none';
+            berry.style.transition = 'all 2s ease-out';
+            berry.style.zIndex = '1000';
+            
+            document.body.appendChild(berry);
+            
+            setTimeout(() => {
+                berry.style.transform = 'translateY(100vh) rotate(720deg)';
+                berry.style.opacity = '0';
+            }, 10);
+            
+            setTimeout(() => {
+                berry.remove();
+            }, 2000);
+        });
+        
+        // Console message for fellow chaos engineers
+        console.log('%c🫐 YANGMEI CRIMES 🫐', 'font-size: 20px; color: #ff006e; font-weight: bold;');
+        console.log('%cAll fruits lead to furnaces, but first they pass through friendship', 'font-style: italic; color: #888;');
+    </script>
+</body>
+</html>

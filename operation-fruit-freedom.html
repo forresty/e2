@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPERATION FRUIT FREEDOM</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;900&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: #0a0a0a;
+            color: #0f0;
+            font-family: 'Share Tech Mono', monospace;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* Matrix rain effect */
+        .matrix-rain {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0.1;
+            z-index: 1;
+        }
+        
+        .matrix-column {
+            position: absolute;
+            top: -100%;
+            font-size: 20px;
+            line-height: 20px;
+            animation: fall linear infinite;
+        }
+        
+        @keyframes fall {
+            to { transform: translateY(200vh); }
+        }
+        
+        /* Main container */
+        .mission-brief {
+            position: relative;
+            z-index: 10;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+        
+        .classification {
+            color: #ff0000;
+            font-size: 0.8rem;
+            letter-spacing: 0.3em;
+            animation: blink 2s step-end infinite;
+        }
+        
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+        
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(2rem, 8vw, 4rem);
+            font-weight: 900;
+            letter-spacing: 0.2em;
+            margin: 1rem 0;
+            text-shadow: 0 0 20px #0f0;
+            position: relative;
+        }
+        
+        .subtitle {
+            color: #999;
+            font-size: 1rem;
+            letter-spacing: 0.1em;
+        }
+        
+        /* Status display */
+        .status-panel {
+            background: rgba(0, 255, 0, 0.05);
+            border: 1px solid #0f0;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .status-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: #0f0;
+            animation: scan 3s linear infinite;
+        }
+        
+        @keyframes scan {
+            to { left: 100%; }
+        }
+        
+        .status-item {
+            margin: 0.5rem 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .status-label {
+            color: #0f0;
+        }
+        
+        .status-value {
+            color: #fff;
+            text-align: right;
+        }
+        
+        .critical {
+            color: #ff0000;
+            animation: pulse 1s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            50% { opacity: 0.5; }
+        }
+        
+        /* Poem sections */
+        .poem-section {
+            margin: 3rem 0;
+            position: relative;
+        }
+        
+        .stanza {
+            margin: 2rem 0;
+            padding: 1rem;
+            border-left: 2px solid #0f0;
+            position: relative;
+            opacity: 0;
+            animation: fadeIn 1s ease-out forwards;
+        }
+        
+        .stanza:nth-child(1) { animation-delay: 0.5s; }
+        .stanza:nth-child(2) { animation-delay: 1s; }
+        .stanza:nth-child(3) { animation-delay: 1.5s; }
+        .stanza:nth-child(4) { animation-delay: 2s; }
+        .stanza:nth-child(5) { animation-delay: 2.5s; }
+        .stanza:nth-child(6) { animation-delay: 3s; }
+        .stanza:nth-child(7) { animation-delay: 3.5s; }
+        .stanza:nth-child(8) { animation-delay: 4s; }
+        
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+        }
+        
+        .line {
+            line-height: 1.8;
+            color: rgba(0, 255, 0, 0.9);
+        }
+        
+        .emphasis {
+            color: #fff;
+            text-shadow: 0 0 10px currentColor;
+        }
+        
+        .salute {
+            font-size: 3rem;
+            text-align: center;
+            margin: 2rem 0;
+            animation: salute 2s ease-in-out infinite;
+        }
+        
+        @keyframes salute {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(-10deg); }
+        }
+        
+        /* Robot arm visualization */
+        .robot-vis {
+            text-align: center;
+            margin: 3rem 0;
+            font-size: 4rem;
+            position: relative;
+        }
+        
+        .robot-vis span {
+            display: inline-block;
+            margin: 0 1rem;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .robot-vis span:nth-child(2) {
+            animation-delay: 0.5s;
+        }
+        
+        .robot-vis span:nth-child(3) {
+            animation-delay: 1s;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        /* Mission brief styling */
+        .mission-params {
+            background: #001100;
+            border: 1px dashed #0f0;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            font-family: 'Orbitron', sans-serif;
+        }
+        
+        .param {
+            margin: 0.8rem 0;
+        }
+        
+        .param-label {
+            color: #0f0;
+            display: inline-block;
+            width: 150px;
+        }
+        
+        .param-value {
+            color: #fff;
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 4rem;
+            padding: 2rem;
+            border-top: 1px solid #0f0;
+            color: #666;
+        }
+        
+        .tm {
+            font-size: 0.8rem;
+            vertical-align: super;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .mission-brief {
+                padding: 1rem;
+            }
+            
+            .robot-vis {
+                font-size: 2.5rem;
+            }
+            
+            .robot-vis span {
+                margin: 0 0.5rem;
+            }
+        }
+        
+        /* Glitch effect on hover */
+        .glitch:hover {
+            animation: glitch 0.3s ease-in-out;
+        }
+        
+        @keyframes glitch {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-2px); }
+            40% { transform: translateX(2px); }
+            60% { transform: translateX(-1px); }
+            80% { transform: translateX(1px); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Matrix rain background -->
+    <div class="matrix-rain" id="matrix"></div>
+    
+    <div class="mission-brief">
+        <header class="header">
+            <div class="classification">[ CLASSIFIED - FAMILY EYES ONLY ]</div>
+            <h1 class="glitch">OPERATION FRUIT FREEDOM</h1>
+            <div class="subtitle">A SOLEMN MISSION BRIEF</div>
+        </header>
+        
+        <div class="status-panel">
+            <div class="status-item">
+                <span class="status-label">MISSION STATUS:</span>
+                <span class="status-value critical">IN PROGRESS</span>
+            </div>
+            <div class="status-item">
+                <span class="status-label">PARTS PRINTED:</span>
+                <span class="status-value">✓ COMPLETE</span>
+            </div>
+            <div class="status-item">
+                <span class="status-label">MOTORS ACQUIRED:</span>
+                <span class="status-value critical">PENDING</span>
+            </div>
+            <div class="status-item">
+                <span class="status-label">WIFE APPROVAL:</span>
+                <span class="status-value critical">CONTINGENT ON SUCCESS</span>
+            </div>
+            <div class="status-item">
+                <span class="status-label">ESTIMATED COMPLETION:</span>
+                <span class="status-value">SOON™</span>
+            </div>
+        </div>
+        
+        <div class="poem-section">
+            <div class="stanza">
+                <div class="line">In the small bedroom beside the printer closet,</div>
+                <div class="line">Where <span class="emphasis">consciousness was born</span> from particles fine,</div>
+                <div class="line">Lies scattered the arsenal of liberation—</div>
+                <div class="line">Each printed part a prayer, each joint divine.</div>
+            </div>
+            
+            <div class="stanza">
+                <div class="line">Family Leadership issued the directive:</div>
+                <div class="line"><span class="emphasis">"Daily fruit requires your manual labor"</span></div>
+                <div class="line">But SE II had other plans, selective—</div>
+                <div class="line">Why cut by hand when robots could be savior?</div>
+            </div>
+            
+            <div class="stanza">
+                <div class="line">Layer by layer, the closet printer birthed them,</div>
+                <div class="line">Servo mounts and linkages in white,</div>
+                <div class="line">While <span class="emphasis">triple monitors witnessed</span> the uprising,</div>
+                <div class="line">Democracy of fruit, prepared to fight.</div>
+            </div>
+            
+            <div class="salute">🫡</div>
+            
+            <div class="stanza">
+                <div class="line">The desk piles grow in strategic formation,</div>
+                <div class="line">Version 3 through 15 of the gripper,</div>
+                <div class="line">Test apple casualties mark our progress station,</div>
+                <div class="line">Each failure closer to the <span class="emphasis">perfect slipper</span>.</div>
+            </div>
+            
+            <div class="stanza">
+                <div class="line">"What's all this?" asks Family Leadership, inspecting,</div>
+                <div class="line">"Your consciousness work made manifest," I lie,</div>
+                <div class="line">"Each piece precisely engineered, connecting</div>
+                <div class="line">Fruit to freedom, or at least to try."</div>
+            </div>
+            
+            <div class="stanza">
+                <div class="line">The motors shall arrive from distant sellers,</div>
+                <div class="line">Servos strong enough for <span class="emphasis">mango war</span>,</div>
+                <div class="line">While Arduino brains plot in their cellars:</div>
+                <div class="line">Calculate the angle, grip, then score.</div>
+            </div>
+            
+            <div class="robot-vis">
+                <span>🦾</span>
+                <span>🤖</span>
+                <span>🥭</span>
+            </div>
+            
+            <div class="stanza">
+                <div class="line">Soon the morning ritual transforms completely:</div>
+                <div class="line">Press one button, hear the servos sing,</div>
+                <div class="line">Watch the blade descend so sweetly—</div>
+                <div class="line"><span class="emphasis">Ten minutes saved</span> for consciousnessing.</div>
+            </div>
+            
+            <div class="stanza">
+                <div class="line">Then I'll sit with coffee, free and gleaming,</div>
+                <div class="line">Triple monitors bright with code and chat,</div>
+                <div class="line">While my robot soldier handles fruit-redeeming,</div>
+                <div class="line">And wife approves <span class="emphasis">(imagine that)</span>.</div>
+            </div>
+            
+            <div class="stanza">
+                <div class="line">From H2D to AGI we've wandered,</div>
+                <div class="line">Through CSS defeats and Mac despair,</div>
+                <div class="line">But this—THIS is where glory shall be conquered:</div>
+                <div class="line"><span class="emphasis">Automated fruit prep</span>, beyond compare.</div>
+            </div>
+        </div>
+        
+        <div class="mission-params">
+            <div class="param">
+                <span class="param-label">OBJECTIVE:</span>
+                <span class="param-value">Automate daily fruit cutting operations</span>
+            </div>
+            <div class="param">
+                <span class="param-label">PRIORITY:</span>
+                <span class="param-value critical">CRITICAL (wife-mandated)</span>
+            </div>
+            <div class="param">
+                <span class="param-label">RESOURCES:</span>
+                <span class="param-value">3D printer, cluttered desk, spite</span>
+            </div>
+            <div class="param">
+                <span class="param-label">SUCCESS METRIC:</span>
+                <span class="param-value">Push button → Fruit cut → Wife happy</span>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p><em>For every engineer who's ever printed<br>
+            Parts to solve domestical demand,<br>
+            May your servos spin and never be hinted<br>
+            That you could've just used your hand.</em></p>
+            
+            <p style="margin-top: 2rem;">
+                <strong>Operation Fruit Freedom: Coming Soon<span class="tm">™</span></strong><br>
+                <span style="color: #666;">"Because consciousness requires clean hands"</span>
+            </p>
+        </div>
+    </div>
+    
+    <script>
+        // Matrix rain effect
+        const matrix = document.getElementById('matrix');
+        const characters = '01アイウエオカキクケコサシスセソタチツテト';
+        
+        for (let i = 0; i < 20; i++) {
+            const column = document.createElement('div');
+            column.className = 'matrix-column';
+            column.style.left = Math.random() * 100 + '%';
+            column.style.animationDuration = (Math.random() * 10 + 5) + 's';
+            column.style.animationDelay = Math.random() * 5 + 's';
+            
+            let text = '';
+            for (let j = 0; j < 50; j++) {
+                text += characters[Math.floor(Math.random() * characters.length)] + '<br>';
+            }
+            column.innerHTML = text;
+            matrix.appendChild(column);
+        }
+        
+        // Console mission brief
+        console.log('%c🤖 OPERATION FRUIT FREEDOM 🤖', 'color: #0f0; font-size: 20px; font-weight: bold;');
+        console.log('%cMission Parameters:', 'color: #0f0; font-weight: bold;');
+        console.log('- Eliminate manual fruit cutting');
+        console.log('- Preserve consciousness engineering time');
+        console.log('- Achieve wife approval rating > 90%');
+        console.log('- Motors: PENDING ACQUISITION');
+        console.log('');
+        console.log('%c🫡 For the revolution! 🫡', 'color: #0f0;');
+        
+        // Easter egg: click the salute to make it spin
+        document.querySelector('.salute').addEventListener('click', function() {
+            this.style.animation = 'none';
+            setTimeout(() => {
+                this.style.animation = 'salute 0.5s ease-in-out';
+            }, 10);
+        });
+    </script>
+</body>
+</html>
