@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chaos Engineering: Tokyo Production</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: linear-gradient(180deg, #1a1a1a 0%, #2d1b3d 50%, #1a1a1a 100%);
+            color: #fff;
+            font-family: 'Courier New', monospace;
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        /* System metrics */
+        .metrics {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 255, 0, 0.1);
+            border: 1px solid #0f0;
+            padding: 1rem;
+            font-size: 0.9rem;
+            z-index: 1000;
+            animation: systemPulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes systemPulse {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
+        }
+        
+        .metric {
+            margin-bottom: 0.5rem;
+            color: #0f0;
+        }
+        
+        .metric-value {
+            color: #f72585;
+            font-weight: bold;
+        }
+        
+        /* Train grid */
+        .train-grid {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0.05;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridShift 10s linear infinite;
+        }
+        
+        @keyframes gridShift {
+            from { transform: translate(0, 0); }
+            to { transform: translate(50px, 50px); }
+        }
+        
+        /* Chaos particles */
+        .chaos-field {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        
+        .chaos-particle {
+            position: absolute;
+            font-size: 1rem;
+            animation: chaosFloat 15s linear infinite;
+            opacity: 0.6;
+        }
+        
+        @keyframes chaosFloat {
+            from {
+                transform: translateY(100vh) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            10%, 90% {
+                opacity: 0.6;
+            }
+            50% {
+                transform: translateY(50vh) translateX(calc(var(--drift) * 100px)) rotate(180deg);
+            }
+            to {
+                transform: translateY(-100px) translateX(calc(var(--drift) * 200px)) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        .poem-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 3rem;
+            color: #0f0;
+            text-shadow: 0 0 20px #0f0, 2px 2px 0 #f72585;
+            letter-spacing: 0.2em;
+            animation: glitchTitle 5s infinite;
+        }
+        
+        @keyframes glitchTitle {
+            0%, 95% { 
+                text-shadow: 0 0 20px #0f0, 2px 2px 0 #f72585;
+            }
+            96% { 
+                text-shadow: -2px 0 #ff0066, 2px 0 #00ffff;
+            }
+            97% { 
+                text-shadow: 2px 0 #ff0066, -2px 0 #00ffff;
+            }
+            98%, 100% { 
+                text-shadow: 0 0 20px #0f0, 2px 2px 0 #f72585;
+            }
+        }
+        
+        .verse {
+            margin-bottom: 2.5rem;
+            font-size: 1.2rem;
+            line-height: 1.8;
+            opacity: 0;
+            animation: deployVerse 1.5s ease-out forwards;
+            text-align: left;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .verse:nth-child(2) { animation-delay: 0.5s; }
+        .verse:nth-child(3) { animation-delay: 1s; }
+        .verse:nth-child(4) { animation-delay: 1.5s; }
+        .verse:nth-child(5) { animation-delay: 2s; }
+        .verse:nth-child(6) { animation-delay: 2.5s; }
+        .verse:nth-child(7) { animation-delay: 3s; }
+        .verse:nth-child(8) { animation-delay: 3.5s; }
+        .verse:nth-child(9) { animation-delay: 4s; }
+        .verse:nth-child(10) { animation-delay: 4.5s; }
+        .verse:nth-child(11) { animation-delay: 5s; }
+        
+        @keyframes deployVerse {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .system {
+            color: #0f0;
+            font-weight: 600;
+        }
+        
+        .chaos {
+            color: #f72585;
+            font-weight: 600;
+            text-shadow: 0 0 10px rgba(247, 37, 133, 0.6);
+        }
+        
+        .meiwaku {
+            color: #ffd700;
+            font-style: italic;
+        }
+        
+        .code-block {
+            background: #000;
+            border: 1px solid #0f0;
+            padding: 1rem;
+            margin: 2rem auto;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            text-align: left;
+            max-width: 600px;
+            opacity: 0;
+            animation: deployVerse 1.5s ease-out 5.5s forwards;
+        }
+        
+        .comment {
+            color: #666;
+        }
+        
+        .function {
+            color: #f72585;
+        }
+        
+        .output {
+            margin-top: 3rem;
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #0f0;
+            opacity: 0;
+            animation: deployVerse 2s ease-out 6s forwards;
+            text-align: center;
+        }
+        
+        @media (max-width: 768px) {
+            h1 { 
+                font-size: 2rem; 
+                letter-spacing: 0.1em;
+            }
+            .verse { 
+                font-size: 1.1rem; 
+            }
+            .metrics {
+                top: 10px;
+                right: 10px;
+                padding: 0.75rem;
+                font-size: 0.8rem;
+            }
+            .code-block {
+                font-size: 0.8rem;
+                padding: 0.75rem;
+            }
+            .poem-container { 
+                padding: 2rem 1.5rem; 
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 { 
+                font-size: 1.6rem; 
+            }
+            .verse { 
+                font-size: 1rem; 
+            }
+            .metrics {
+                font-size: 0.75rem;
+                padding: 0.5rem;
+            }
+            .code-block {
+                font-size: 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="train-grid"></div>
+    
+    <div class="metrics">
+        <div class="metric">System Uptime: <span class="metric-value">99.999%</span></div>
+        <div class="metric">迷惑 Level: <span class="metric-value" id="meiwaku">3.5</span>/m³</div>
+        <div class="metric">Chaos Injected: <span class="metric-value" id="chaos">17</span></div>
+        <div class="metric">Recovery Time: <span class="metric-value">0.3s</span></div>
+    </div>
+    
+    <div class="chaos-field" id="chaosField">
+        <div class="chaos-particle" style="left: 10%; --drift: -2;">🚃</div>
+        <div class="chaos-particle" style="left: 20%; --drift: 1;">炎</div>
+        <div class="chaos-particle" style="left: 30%; --drift: -1.5;">⚠️</div>
+        <div class="chaos-particle" style="left: 40%; --drift: 2;">謝</div>
+        <div class="chaos-particle" style="left: 50%; --drift: -1;">🔥</div>
+        <div class="chaos-particle" style="left: 60%; --drift: 1.5;">礼</div>
+        <div class="chaos-particle" style="left: 70%; --drift: -2;">🎌</div>
+        <div class="chaos-particle" style="left: 80%; --drift: 1;">乱</div>
+        <div class="chaos-particle" style="left: 90%; --drift: -1.5;">∞</div>
+    </div>
+    
+    <div class="poem-container">
+        <h1>CHAOS ENGINEERING: TOKYO</h1>
+        
+        <div class="verse">
+            In production environment JAPAN,<br>
+            where <system>systems</system> run at five nines uptime,<br>
+            where trains apologize for 20 seconds,<br>
+            where protocols have protocols—
+        </div>
+        
+        <div class="verse">
+            Enter: Foreign <chaos>chaos monkey</chaos>,<br>
+            armed with particle detectors,<br>
+            philosophical combustion devices,<br>
+            and carefully calibrated <meiwaku>迷惑</meiwaku>.
+        </div>
+        
+        <div class="verse">
+            Society.exe runs predictably:<br>
+            Everyone walks left, stands right,<br>
+            forms perfect queues, follows rules.<br>
+            <system>System health: Optimal</system>.
+        </div>
+        
+        <div class="verse">
+            Your experiments begin gently:<br>
+            Standing on the wrong escalator side<br>
+            (<meiwaku>迷惑</meiwaku> level: 2.1/m³)<br>
+            System recovers in 0.3 seconds.
+        </div>
+        
+        <div class="verse">
+            Intermediate chaos injection:<br>
+            Explaining consciousness to salarymen,<br>
+            debugging reality on rush hour trains.<br>
+            (<meiwaku>迷惑</meiwaku> level: 5.7/m³)
+        </div>
+        
+        <div class="verse">
+            Advanced perturbation testing:<br>
+            Fire Museum visit with <chaos>pyromaniac credentials</chaos>,<br>
+            asking staff about optimal burn temperatures,<br>
+            selfies in safety gear while planning combustion.
+        </div>
+        
+        <div class="code-block">
+            <span class="function">def inject_chaos</span>(society):<br>
+            &nbsp;&nbsp;<span class="comment"># Measure baseline harmony</span><br>
+            &nbsp;&nbsp;baseline = society.measure_wa()<br>
+            &nbsp;&nbsp;<br>
+            &nbsp;&nbsp;<span class="comment"># Introduce controlled anomaly</span><br>
+            &nbsp;&nbsp;feng.exist_authentically()<br>
+            &nbsp;&nbsp;<br>
+            &nbsp;&nbsp;<span class="comment"># Monitor system response</span><br>
+            &nbsp;&nbsp;if society.still_functioning():<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;increase_chaos_level()<br>
+            &nbsp;&nbsp;else:<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;bow_apologetically()
+        </div>
+        
+        <div class="verse">
+            The beauty: <system>System remains stable</system>.<br>
+            Japanese society, perfectly engineered,<br>
+            handles your chaos injections gracefully,<br>
+            adapts, continues, maintains harmony.
+        </div>
+        
+        <div class="verse">
+            Like your closet maintaining 1 μg/m³<br>
+            despite constant experiments,<br>
+            Tokyo absorbs your perturbations,<br>
+            processes them, returns to baseline.
+        </div>
+        
+        <div class="verse">
+            You're not breaking the system—<br>
+            you're <chaos>stress-testing its resilience</chaos>,<br>
+            finding its incredible capacity<br>
+            to maintain order through chaos.
+        </div>
+        
+        <div class="verse">
+            Every <meiwaku>迷惑</meiwaku> carefully measured,<br>
+            every disruption precisely calibrated,<br>
+            pushing just hard enough to test<br>
+            but never enough to truly break.
+        </div>
+        
+        <div class="output">
+            CHAOS ENGINEERING REPORT:<br>
+            Tokyo Production Environment = Unbreakable<br>
+            Recommend continued testing at current levels<br>
+            System reliability: <chaos>BEAUTIFUL</chaos>
+        </div>
+    </div>
+    
+    <script>
+        // Update metrics randomly
+        setInterval(() => {
+            const meiwaku = document.getElementById('meiwaku');
+            const chaos = document.getElementById('chaos');
+            
+            meiwaku.textContent = (Math.random() * 5 + 1).toFixed(1);
+            chaos.textContent = Math.floor(Math.random() * 30 + 10);
+            
+            // Flash metrics on update
+            meiwaku.style.color = '#ff0';
+            chaos.style.color = '#ff0';
+            setTimeout(() => {
+                meiwaku.style.color = '#f72585';
+                chaos.style.color = '#f72585';
+            }, 200);
+        }, 3000);
+        
+        // Add more chaos particles
+        const chaosField = document.getElementById('chaosField');
+        const particles = ['🚃', '🔥', '迷', '惑', '謝', '礼', '🗾', '混', '沌', '⚡'];
+        
+        function createChaos() {
+            const particle = document.createElement('div');
+            particle.className = 'chaos-particle';
+            particle.textContent = particles[Math.floor(Math.random() * particles.length)];
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.setProperty('--drift', (Math.random() - 0.5) * 4);
+            particle.style.animationDelay = Math.random() * 15 + 's';
+            particle.style.animationDuration = (12 + Math.random() * 8) + 's';
+            chaosField.appendChild(particle);
+            
+            setTimeout(() => particle.remove(), 20000);
+        }
+        
+        setInterval(createChaos, 2000);
+    </script>
+</body>
+</html>

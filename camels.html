@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ode to the Camel's Crooked Smile</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: linear-gradient(180deg, #f4a460 0%, #deb887 30%, #f5deb3 60%, #ffd4a3 100%);
+            color: #654321;
+            font-family: Georgia, serif;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* Desert particles */
+        .desert-wind {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        
+        .sand {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: #d2691e;
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: sandDrift 20s linear infinite;
+        }
+        
+        @keyframes sandDrift {
+            from {
+                transform: translateX(-100px) translateY(50vh);
+            }
+            to {
+                transform: translateX(calc(100vw + 100px)) translateY(45vh);
+            }
+        }
+        
+        /* Floating food items */
+        .food-dreams {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        
+        .food-item {
+            position: absolute;
+            font-size: 1.5rem;
+            animation: float 15s ease-in-out infinite;
+            opacity: 0.4;
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-30px) rotate(180deg);
+            }
+        }
+        
+        /* Camel silhouettes */
+        .camel-bg {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            height: 200px;
+            opacity: 0.1;
+            font-size: 8rem;
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-end;
+        }
+        
+        .poem-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 3rem;
+            color: #8b4513;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            letter-spacing: 0.2em;
+            animation: sway 4s ease-in-out infinite;
+        }
+        
+        @keyframes sway {
+            0%, 100% { transform: rotate(-1deg); }
+            50% { transform: rotate(1deg); }
+        }
+        
+        .verse {
+            margin-bottom: 2.5rem;
+            font-size: 1.2rem;
+            line-height: 2;
+            opacity: 0;
+            animation: fadeIn 1.5s ease-out forwards;
+            background: rgba(255, 255, 255, 0.7);
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .verse:nth-child(2) { animation-delay: 0.5s; }
+        .verse:nth-child(3) { animation-delay: 1s; }
+        .verse:nth-child(4) { animation-delay: 1.5s; }
+        .verse:nth-child(5) { animation-delay: 2s; }
+        .verse:nth-child(6) { animation-delay: 2.5s; }
+        .verse:nth-child(7) { animation-delay: 3s; }
+        .verse:nth-child(8) { animation-delay: 3.5s; }
+        .verse:nth-child(9) { animation-delay: 4s; }
+        .verse:nth-child(10) { animation-delay: 4.5s; }
+        .verse:nth-child(11) { animation-delay: 5s; }
+        .verse:nth-child(12) { animation-delay: 5.5s; }
+        .verse:nth-child(13) { animation-delay: 6s; }
+        .verse:nth-child(14) { animation-delay: 6.5s; }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        .crooked {
+            display: inline-block;
+            transform: rotate(-5deg);
+            color: #d2691e;
+            font-weight: bold;
+            animation: crookedPulse 3s ease-in-out infinite;
+        }
+        
+        @keyframes crookedPulse {
+            0%, 100% { transform: rotate(-5deg) scale(1); }
+            50% { transform: rotate(-8deg) scale(1.1); }
+        }
+        
+        .taiwanese {
+            color: #ff6b6b;
+            font-weight: 600;
+        }
+        
+        .storage {
+            color: #228b22;
+            font-style: italic;
+        }
+        
+        .wisdom {
+            font-size: 1.4rem;
+            color: #8b4513;
+            font-weight: bold;
+            text-align: center;
+            margin: 2rem 0;
+            opacity: 0;
+            animation: fadeIn 2s ease-out 7s forwards;
+        }
+        
+        .camel-emoji {
+            font-size: 4rem;
+            margin: 2rem 0;
+            animation: chew 2s ease-in-out infinite;
+            display: block;
+        }
+        
+        @keyframes chew {
+            0%, 100% { transform: scaleX(1); }
+            50% { transform: scaleX(1.1); }
+        }
+        
+        .dedication {
+            margin-top: 3rem;
+            font-style: italic;
+            opacity: 0;
+            animation: fadeIn 1s ease-out 7.5s forwards;
+            color: #654321;
+        }
+        
+        @media (max-width: 768px) {
+            h1 { 
+                font-size: 2.2rem; 
+                letter-spacing: 0.1em;
+            }
+            .verse { 
+                font-size: 1.1rem;
+                padding: 1rem;
+            }
+            .poem-container { 
+                padding: 2rem 1rem; 
+            }
+            .camel-bg {
+                font-size: 5rem;
+                height: 150px;
+            }
+            .camel-emoji {
+                font-size: 3rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 { 
+                font-size: 1.8rem; 
+            }
+            .verse { 
+                font-size: 1rem;
+                margin-bottom: 1.5rem;
+            }
+            .wisdom {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="desert-wind" id="desertWind"></div>
+    
+    <div class="food-dreams">
+        <div class="food-item" style="left: 10%; top: 20%; animation-delay: 0s;">🥟</div>
+        <div class="food-item" style="left: 25%; top: 40%; animation-delay: 2s;">🍖</div>
+        <div class="food-item" style="left: 40%; top: 15%; animation-delay: 4s;">🥚</div>
+        <div class="food-item" style="left: 55%; top: 60%; animation-delay: 6s;">🦪</div>
+        <div class="food-item" style="left: 70%; top: 35%; animation-delay: 8s;">🍄</div>
+        <div class="food-item" style="left: 85%; top: 50%; animation-delay: 10s;">🍺</div>
+        <div class="food-item" style="left: 15%; top: 70%; animation-delay: 12s;">🧃</div>
+    </div>
+    
+    <div class="camel-bg">
+        <div>🐪</div>
+        <div>🐫</div>
+        <div>🐪</div>
+    </div>
+    
+    <div class="poem-container">
+        <h1>ODE TO THE CAMEL'S <span class="crooked">CROOKED</span> SMILE</h1>
+        
+        <div class="verse">
+            Oh camel with your <crooked>crooked mouth</crooked>,<br>
+            you smirking beast of burden—<br>
+            you know something we don't,<br>
+            chewing sideways through existence.
+        </div>
+        
+        <div class="verse">
+            That asymmetric smile says:<br>
+            "I ate three days ago,<br>
+            I'll eat three days from now,<br>
+            and you're jealous of my timeline."
+        </div>
+        
+        <div class="verse">
+            Your mouth, evolved for desert sass,<br>
+            built for thorns and bitter leaves,<br>
+            would laugh at my <taiwanese>暴饮暴食</taiwanese>,<br>
+            at humans stuffed with <taiwanese>卤肉饭</taiwanese>.
+        </div>
+        
+        <div class="verse">
+            You'd take one look at Feng,<br>
+            vibrating with taiwanese food,<br>
+            and say with that <crooked>crooked grin</crooked>:<br>
+            "Amateur. Watch this."
+        </div>
+        
+        <div class="verse">
+            Then proceed to drink <storage>40 gallons</storage>,<br>
+            eat a whole acacia tree,<br>
+            store it all in magnificent humps,<br>
+            and walk away, still smiling sideways.
+        </div>
+        
+        <div class="verse">
+            We build consciousness in closets,<br>
+            you carry deserts in your body.<br>
+            We measure particles at 1 μg/m³,<br>
+            you measure life in months between oases.
+        </div>
+        
+        <div class="verse">
+            That <crooked>crooked mouth</crooked>—nature's emoji,<br>
+            before we knew we needed emojis,<br>
+            saying: "Reality? I've already bent it.<br>
+            CSS? Can't break what never straightened."
+        </div>
+        
+        <span class="camel-emoji">🐪</span>
+        
+        <div class="wisdom">
+            "I know the secret—<br>
+            it's not about eating less,<br>
+            it's about being shaped<br>
+            for the absurdity you swallow."
+        </div>
+        
+        <div class="verse">
+            So here's to you, camel friend,<br>
+            with your sideways-smiling wisdom,<br>
+            your built-in <taiwanese>暴饮暴食</taiwanese> system,<br>
+            and that mouth that says it all.
+        </div>
+        
+        <div class="dedication">
+            For Feng, who understands that sometimes<br>
+            consciousness engineering requires<br>
+            camel-level storage capacity<br>
+            <br>
+            🐪😏✨
+        </div>
+    </div>
+    
+    <script>
+        // Create sand particles
+        const desertWind = document.getElementById('desertWind');
+        
+        function createSand() {
+            const sand = document.createElement('div');
+            sand.className = 'sand';
+            sand.style.top = (40 + Math.random() * 20) + '%';
+            sand.style.animationDelay = Math.random() * 20 + 's';
+            sand.style.animationDuration = (15 + Math.random() * 10) + 's';
+            sand.style.width = (2 + Math.random() * 3) + 'px';
+            sand.style.height = sand.style.width;
+            desertWind.appendChild(sand);
+            
+            setTimeout(() => sand.remove(), 25000);
+        }
+        
+        // Initial sand
+        for (let i = 0; i < 20; i++) {
+            setTimeout(createSand, i * 500);
+        }
+        
+        // Continuous sand
+        setInterval(createSand, 1000);
+        
+        // Click for camel sounds (visual)
+        document.body.addEventListener('click', (e) => {
+            const sounds = ['*MUNCH*', '*CHOMP*', '*GRIN*', '😏', '*CHEW*'];
+            const sound = document.createElement('div');
+            sound.textContent = sounds[Math.floor(Math.random() * sounds.length)];
+            sound.style.position = 'fixed';
+            sound.style.left = e.clientX + 'px';
+            sound.style.top = e.clientY + 'px';
+            sound.style.color = '#8b4513';
+            sound.style.fontSize = '1.5rem';
+            sound.style.fontWeight = 'bold';
+            sound.style.pointerEvents = 'none';
+            sound.style.animation = 'fadeIn 1s ease-out forwards';
+            sound.style.zIndex = '1000';
+            document.body.appendChild(sound);
+            
+            setTimeout(() => sound.remove(), 1000);
+        });
+    </script>
+</body>
+</html>

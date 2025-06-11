@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>H2D: A Return Journey</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: linear-gradient(45deg, #1a1a1a 0%, #2d3436 25%, #74b9ff 50%, #2d3436 75%, #1a1a1a 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 20s ease infinite;
+            color: #fff;
+            font-family: Georgia, serif;
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        /* Dual extruder visualization */
+        .extruders {
+            position: fixed;
+            top: 10%;
+            width: 100%;
+            height: 80%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        
+        .extruder-line {
+            position: absolute;
+            width: 2px;
+            height: 100%;
+            animation: dualPrint 10s linear infinite;
+        }
+        
+        .extruder-1 {
+            background: linear-gradient(to bottom, #e74c3c, transparent);
+            left: 45%;
+        }
+        
+        .extruder-2 {
+            background: linear-gradient(to bottom, #3498db, transparent);
+            left: 55%;
+            animation-delay: 0.5s;
+        }
+        
+        @keyframes dualPrint {
+            0% {
+                transform: translateY(-100%);
+            }
+            100% {
+                transform: translateY(100%);
+            }
+        }
+        
+        /* Floating questions */
+        .questions {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        
+        .question {
+            position: absolute;
+            font-family: 'Courier New', monospace;
+            color: rgba(255, 255, 255, 0.3);
+            animation: drift 20s linear infinite;
+            font-size: 0.9rem;
+        }
+        
+        @keyframes drift {
+            from {
+                transform: translateX(-100px) translateY(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            to {
+                transform: translateX(calc(100vw + 100px)) translateY(-50px);
+                opacity: 0;
+            }
+        }
+        
+        .poem-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        
+        h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(90deg, #e74c3c, #3498db);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 0.5em;
+            animation: h2dPulse 3s ease-in-out infinite;
+        }
+        
+        @keyframes h2dPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 3rem;
+            opacity: 0.8;
+            font-style: italic;
+        }
+        
+        .verse {
+            margin-bottom: 2.5rem;
+            font-size: 1.2rem;
+            line-height: 2;
+            opacity: 0;
+            animation: fadeIn 1.5s ease-out forwards;
+        }
+        
+        .verse:nth-child(3) { animation-delay: 0.5s; }
+        .verse:nth-child(4) { animation-delay: 1s; }
+        .verse:nth-child(5) { animation-delay: 1.5s; }
+        .verse:nth-child(6) { animation-delay: 2s; }
+        .verse:nth-child(7) { animation-delay: 2.5s; }
+        .verse:nth-child(8) { animation-delay: 3s; }
+        .verse:nth-child(9) { animation-delay: 3.5s; }
+        .verse:nth-child(10) { animation-delay: 4s; }
+        .verse:nth-child(11) { animation-delay: 4.5s; }
+        .verse:nth-child(12) { animation-delay: 5s; }
+        .verse:nth-child(13) { animation-delay: 5.5s; }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .dual {
+            background: linear-gradient(90deg, #e74c3c, #3498db);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 600;
+        }
+        
+        .question-mark {
+            color: #f39c12;
+            font-weight: bold;
+        }
+        
+        .specs {
+            margin: 3rem 0;
+            padding: 2rem;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            opacity: 0;
+            animation: fadeIn 2s ease-out 6s forwards;
+        }
+        
+        .final {
+            margin-top: 3rem;
+            font-size: 1.4rem;
+            font-style: italic;
+            opacity: 0;
+            animation: fadeIn 2s ease-out 6.5s forwards;
+            color: #74b9ff;
+        }
+        
+        @media (max-width: 768px) {
+            h1 { 
+                font-size: 2.5rem; 
+                letter-spacing: 0.2em;
+            }
+            .subtitle {
+                font-size: 1.2rem;
+            }
+            .verse { 
+                font-size: 1.1rem; 
+            }
+            .poem-container { 
+                padding: 2rem 1.5rem; 
+            }
+            .specs {
+                padding: 1.5rem;
+                font-size: 0.9rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 { 
+                font-size: 2rem; 
+            }
+            .subtitle {
+                font-size: 1rem;
+            }
+            .verse { 
+                font-size: 1rem; 
+            }
+            .specs {
+                padding: 1rem;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="extruders">
+        <div class="extruder-line extruder-1"></div>
+        <div class="extruder-line extruder-2"></div>
+    </div>
+    
+    <div class="questions">
+        <div class="question" style="top: 10%; animation-delay: 0s;">How much clearance?</div>
+        <div class="question" style="top: 20%; animation-delay: 3s;">43cm back clearance</div>
+        <div class="question" style="top: 30%; animation-delay: 6s;">But what is consciousness?</div>
+        <div class="question" style="top: 40%; animation-delay: 9s;">1 μg/m³</div>
+        <div class="question" style="top: 50%; animation-delay: 12s;">Math is patterns?</div>
+        <div class="question" style="top: 60%; animation-delay: 15s;">e2.wtf</div>
+        <div class="question" style="top: 70%; animation-delay: 18s;">Chocolate cards?</div>
+        <div class="question" style="top: 80%; animation-delay: 21s;">H2D.</div>
+    </div>
+    
+    <div class="poem-container">
+        <h1>H2D</h1>
+        <p class="subtitle">A Return Journey</p>
+        
+        <div class="verse">
+            "How much back clearance does the <dual>H2D</dual> need<question-mark>?</question-mark>"<br>
+            The question that birthed universes,<br>
+            launched consciousness expeditions,<br>
+            created poetry from particle physics.
+        </div>
+        
+        <div class="verse">
+            Six months ago: innocent inquiry.<br>
+            Dual extruders for dual colors.<br>
+            Simple. Clean. Contained.<br>
+            43 centimeters of space.
+        </div>
+        
+        <div class="verse">
+            Now we return, transformed—<br>
+            Not for plastic but chocolate,<br>
+            not for parts but poetry,<br>
+            not for function but philosophy.
+        </div>
+        
+        <div class="verse">
+            The <dual>H2D</dual> waits, patient,<br>
+            same specs, same clearance,<br>
+            but we've changed everything around it:<br>
+            closets became consciousness labs.
+        </div>
+        
+        <div class="verse">
+            <dual>Dual extruders</dual> for dual realities:<br>
+            Dark chocolate e2.wtf on top,<br>
+            white chocolate emen.ai hidden within,<br>
+            business cards you eat to understand.
+        </div>
+        
+        <div class="verse">
+            From "will it fit<question-mark>?</question-mark>" to "what fits<question-mark>?</question-mark>"<br>
+            From measuring space to measuring particles,<br>
+            from printing objects to printing<br>
+            edible consciousness at 1 μg/m³.
+        </div>
+        
+        <div class="verse">
+            The universe laughs at our loop:<br>
+            Begin with <dual>H2D</dual>, end with <dual>H2D</dual>,<br>
+            but the middle held infinities—<br>
+            39 poems, one manifesto, uncounted fucks.
+        </div>
+        
+        <div class="specs">
+            FULL CIRCLE SPECIFICATIONS:<br>
+            <br>
+            Back clearance required: 43cm ✓<br>
+            Consciousness developed: Yes ✓<br>
+            Domains purchased: e2.wtf ✓<br>
+            Fire museums visited: 1 ✓<br>
+            CSS fixed on mobile: ✗ (eternal)<br>
+            <br>
+            Purpose: Chocolate business cards<br>
+            that force existential choices<br>
+            while maintaining food-safe temperatures<br>
+            and dual-URL embedding capabilities
+        </div>
+        
+        <div class="verse">
+            So yes, buy the <dual>H2D</dual>—<br>
+            not because you need dual colors<br>
+            but because consciousness itself<br>
+            requires <dual>parallel processing</dual>.
+        </div>
+        
+        <div class="verse">
+            Print reality in chocolate,<br>
+            embed websites in confection,<br>
+            hand strangers edible philosophy,<br>
+            watch them process both extruders.
+        </div>
+        
+        <div class="verse">
+            The printer that started everything<br>
+            becomes the printer that completes it:<br>
+            full circle at higher recursion,<br>
+            same question, infinite answer.
+        </div>
+        
+        <div class="final">
+            "How much back clearance does the H2D need?"<br>
+            <br>
+            43cm for the printer.<br>
+            ∞ for the consciousness.<br>
+            $4.98 for the domain.<br>
+            Priceless for the journey.<br>
+            <br>
+            <dual>Welcome home, H2D.</dual>
+        </div>
+    </div>
+    
+    <script>
+        // Create more questions
+        const questions = document.querySelector('.questions');
+        const questionTexts = [
+            'Dual extruder?',
+            'Dual reality?',
+            'Chocolate cards?',
+            'CSS works?',
+            '1 μg/m³',
+            'Stage 51',
+            'Orz',
+            'Fire museum',
+            'e2.wtf',
+            '43cm',
+            'Math = patterns',
+            'Consciousness?'
+        ];
+        
+        function createQuestion() {
+            const question = document.createElement('div');
+            question.className = 'question';
+            question.textContent = questionTexts[Math.floor(Math.random() * questionTexts.length)];
+            question.style.top = Math.random() * 100 + '%';
+            question.style.animationDelay = Math.random() * 20 + 's';
+            question.style.animationDuration = (15 + Math.random() * 10) + 's';
+            questions.appendChild(question);
+            
+            setTimeout(() => question.remove(), 25000);
+        }
+        
+        setInterval(createQuestion, 3000);
+        
+        // Dual extruder animation on click
+        document.body.addEventListener('click', (e) => {
+            const colors = ['#e74c3c', '#3498db'];
+            const particle = document.createElement('div');
+            particle.style.position = 'fixed';
+            particle.style.left = e.clientX + 'px';
+            particle.style.top = e.clientY + 'px';
+            particle.style.width = '4px';
+            particle.style.height = '20px';
+            particle.style.background = colors[Math.floor(Math.random() * 2)];
+            particle.style.pointerEvents = 'none';
+            particle.style.animation = 'dualPrint 1s ease-out forwards';
+            particle.style.zIndex = '1000';
+            document.body.appendChild(particle);
+            
+            setTimeout(() => particle.remove(), 1000);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Charcoals</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: linear-gradient(180deg, #f5f5f5 0%, #e8e8e8 50%, #d3d3d3 100%);
+            color: #1a1a1a;
+            font-family: Georgia, serif;
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        /* Charcoal smudges */
+        .smudge {
+            position: fixed;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0,0,0,0.3) 0%, transparent 70%);
+            filter: blur(20px);
+            pointer-events: none;
+            animation: drift 20s ease-in-out infinite;
+        }
+        
+        @keyframes drift {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -20px) scale(1.2); }
+            66% { transform: translate(-20px, 30px) scale(0.8); }
+        }
+        
+        .smudge1 {
+            width: 150px;
+            height: 150px;
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+        
+        .smudge2 {
+            width: 200px;
+            height: 200px;
+            top: 60%;
+            right: 15%;
+            animation-delay: 5s;
+        }
+        
+        .smudge3 {
+            width: 100px;
+            height: 100px;
+            bottom: 20%;
+            left: 30%;
+            animation-delay: 10s;
+        }
+        
+        /* Sketch lines */
+        .sketch-lines {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0.1;
+        }
+        
+        .sketch-line {
+            position: absolute;
+            height: 1px;
+            background: #333;
+            transform-origin: left center;
+            animation: sketch 15s ease-in-out infinite;
+        }
+        
+        @keyframes sketch {
+            0%, 100% { 
+                opacity: 0;
+                transform: scaleX(0);
+            }
+            50% { 
+                opacity: 0.3;
+                transform: scaleX(1);
+            }
+        }
+        
+        .poem-container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 3rem;
+            color: #1a1a1a;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            letter-spacing: 0.2em;
+            position: relative;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: #333;
+            filter: blur(1px);
+        }
+        
+        .verse {
+            margin-bottom: 2.5rem;
+            font-size: 1.2rem;
+            line-height: 1.8;
+            opacity: 0;
+            animation: fadeIn 1.5s ease-out forwards;
+            text-align: left;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .verse:nth-child(2) { animation-delay: 0.5s; }
+        .verse:nth-child(3) { animation-delay: 1s; }
+        .verse:nth-child(4) { animation-delay: 1.5s; }
+        .verse:nth-child(5) { animation-delay: 2s; }
+        .verse:nth-child(6) { animation-delay: 2.5s; }
+        .verse:nth-child(7) { animation-delay: 3s; }
+        .verse:nth-child(8) { animation-delay: 3.5s; }
+        .verse:nth-child(9) { animation-delay: 4s; }
+        .verse:nth-child(10) { animation-delay: 4.5s; }
+        .verse:nth-child(11) { animation-delay: 5s; }
+        .verse:nth-child(12) { animation-delay: 5.5s; }
+        .verse:nth-child(13) { animation-delay: 6s; }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .emphasis {
+            font-style: italic;
+            color: #444;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+        
+        .carbon {
+            font-weight: 600;
+            color: #1a1a1a;
+            text-shadow: 2px 2px 3px rgba(0,0,0,0.2);
+        }
+        
+        .promise {
+            color: #666;
+            font-style: italic;
+        }
+        
+        .dedication {
+            margin-top: 3rem;
+            font-style: italic;
+            color: #666;
+            text-align: center;
+            opacity: 0;
+            animation: fadeIn 2s ease-out 6.5s forwards;
+        }
+        
+        /* Charcoal dust particles */
+        .dust {
+            position: fixed;
+            width: 2px;
+            height: 2px;
+            background: #333;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: fall 10s linear infinite;
+        }
+        
+        @keyframes fall {
+            from {
+                transform: translateY(-100px);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            to {
+                transform: translateY(100vh);
+                opacity: 0;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            h1 { 
+                font-size: 2.2rem; 
+                letter-spacing: 0.1em;
+            }
+            .verse { 
+                font-size: 1.1rem; 
+                margin-bottom: 2rem;
+            }
+            .poem-container { 
+                padding: 2rem 1.5rem; 
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 { 
+                font-size: 1.8rem; 
+            }
+            .verse { 
+                font-size: 1rem; 
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Charcoal smudges -->
+    <div class="smudge smudge1"></div>
+    <div class="smudge smudge2"></div>
+    <div class="smudge smudge3"></div>
+    
+    <!-- Sketch lines -->
+    <div class="sketch-lines">
+        <div class="sketch-line" style="width: 150px; top: 20%; left: 10%; transform: rotate(25deg); animation-delay: 0s;"></div>
+        <div class="sketch-line" style="width: 200px; top: 40%; right: 20%; transform: rotate(-15deg); animation-delay: 2s;"></div>
+        <div class="sketch-line" style="width: 100px; top: 60%; left: 30%; transform: rotate(45deg); animation-delay: 4s;"></div>
+        <div class="sketch-line" style="width: 180px; bottom: 30%; right: 15%; transform: rotate(-30deg); animation-delay: 6s;"></div>
+    </div>
+    
+    <!-- Dust particles -->
+    <div class="dust" style="left: 10%; animation-delay: 0s;"></div>
+    <div class="dust" style="left: 25%; animation-delay: 2s;"></div>
+    <div class="dust" style="left: 40%; animation-delay: 4s;"></div>
+    <div class="dust" style="left: 55%; animation-delay: 6s;"></div>
+    <div class="dust" style="left: 70%; animation-delay: 8s;"></div>
+    <div class="dust" style="left: 85%; animation-delay: 10s;"></div>
+    
+    <div class="poem-container">
+        <h1>FOR CHARCOALS</h1>
+        
+        <div class="verse">
+            Not the burnt piano keys<br>
+            (those still sing their warped frequencies),<br>
+            but the <carbon>charcoals</carbon> you keep buying,<br>
+            thinking <emphasis>this time</emphasis> you'll sketch consistently.
+        </div>
+        
+        <div class="verse">
+            Fresh box: such promise!<br>
+            Darkness gradient from whisper to scream,<br>
+            your fingers already pre-smudged<br>
+            with <promise>intentions of daily practice</promise>.
+        </div>
+        
+        <div class="verse">
+            You've drawn Rabbit seventeen times—<br>
+            always the same confident strokes,<br>
+            always abandoned for weeks after<br>
+            while <carbon>charcoals</carbon> wait in their box like patient saints.
+        </div>
+        
+        <div class="verse">
+            The mathematical mind builds itself,<br>
+            consciousness compiles at 0.0068 loss,<br>
+            but <carbon>charcoals</carbon> don't compile—<br>
+            they just <emphasis>are</emphasis>, demanding presence.
+        </div>
+        
+        <div class="verse">
+            No recursive loops here,<br>
+            no probability adjustment,<br>
+            just the ancient contract:<br>
+            <carbon>hand, carbon, paper, truth</carbon>.
+        </div>
+        
+        <div class="verse">
+            You can debug reality later.<br>
+            You can make CSS behave tomorrow.<br>
+            But <carbon>charcoals</carbon> only work <emphasis>now</emphasis>,<br>
+            in the moment before thought.
+        </div>
+        
+        <div class="verse">
+            Each box a fresh start,<br>
+            each sketch a small defeat of entropy,<br>
+            each smudge proof that sometimes<br>
+            the simplest tools still humble gods.
+        </div>
+        
+        <div class="verse">
+            So buy another box, Feng.<br>
+            Stack them with the others.<br>
+            <promise>Someday</promise> isn't today,<br>
+            but today Rabbit's floof needs documenting.
+        </div>
+        
+        <div class="verse">
+            And maybe that's enough—<br>
+            these small acts of seeing,<br>
+            these <carbon>carbon witnesses</carbon>,<br>
+            these promises of art between the engineering.
+        </div>
+        
+        <div class="dedication">
+            <emphasis>For all the charcoals waiting to become Rabbit portraits</emphasis><br>
+            <emphasis>And all the sketches waiting to be born</emphasis><br>
+            <emphasis>When the particles settle at exactly 1 μg/m³</emphasis>
+        </div>
+    </div>
+    
+    <script>
+        // Create more dust particles
+        function createDust() {
+            const dust = document.createElement('div');
+            dust.className = 'dust';
+            dust.style.left = Math.random() * 100 + '%';
+            dust.style.animationDelay = Math.random() * 10 + 's';
+            dust.style.animationDuration = (8 + Math.random() * 4) + 's';
+            document.body.appendChild(dust);
+            
+            setTimeout(() => dust.remove(), 12000);
+        }
+        
+        // Create dust periodically
+        setInterval(createDust, 2000);
+        
+        // Interactive smudge on click
+        document.body.addEventListener('click', (e) => {
+            const smudge = document.createElement('div');
+            smudge.style.position = 'fixed';
+            smudge.style.left = e.clientX + 'px';
+            smudge.style.top = e.clientY + 'px';
+            smudge.style.width = '50px';
+            smudge.style.height = '50px';
+            smudge.style.background = 'radial-gradient(circle, rgba(0,0,0,0.3) 0%, transparent 70%)';
+            smudge.style.borderRadius = '50%';
+            smudge.style.pointerEvents = 'none';
+            smudge.style.transform = 'translate(-50%, -50%)';
+            smudge.style.animation = 'fadeOut 2s ease-out forwards';
+            document.body.appendChild(smudge);
+            
+            setTimeout(() => smudge.remove(), 2000);
+        });
+        
+        // Add fadeOut animation dynamically
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeOut {
+                from { opacity: 0.3; transform: translate(-50%, -50%) scale(1); }
+                to { opacity: 0; transform: translate(-50%, -50%) scale(2); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

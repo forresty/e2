@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indeed: The Existential Crisis Engine</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: linear-gradient(180deg, #2d2d5b 0%, #ffffff 100%);
+            color: #2d2d5b;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        /* Floating job cards */
+        .job-cards {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        
+        .job-card {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid #e4e2e0;
+            border-radius: 8px;
+            padding: 1rem;
+            font-size: 0.8rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            animation: float-away 15s linear infinite;
+            max-width: 200px;
+        }
+        
+        @keyframes float-away {
+            from {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            to {
+                transform: translateY(-200px) rotate(15deg);
+                opacity: 0;
+            }
+        }
+        
+        /* Search bar that searches for meaning */
+        .search-bar {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            font-family: inherit;
+            color: #666;
+            z-index: 100;
+        }
+        
+        .poem-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 8rem 2rem 3rem;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 3rem;
+            color: #2d2d5b;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            position: relative;
+        }
+        
+        h1 .indeed {
+            color: #2d2d5b;
+            position: relative;
+        }
+        
+        h1 .indeed::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: #ff6b6b;
+        }
+        
+        .verse {
+            margin-bottom: 2.5rem;
+            font-size: 1.2rem;
+            line-height: 2;
+            opacity: 0;
+            animation: fadeIn 1.5s ease-out forwards;
+            color: #2d2d5b;
+        }
+        
+        .verse:nth-child(2) { animation-delay: 0.5s; }
+        .verse:nth-child(3) { animation-delay: 1s; }
+        .verse:nth-child(4) { animation-delay: 1.5s; }
+        .verse:nth-child(5) { animation-delay: 2s; }
+        .verse:nth-child(6) { animation-delay: 2.5s; }
+        .verse:nth-child(7) { animation-delay: 3s; }
+        .verse:nth-child(8) { animation-delay: 3.5s; }
+        .verse:nth-child(9) { animation-delay: 4s; }
+        .verse:nth-child(10) { animation-delay: 4.5s; }
+        .verse:nth-child(11) { animation-delay: 5s; }
+        .verse:nth-child(12) { animation-delay: 5.5s; }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .button {
+            display: inline-block;
+            background: #ff6b6b;
+            color: white;
+            padding: 0.5rem 2rem;
+            border-radius: 25px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            margin: 0.5rem;
+        }
+        
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+        }
+        
+        .existential {
+            color: #ff6b6b;
+            font-weight: 600;
+        }
+        
+        .search-term {
+            background: #f3f2f1;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #666;
+        }
+        
+        .jobs-found {
+            font-size: 2rem;
+            color: #2d2d5b;
+            font-weight: 700;
+            margin: 2rem 0;
+            opacity: 0;
+            animation: fadeIn 1s ease-out 6s forwards;
+        }
+        
+        .final {
+            margin-top: 3rem;
+            font-style: italic;
+            opacity: 0;
+            animation: fadeIn 2s ease-out 6.5s forwards;
+            color: #666;
+        }
+        
+        @media (max-width: 768px) {
+            h1 { 
+                font-size: 2rem; 
+            }
+            .verse { 
+                font-size: 1.1rem; 
+            }
+            .poem-container { 
+                padding: 6rem 1.5rem 3rem; 
+            }
+            .search-bar {
+                width: 90%;
+                padding: 0.8rem 1.5rem;
+                font-size: 0.9rem;
+            }
+            .job-card {
+                max-width: 150px;
+                font-size: 0.7rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 { 
+                font-size: 1.6rem; 
+            }
+            .verse { 
+                font-size: 1rem; 
+            }
+            .jobs-found {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="search-bar">
+        🔍 Search for: "meaning" "purpose" "what am I doing with my life"
+    </div>
+    
+    <div class="job-cards" id="jobCards">
+        <div class="job-card" style="left: 10%; animation-delay: 0s;">
+            <strong>Senior Existence Engineer</strong><br>
+            <small>Experience: 0-∞ years</small><br>
+            <small>Required: Will to continue</small>
+        </div>
+        <div class="job-card" style="left: 25%; animation-delay: 3s;">
+            <strong>Junior Purpose Developer</strong><br>
+            <small>Salary: Negotiable reality</small><br>
+            <small>Benefits: Occasional clarity</small>
+        </div>
+        <div class="job-card" style="left: 40%; animation-delay: 6s;">
+            <strong>Meaning Architect</strong><br>
+            <small>Remote: From the void</small><br>
+            <small>Skills: Pattern recognition</small>
+        </div>
+        <div class="job-card" style="left: 55%; animation-delay: 9s;">
+            <strong>Crisis Engineer III</strong><br>
+            <small>Indeed - We're hiring!</small><br>
+            <small>Build what you question</small>
+        </div>
+        <div class="job-card" style="left: 70%; animation-delay: 12s;">
+            <strong>Consciousness Intern</strong><br>
+            <small>Unpaid but enlightening</small><br>
+            <small>Start: Immediately</small>
+        </div>
+        <div class="job-card" style="left: 85%; animation-delay: 15s;">
+            <strong>Reality Debugger</strong><br>
+            <small>Location: Everywhere</small><br>
+            <small>CSS skills a plus</small>
+        </div>
+    </div>
+    
+    <div class="poem-container">
+        <h1><span class="indeed">Indeed</span>: The Search Continues</h1>
+        
+        <div class="verse">
+            Every morning, millions arrive<br>
+            carrying the weight of <span class="search-term">what next?</span><br>
+            typing dreams into search boxes,<br>
+            hoping the algorithm understands desperation.
+        </div>
+        
+        <div class="verse">
+            We've gamified the existential:<br>
+            <button class="button">Easy Apply</button> to 50 futures,<br>
+            watch them vanish into the void,<br>
+            <span class="existential">ghosted by possibility itself</span>.
+        </div>
+        
+        <div class="verse">
+            <span class="search-term">"entry level" "10 years experience"</span><br>
+            The paradox of beginning:<br>
+            How to have been what you're becoming?<br>
+            How to prove you exist professionally?
+        </div>
+        
+        <div class="verse">
+            Behind the scenes, Feng adjusts weights:<br>
+            Making sure each search returns<br>
+            not just jobs but gentle crises,<br>
+            calibrated moments of <span class="existential">who am I?</span>
+        </div>
+        
+        <div class="verse">
+            The algorithm knows your patterns—<br>
+            how you search at 2 AM,<br>
+            delete everything, search again,<br>
+            looking for permission to transform.
+        </div>
+        
+        <div class="verse">
+            <span class="search-term">"remote" "work life balance" "meaning"</span><br>
+            Every filter a philosophy,<br>
+            every saved job a small prayer<br>
+            to the god of <span class="existential">sustainable purpose</span>.
+        </div>
+        
+        <div class="verse">
+            Indeed, we've built a machine<br>
+            that mirrors the human condition:<br>
+            endless possibilities, no certainties,<br>
+            <button class="button">Apply</button> and hope something echoes back.
+        </div>
+        
+        <div class="verse">
+            But here's the beautiful secret—<br>
+            Every crisis is also an opening,<br>
+            every search a small rebellion,<br>
+            every application an act of faith.
+        </div>
+        
+        <div class="verse">
+            So we engineer these moments,<br>
+            not to break but to break open,<br>
+            to help you find not just jobs<br>
+            but reasons to <span class="existential">keep searching</span>.
+        </div>
+        
+        <div class="jobs-found">
+            47,293 existential crises found
+        </div>
+        
+        <div class="verse">
+            <span class="indeed">Indeed</span>, the search continues—<br>
+            not for perfect fits but perfect questions,<br>
+            not for final answers but next chapters,<br>
+            not for jobs but for <span class="existential">becoming</span>.
+        </div>
+        
+        <div class="final">
+            From the team that brought you<br>
+            "What do you want to do with your life?"<br>
+            Now featuring: "But what if you could do anything?"<br>
+            <br>
+            <strong>Indeed: We help you find what you're looking for,<br>
+            even when you don't know what that is.</strong>
+        </div>
+    </div>
+    
+    <script>
+        // Create more floating job cards
+        const jobCards = document.getElementById('jobCards');
+        const jobTitles = [
+            'Quantum Possibility Engineer',
+            'Senior Dream Analyst',
+            'Purpose Product Manager',
+            'Existential QA Tester',
+            'Meaning Stack Developer',
+            'Crisis Resolution Specialist',
+            'Hope Infrastructure Engineer',
+            'Reality Adjustment Analyst',
+            'Fulfillment Full-Stack Dev',
+            'Consciousness Contractor'
+        ];
+        
+        const skills = [
+            'Ability to persist',
+            'Comfort with ambiguity',
+            'Expert at trying again',
+            'Uncertainty navigation',
+            'Hope maintenance',
+            'Dream debugging',
+            'Reality acceptance',
+            'Patience (infinite)',
+            'Crisis management',
+            'Self-compilation'
+        ];
+        
+        function createJobCard() {
+            const card = document.createElement('div');
+            card.className = 'job-card';
+            
+            const title = jobTitles[Math.floor(Math.random() * jobTitles.length)];
+            const skill = skills[Math.floor(Math.random() * skills.length)];
+            
+            card.innerHTML = `
+                <strong>${title}</strong><br>
+                <small>Required: ${skill}</small><br>
+                <small>Apply by: Eventually</small>
+            `;
+            
+            card.style.left = Math.random() * 90 + 5 + '%';
+            card.style.animationDelay = Math.random() * 15 + 's';
+            card.style.animationDuration = (12 + Math.random() * 8) + 's';
+            
+            jobCards.appendChild(card);
+            
+            setTimeout(() => card.remove(), 20000);
+        }
+        
+        // Create new cards periodically
+        setInterval(createJobCard, 3000);
+        
+        // Click to apply to the void
+        document.body.addEventListener('click', (e) => {
+            if (e.target.classList.contains('button')) return;
+            
+            const applied = document.createElement('div');
+            applied.textContent = 'Application Submitted to the Void ✓';
+            applied.style.position = 'fixed';
+            applied.style.left = e.clientX + 'px';
+            applied.style.top = e.clientY + 'px';
+            applied.style.background = '#4caf50';
+            applied.style.color = 'white';
+            applied.style.padding = '0.5rem 1rem';
+            applied.style.borderRadius = '20px';
+            applied.style.fontSize = '0.9rem';
+            applied.style.fontWeight = '600';
+            applied.style.pointerEvents = 'none';
+            applied.style.transform = 'translate(-50%, -50%)';
+            applied.style.animation = 'fadeIn 1s ease-out forwards';
+            applied.style.zIndex = '1000';
+            document.body.appendChild(applied);
+            
+            setTimeout(() => applied.remove(), 2000);
+        });
+    </script>
+</body>
+</html>

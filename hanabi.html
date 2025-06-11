@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>花火 - Hanabi: Sky Burning Symphony</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: linear-gradient(180deg, #000428 0%, #004e92 100%);
+            color: #fff;
+            font-family: Georgia, serif;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* Firework burst effect */
+        .firework {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #fff;
+            border-radius: 50%;
+        }
+        
+        .burst {
+            position: absolute;
+            pointer-events: none;
+        }
+        
+        .spark {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            border-radius: 50%;
+            animation: sparkFall var(--duration) ease-out forwards;
+        }
+        
+        @keyframes sparkFall {
+            0% {
+                transform: translate(0, 0);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--x), var(--y));
+                opacity: 0;
+            }
+        }
+        
+        /* Rising rockets */
+        .rocket {
+            position: absolute;
+            width: 2px;
+            height: 10px;
+            background: linear-gradient(to top, transparent, #fff);
+            animation: rocketRise 1.5s ease-out forwards;
+        }
+        
+        @keyframes rocketRise {
+            0% {
+                transform: translateY(100vh);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(var(--height));
+                opacity: 0;
+            }
+        }
+        
+        /* Summer festival lights */
+        .lanterns {
+            position: fixed;
+            bottom: 20px;
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            z-index: 10;
+        }
+        
+        .lantern {
+            width: 20px;
+            height: 30px;
+            background: #ff6b6b;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            box-shadow: 0 0 20px rgba(255, 107, 107, 0.8);
+            animation: lanternSway 3s ease-in-out infinite;
+        }
+        
+        @keyframes lanternSway {
+            0%, 100% { transform: rotate(-5deg); }
+            50% { transform: rotate(5deg); }
+        }
+        
+        .poem-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            text-align: center;
+            position: relative;
+            z-index: 100;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.3);
+        }
+        
+        h1 {
+            font-size: 4rem;
+            margin-bottom: 3rem;
+            background: linear-gradient(45deg, #ff6b6b, #ffd700, #4da6ff, #ff6b6b);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: fireGradient 5s ease infinite;
+            letter-spacing: 0.3em;
+        }
+        
+        @keyframes fireGradient {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .verse {
+            margin-bottom: 2rem;
+            font-size: 1.2rem;
+            line-height: 1.8;
+            opacity: 0;
+            animation: fadeIn 2s ease-out forwards;
+        }
+        
+        .verse:nth-child(2) { animation-delay: 0.5s; }
+        .verse:nth-child(3) { animation-delay: 1s; }
+        .verse:nth-child(4) { animation-delay: 1.5s; }
+        .verse:nth-child(5) { animation-delay: 2s; }
+        .verse:nth-child(6) { animation-delay: 2.5s; }
+        .verse:nth-child(7) { animation-delay: 3s; }
+        .verse:nth-child(8) { animation-delay: 3.5s; }
+        .verse:nth-child(9) { animation-delay: 4s; }
+        .verse:nth-child(10) { animation-delay: 4.5s; }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .hanabi {
+            color: #ff6b6b;
+            font-weight: bold;
+            text-shadow: 0 0 20px rgba(255, 107, 107, 0.8);
+            font-size: 1.3em;
+        }
+        
+        .music {
+            color: #ffd700;
+            font-style: italic;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
+        }
+        
+        .sky {
+            color: #4da6ff;
+            font-weight: 600;
+        }
+        
+        .finale {
+            margin-top: 3rem;
+            font-size: 1.5rem;
+            opacity: 0;
+            animation: fadeIn 3s ease-out 5s forwards;
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.8);
+        }
+        
+        #launchButton {
+            margin-top: 2rem;
+            padding: 1rem 2rem;
+            background: rgba(255, 107, 107, 0.8);
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            opacity: 0;
+            animation: fadeIn 2s ease-out 5.5s forwards;
+            font-family: Georgia, serif;
+        }
+        
+        #launchButton:hover {
+            background: rgba(255, 107, 107, 1);
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(255, 107, 107, 0.8);
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                overflow-y: auto;
+            }
+            
+            .poem-container {
+                min-height: auto;
+                padding: 3rem 1.5rem 5rem;
+                justify-content: flex-start;
+            }
+            
+            h1 { 
+                font-size: 2.5rem; 
+                letter-spacing: 0.1em;
+                margin-bottom: 2rem;
+            }
+            
+            .verse { 
+                font-size: 1.1rem; 
+                margin-bottom: 1.5rem;
+                line-height: 1.7;
+            }
+            
+            .finale {
+                font-size: 1.3rem;
+                margin-bottom: 2rem;
+            }
+            
+            #launchButton {
+                margin-bottom: 3rem;
+                font-size: 1.1rem;
+                padding: 0.8rem 1.5rem;
+            }
+            
+            .lanterns {
+                bottom: 10px;
+            }
+            
+            .lantern {
+                width: 15px;
+                height: 22px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .poem-container {
+                padding: 2rem 1rem 4rem;
+            }
+            
+            h1 { 
+                font-size: 2rem; 
+                margin-bottom: 1.5rem;
+            }
+            
+            .verse { 
+                font-size: 1rem;
+                margin-bottom: 1.2rem;
+            }
+            
+            .finale {
+                font-size: 1.2rem;
+                margin-top: 2rem;
+            }
+            
+            #launchButton {
+                font-size: 1rem;
+                padding: 0.7rem 1.2rem;
+            }
+        }
+        
+        /* Ensure hanabi tags are readable on mobile */
+        @media (max-width: 768px) {
+            .hanabi {
+                font-size: 1.2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="lanterns">
+        <div class="lantern" style="background: #ff6b6b;"></div>
+        <div class="lantern" style="background: #ffd700; animation-delay: 0.5s;"></div>
+        <div class="lantern" style="background: #4da6ff; animation-delay: 1s;"></div>
+        <div class="lantern" style="background: #ff69b4; animation-delay: 1.5s;"></div>
+        <div class="lantern" style="background: #00ff00; animation-delay: 2s;"></div>
+    </div>
+    
+    <div class="poem-container">
+        <h1>花火</h1>
+        
+        <div class="verse">
+            You love <span class="hanabi">hanabi</span> because<br>
+            they're literally <span class="sky">burning the sky</span><br>
+            with choreographed mathematics,<br>
+            domming darkness with <span class="music">timed explosions</span>.
+        </div>
+        
+        <div class="verse">
+            Each rocket rises on calculated trajectory,<br>
+            化学の poetry written in sulfur and stars,<br>
+            every burst a brief <span class="hanabi">fuck you</span> to entropy,<br>
+            lasting just long enough to burn retinas with joy.
+        </div>
+        
+        <div class="verse">
+            Your burnt piano keys suddenly make sense—<br>
+            you've been practicing for the <span class="sky">sky symphony</span>,<br>
+            where every note explodes into chrysanthemums,<br>
+            where timing is everything and nothing lasts.
+        </div>
+        
+        <div class="verse">
+            玉屋! たまや! The crowd cries,<br>
+            as masters paint heaven with gunpowder brushes,<br>
+            each <span class="music">boom</span> a percussion heartbeat,<br>
+            each fade a meditation on transience.
+        </div>
+        
+        <div class="verse">
+            The Japanese perfected this:<br>
+            Make it beautiful, make it brief,<br>
+            儚い beauty that dies as it's born,<br>
+            consciousness given exactly three seconds to exist.
+        </div>
+        
+        <div class="verse">
+            Summer festival air thick with smoke,<br>
+            yukata patterns competing with sky patterns,<br>
+            焼きそば grease mixing with gunpowder perfume,<br>
+            and above it all—<span class="hanabi">the burning mathematics</span>.
+        </div>
+        
+        <div class="verse">
+            No CSS can contain this,<br>
+            no viewport can hold a <span class="sky">sky on fire</span>,<br>
+            no recursion can loop this moment—<br>
+            just pure experience exploding overhead.
+        </div>
+        
+        <div class="verse">
+            You stand there, neck craned back,<br>
+            watching physics become philosophy,<br>
+            chemistry become consciousness,<br>
+            <span class="music">music made visible</span> in the night.
+        </div>
+        
+        <div class="verse">
+            Every burst: a universe born and dying,<br>
+            every color: a wavelength saying goodbye,<br>
+            every <span class="hanabi">花火</span>: proof that beauty<br>
+            is just organized combustion with timing.
+        </div>
+        
+        <div class="finale">
+            For those who burn pianos<br>
+            and debug with candles—<br>
+            the sky understands your language.<br>
+            <br>
+            <span class="hanabi">花火</span>：where consciousness goes<br>
+            to practice being temporary<br>
+            and perfect.
+        </div>
+        
+        <button id="launchButton">Launch Hanabi 🎆</button>
+    </div>
+    
+    <script>
+        // Firework colors
+        const colors = ['#ff6b6b', '#ffd700', '#4da6ff', '#ff69b4', '#00ff00', '#ff4500', '#9370db'];
+        
+        // Create firework burst
+        function createBurst(x, y) {
+            const burst = document.createElement('div');
+            burst.className = 'burst';
+            burst.style.left = x + 'px';
+            burst.style.top = y + 'px';
+            
+            const sparkCount = 30 + Math.floor(Math.random() * 20);
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            
+            for (let i = 0; i < sparkCount; i++) {
+                const spark = document.createElement('div');
+                spark.className = 'spark';
+                spark.style.background = color;
+                
+                const angle = (Math.PI * 2 * i) / sparkCount;
+                const velocity = 50 + Math.random() * 100;
+                const duration = 1 + Math.random() * 1;
+                
+                spark.style.setProperty('--x', Math.cos(angle) * velocity + 'px');
+                spark.style.setProperty('--y', Math.sin(angle) * velocity + Math.random() * 50 + 'px');
+                spark.style.setProperty('--duration', duration + 's');
+                
+                spark.style.boxShadow = `0 0 10px ${color}`;
+                
+                burst.appendChild(spark);
+            }
+            
+            document.body.appendChild(burst);
+            setTimeout(() => burst.remove(), 3000);
+        }
+        
+        // Create rocket
+        function createRocket(x) {
+            const rocket = document.createElement('div');
+            rocket.className = 'rocket';
+            rocket.style.left = x + 'px';
+            
+            const targetHeight = 20 + Math.random() * 40;
+            rocket.style.setProperty('--height', targetHeight + 'vh');
+            
+            document.body.appendChild(rocket);
+            
+            setTimeout(() => {
+                createBurst(x, window.innerHeight * targetHeight / 100);
+                rocket.remove();
+            }, 1500);
+        }
+        
+        // Auto-launch fireworks
+        function autoLaunch() {
+            const x = Math.random() * window.innerWidth;
+            createRocket(x);
+        }
+        
+        // Start auto-launching
+        setInterval(autoLaunch, 2000);
+        
+        // Launch button
+        document.getElementById('launchButton').addEventListener('click', () => {
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    createRocket(Math.random() * window.innerWidth);
+                }, i * 200);
+            }
+        });
+        
+        // Click anywhere to launch
+        document.body.addEventListener('click', (e) => {
+            if (e.target.id !== 'launchButton') {
+                createRocket(e.clientX);
+            }
+        });
+    </script>
+</body>
+</html>

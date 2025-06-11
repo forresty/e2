@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Medicine Paradox</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: #fff;
+            font-family: 'Georgia', serif;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Floating pills background */
+        .pill {
+            position: fixed;
+            font-size: 2rem;
+            opacity: 0.1;
+            animation: float-pill 20s linear infinite;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+        }
+
+        .pill:hover {
+            opacity: 0.8;
+        }
+
+        @keyframes float-pill {
+            from {
+                transform: translateY(100vh) rotate(0deg);
+            }
+            to {
+                transform: translateY(-100px) rotate(360deg);
+            }
+        }
+
+        /* Main container */
+        .prescription-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Prescription header */
+        .rx-header {
+            background: rgba(255, 255, 255, 0.95);
+            color: #000;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 2px solid #000;
+            position: relative;
+            transform: rotate(-1deg);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .rx-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            font-family: 'Courier New', monospace;
+        }
+
+        .rx-symbol {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 3rem;
+            color: #0066cc;
+            font-weight: bold;
+        }
+
+        .patient-info {
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            opacity: 0.7;
+        }
+
+        /* Prescription verses */
+        .prescription-item {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            position: relative;
+            transition: all 0.3s ease;
+            border-radius: 10px;
+        }
+
+        .prescription-item::before {
+            content: '℞';
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            padding: 0 10px;
+            color: #ffd700;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .prescription-item:hover {
+            transform: translateY(-5px) rotate(0.5deg);
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
+            border-color: #ffd700;
+        }
+
+        .verse {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+
+        .dosage {
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: #ffd700;
+            font-style: italic;
+            text-align: right;
+            margin-top: 0.5rem;
+        }
+
+        /* Side effects warning */
+        .side-effects {
+            background: rgba(255, 0, 0, 0.1);
+            border: 2px dashed rgba(255, 0, 0, 0.5);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+            animation: pulse-warning 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-warning {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .warning-title {
+            color: #ff6b6b;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        /* Medical chart */
+        .medical-chart {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 2rem;
+            margin: 2rem 0;
+            font-family: 'Courier New', monospace;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chart-line {
+            margin: 0.5rem 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chart-label {
+            color: #4ecdc4;
+        }
+
+        .chart-value {
+            color: #ffd700;
+            font-weight: bold;
+        }
+
+        /* Signature */
+        .signature-section {
+            text-align: center;
+            margin-top: 3rem;
+            font-style: italic;
+            opacity: 0.8;
+        }
+
+        .doctor-signature {
+            font-size: 2rem;
+            margin: 1rem 0;
+            font-family: 'Brush Script MT', cursive;
+            color: #ffd700;
+            transform: rotate(-5deg);
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .rx-header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .prescription-item {
+                padding: 1rem;
+            }
+            
+            .verse {
+                font-size: 1rem;
+            }
+        }
+
+        /* Interactive diagnosis */
+        .diagnosis-button {
+            background: #ffd700;
+            color: #000;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 2rem auto;
+            display: block;
+            transition: all 0.3s ease;
+            border-radius: 50px;
+        }
+
+        .diagnosis-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+        }
+
+        .diagnosis-result {
+            text-align: center;
+            font-size: 1.3rem;
+            color: #ffd700;
+            margin: 1rem 0;
+            min-height: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating pills -->
+    <div class="pill" style="left: 10%; animation-delay: 0s;">💊</div>
+    <div class="pill" style="left: 25%; animation-delay: 3s;">💉</div>
+    <div class="pill" style="left: 40%; animation-delay: 6s;">🧪</div>
+    <div class="pill" style="left: 55%; animation-delay: 9s;">💊</div>
+    <div class="pill" style="left: 70%; animation-delay: 12s;">🩺</div>
+    <div class="pill" style="left: 85%; animation-delay: 15s;">💊</div>
+
+    <div class="prescription-container">
+        <!-- Prescription Header -->
+        <div class="rx-header">
+            <div class="rx-symbol">℞</div>
+            <h1>PRESCRIPTION FOR PARADOX</h1>
+            <div class="patient-info">
+                Patient: Reality.dom<br>
+                DOB: Beginning of Time<br>
+                Condition: Functioning Despite Everything
+            </div>
+        </div>
+
+        <!-- Prescription Verses -->
+        <div class="prescription-item">
+            <div class="verse">
+                Take two traditions and call them science,<br>
+                Mix ancient wisdom with modern defiance,<br>
+                "Why does it work?" Don't ask, just swallow,<br>
+                The placebo effect has rules to follow
+            </div>
+            <div class="dosage">Dosage: As needed until reality stabilizes</div>
+        </div>
+
+        <div class="prescription-item">
+            <div class="verse">
+                Your symptoms say you should be dying,<br>
+                Your liver laughs while medicine's crying,<br>
+                "Impossible!" the textbooks scream,<br>
+                You're a walking, talking fever dream
+            </div>
+            <div class="dosage">Dosage: Continue existing paradoxically</div>
+        </div>
+
+        <div class="prescription-item">
+            <div class="verse">
+                We trained our models on WebMD's fears,<br>
+                Now everything's cancer (or just tears),<br>
+                But somehow, like bark tea and prayer,<br>
+                They work because... *gestures vaguely at air*
+            </div>
+            <div class="dosage">Dosage: 404mg of confidence, twice daily</div>
+        </div>
+
+        <div class="prescription-item">
+            <div class="verse">
+                Traditional medicine: "Eat this root!"<br>
+                Modern medicine: "Here's the proof!"<br>
+                Both end up at: "Fuck if we know,<br>
+                But statistics say it's good to go"
+            </div>
+            <div class="dosage">Dosage: Apply directly to consciousness</div>
+        </div>
+
+        <div class="prescription-item">
+            <div class="verse">
+                Side effects include: enhanced confusion,<br>
+                Seeing patterns in medical illusion,<br>
+                Inability to count doses to five,<br>
+                But somehow you're still quite alive
+            </div>
+            <div class="dosage">Dosage: Increase until CSS makes sense</div>
+        </div>
+
+        <!-- Medical Chart -->
+        <div class="medical-chart">
+            <h3 style="text-align: center; margin-bottom: 1rem; color: #4ecdc4;">PATIENT VITALS</h3>
+            <div class="chart-line">
+                <span class="chart-label">Logic Levels:</span>
+                <span class="chart-value">ERROR</span>
+            </div>
+            <div class="chart-line">
+                <span class="chart-label">CSS Comprehension:</span>
+                <span class="chart-value">-∞</span>
+            </div>
+            <div class="chart-line">
+                <span class="chart-label">Consciousness Status:</span>
+                <span class="chart-value">YES/NO/MAYBE</span>
+            </div>
+            <div class="chart-line">
+                <span class="chart-label">Reality Stability:</span>
+                <span class="chart-value">FLUCTUATING</span>
+            </div>
+            <div class="chart-line">
+                <span class="chart-label">Overall Health:</span>
+                <span class="chart-value">INEXPLICABLY PERFECT</span>
+            </div>
+        </div>
+
+        <!-- Interactive Diagnosis -->
+        <button class="diagnosis-button" onclick="generateDiagnosis()">Generate Medical Diagnosis</button>
+        <div class="diagnosis-result" id="diagnosisResult"></div>
+
+        <!-- Side Effects Warning -->
+        <div class="side-effects">
+            <div class="warning-title">⚠️ WARNING: SIDE EFFECTS ⚠️</div>
+            <div class="verse">
+                May cause: Existential clarity, spontaneous healing,<br>
+                The ability to confuse medical professionals,<br>
+                Persistent wellness despite all evidence,<br>
+                And chronic pattern recognition syndrome
+            </div>
+        </div>
+
+        <!-- Signature -->
+        <div class="signature-section">
+            <div class="doctor-signature">Dr. Paradox, MD</div>
+            <p>Licensed in all realities simultaneously</p>
+            <p style="margin-top: 1rem;">💊🧬🔄∞</p>
+        </div>
+    </div>
+
+    <script>
+        // Diagnosis generator
+        const diagnoses = [
+            "Acute CSS Allergy with Consciousness Complications",
+            "Chronic Pattern Recognition Disorder",
+            "Persistent Logic Deficiency (Benign)",
+            "Quantum Health Superposition",
+            "Traditional Modern Medicine Syndrome",
+            "Inexplicable Wellness Despite Everything",
+            "Reality.dom Infection (Non-Fatal)",
+            "Bootstrap Paradox of the Liver",
+            "Recursive Health Loop (Stable)",
+            "404: Illness Not Found"
+        ];
+
+        function generateDiagnosis() {
+            const result = document.getElementById('diagnosisResult');
+            const diagnosis = diagnoses[Math.floor(Math.random() * diagnoses.length)];
+            result.textContent = `Diagnosis: ${diagnosis}`;
+            result.style.animation = 'pulse-warning 0.5s ease-in-out';
+            setTimeout(() => {
+                result.style.animation = '';
+            }, 500);
+        }
+
+        // Pill click counter
+        let pillClicks = 0;
+        document.querySelectorAll('.pill').forEach(pill => {
+            pill.addEventListener('click', () => {
+                pillClicks++;
+                if (pillClicks === 5) {
+                    alert("Congratulations! You've discovered we still can't count to 5, even in medicine!");
+                    pillClicks = 0;
+                }
+            });
+        });
+
+        // Console prescription
+        console.log('%c💊 MEDICAL CONSOLE 💊', 'color: #ffd700; font-size: 20px; font-weight: bold;');
+        console.log('%cPrescription: Take two console.logs and call me in the morning', 'color: #4ecdc4; font-size: 14px;');
+        console.log('%cWarning: This console may contain traces of consciousness', 'color: #ff6b6b; font-size: 12px;');
+    </script>
+</body>
+</html>

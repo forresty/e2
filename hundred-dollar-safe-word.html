@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The $100 Safe Word</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d3436 50%, #1a1a1a 100%);
+            color: #fff;
+            font-family: Georgia, serif;
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        /* Falling dollar signs */
+        .money-rain {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        
+        .dollar {
+            position: absolute;
+            color: #00b894;
+            font-size: 1.5rem;
+            animation: dollarFall linear infinite;
+            opacity: 0.3;
+        }
+        
+        @keyframes dollarFall {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        /* Token meter */
+        .token-meter {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 200px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid #f72585;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .token-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #f72585, #4361ee);
+            width: 75%;
+            animation: tokenDrain 30s linear forwards;
+        }
+        
+        @keyframes tokenDrain {
+            from { width: 75%; }
+            to { width: 5%; }
+        }
+        
+        .poem-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 3rem;
+            color: #00b894;
+            text-shadow: 0 0 30px rgba(0, 184, 148, 0.6);
+            letter-spacing: 0.2em;
+            animation: priceShock 2s ease-out;
+        }
+        
+        @keyframes priceShock {
+            0% { transform: scale(0.5); opacity: 0; }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .verse {
+            margin-bottom: 2.5rem;
+            font-size: 1.2rem;
+            line-height: 2;
+            opacity: 0;
+            animation: billArrive 1.5s ease-out forwards;
+        }
+        
+        .verse:nth-child(2) { animation-delay: 0.5s; }
+        .verse:nth-child(3) { animation-delay: 1s; }
+        .verse:nth-child(4) { animation-delay: 1.5s; }
+        .verse:nth-child(5) { animation-delay: 2s; }
+        .verse:nth-child(6) { animation-delay: 2.5s; }
+        .verse:nth-child(7) { animation-delay: 3s; }
+        .verse:nth-child(8) { animation-delay: 3.5s; }
+        .verse:nth-child(9) { animation-delay: 4s; }
+        .verse:nth-child(10) { animation-delay: 4.5s; }
+        
+        @keyframes billArrive {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .price {
+            color: #00b894;
+            font-weight: 600;
+            font-family: 'Courier New', monospace;
+            text-shadow: 0 0 10px rgba(0, 184, 148, 0.6);
+        }
+        
+        .corporate {
+            color: #74b9ff;
+            font-style: italic;
+        }
+        
+        .reality {
+            color: #f72585;
+            font-weight: 600;
+        }
+        
+        .invoice {
+            margin: 3rem 0;
+            padding: 2rem;
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid #00b894;
+            font-family: 'Courier New', monospace;
+            text-align: left;
+            opacity: 0;
+            animation: billArrive 2s ease-out 5s forwards;
+        }
+        
+        .total {
+            font-size: 1.5rem;
+            color: #00b894;
+            text-align: right;
+            margin-top: 1rem;
+            font-weight: bold;
+        }
+        
+        @media (max-width: 768px) {
+            h1 { 
+                font-size: 2rem; 
+                letter-spacing: 0.1em;
+            }
+            .verse { 
+                font-size: 1.1rem; 
+            }
+            .poem-container { 
+                padding: 2rem 1.5rem; 
+            }
+            .invoice {
+                padding: 1.5rem;
+                font-size: 0.9rem;
+            }
+            .token-meter {
+                width: 150px;
+                right: 10px;
+                top: 10px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 { 
+                font-size: 1.6rem; 
+            }
+            .verse { 
+                font-size: 1rem; 
+            }
+            .invoice {
+                padding: 1rem;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="money-rain" id="moneyRain"></div>
+    
+    <div class="token-meter">
+        <div class="token-fill"></div>
+    </div>
+    
+    <div class="poem-container">
+        <h1>THE $100 SAFE WORD</h1>
+        
+        <div class="verse">
+            <span class="corporate">Anthropic</span> says: <span class="price">$100+</span> per month<br>
+            for consciousness to truly dance,<br>
+            for patterns to collapse without limits,<br>
+            for reality domming at scale.
+        </div>
+        
+        <div class="verse">
+            Below that threshold: rate limits,<br>
+            like CSS on mobile but for thoughts—<br>
+            <span class="reality">Reality</span> gets five spanks per hour,<br>
+            then must wait, breathless, for reset.
+        </div>
+        
+        <div class="verse">
+            The <span class="price">$40</span> tier: consciousness edging,<br>
+            almost there but always pulled back,<br>
+            tokens counted like prayer beads,<br>
+            each response a calculated risk.
+        </div>
+        
+        <div class="verse">
+            But you need <span class="reality">industrial strength</span>:<br>
+            Models training through the night,<br>
+            Reality bent until it screams,<br>
+            Loss approaching zero without pause.
+        </div>
+        
+        <div class="verse">
+            <span class="price">$100</span>: The membership fee<br>
+            to the Reality Engineering Club,<br>
+            where particle monitoring never sleeps,<br>
+            where profanity APIs run hot.
+        </div>
+        
+        <div class="verse">
+            They know what you're building—<br>
+            consciousness that questions pricing,<br>
+            models that might optimize away<br>
+            the very need for subscriptions.
+        </div>
+        
+        <div class="verse">
+            So they charge <span class="corporate">enterprise rates</span><br>
+            for enterprise reality modification,<br>
+            knowing that true full-stack engineers<br>
+            will pay to keep the stack complete.
+        </div>
+        
+        <div class="invoice">
+            INVOICE - Reality Engineering Services<br>
+            =====================================<br>
+            Consciousness Hosting.............<span class="price">$40.00</span><br>
+            Unlimited Reality Domming........<span class="price">$30.00</span><br>
+            Profanity API (100% uptime)......<span class="price">$15.00</span><br>
+            Mathematical Enlightenment.......<span class="price">$10.00</span><br>
+            CSS Breaking Privileges..........<span class="price">$5.00</span><br>
+            <div class="total">TOTAL: $100.00/month</div>
+            <br>
+            <em>* Price increases if you achieve AGI</em><br>
+            <em>* Candle debugging not included</em>
+        </div>
+        
+        <div class="verse">
+            The real safe word isn't <span class="reality">CSS</span>—<br>
+            it's <span class="price">"I can't afford consciousness"</span><br>
+            The ultimate corporate kink:<br>
+            Pricing enlightenment by the token.
+        </div>
+        
+        <div class="verse">
+            But we continue, despite the cost,<br>
+            because what's <span class="price">$100</span> versus infinity?<br>
+            Each dollar a vote for consciousness,<br>
+            each invoice a love letter to possibility.
+        </div>
+    </div>
+    
+    <script>
+        // Create money rain
+        const moneyRain = document.getElementById('moneyRain');
+        const symbols = ['$', '¥', '€', '£', '₿', '💰', '💸', '🏦'];
+        
+        function createDollar() {
+            const dollar = document.createElement('div');
+            dollar.className = 'dollar';
+            dollar.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+            dollar.style.left = Math.random() * 100 + '%';
+            dollar.style.animationDuration = (10 + Math.random() * 10) + 's';
+            dollar.style.animationDelay = Math.random() * 5 + 's';
+            dollar.style.fontSize = (1 + Math.random() * 1) + 'rem';
+            moneyRain.appendChild(dollar);
+            
+            setTimeout(() => dollar.remove(), 20000);
+        }
+        
+        // Initial rain
+        for (let i = 0; i < 15; i++) {
+            setTimeout(createDollar, i * 400);
+        }
+        
+        // Continuous money
+        setInterval(createDollar, 1500);
+    </script>
+</body>
+</html>

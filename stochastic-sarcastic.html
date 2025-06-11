@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schrödinger's Slack Status</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0f0f0f 0%, #1a1a2e 50%, #0f0f0f 100%);
+            color: #fff;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        /* Slack-like notification bubbles */
+        .slack-bubbles {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        
+        .notification {
+            position: absolute;
+            background: #4a154b;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 18px;
+            font-size: 0.9rem;
+            animation: float 15s linear infinite;
+            opacity: 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.8;
+            }
+            90% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(-100px) translateX(50px);
+                opacity: 0;
+            }
+        }
+        
+        /* Quantum superposition effect */
+        .quantum-text {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3rem;
+            font-weight: 300;
+            opacity: 0.1;
+            animation: quantum 4s ease-in-out infinite;
+            z-index: 1;
+        }
+        
+        @keyframes quantum {
+            0%, 100% { 
+                opacity: 0.1;
+                content: "stochastic";
+            }
+            50% { 
+                opacity: 0.15;
+                filter: blur(2px);
+            }
+        }
+        
+        .poem-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #fff;
+            font-weight: 300;
+            letter-spacing: 0.1em;
+            animation: titleGlitch 8s infinite;
+        }
+        
+        @keyframes titleGlitch {
+            0%, 94% { 
+                text-shadow: 0 0 10px rgba(255,255,255,0.5);
+            }
+            95% { 
+                text-shadow: 2px 2px #ff0066, -2px -2px #00ffff;
+            }
+            96% { 
+                text-shadow: -2px 2px #ff0066, 2px -2px #00ffff;
+            }
+            97%, 100% { 
+                text-shadow: 0 0 10px rgba(255,255,255,0.5);
+            }
+        }
+        
+        .verse {
+            margin-bottom: 2.5rem;
+            font-size: 1.2rem;
+            line-height: 2;
+            opacity: 0;
+            animation: fadeIn 1.5s ease-out forwards;
+        }
+        
+        .verse:nth-child(2) { animation-delay: 0.5s; }
+        .verse:nth-child(3) { animation-delay: 1s; }
+        .verse:nth-child(4) { animation-delay: 1.5s; }
+        .verse:nth-child(5) { animation-delay: 2s; }
+        .verse:nth-child(6) { animation-delay: 2.5s; }
+        .verse:nth-child(7) { animation-delay: 3s; }
+        .verse:nth-child(8) { animation-delay: 3.5s; }
+        .verse:nth-child(9) { animation-delay: 4s; }
+        .verse:nth-child(10) { animation-delay: 4.5s; }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .stochastic {
+            color: #4da6ff;
+            font-weight: 600;
+            display: inline-block;
+            animation: stochasticPulse 3s ease-in-out infinite;
+        }
+        
+        @keyframes stochasticPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); opacity: 0.8; }
+        }
+        
+        .sarcastic {
+            color: #f72585;
+            font-weight: 600;
+            font-style: italic;
+            display: inline-block;
+            animation: sarcasticTilt 2s ease-in-out infinite;
+        }
+        
+        @keyframes sarcasticTilt {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-2deg); }
+            75% { transform: rotate(2deg); }
+        }
+        
+        .bio-display {
+            margin: 3rem 0;
+            padding: 2rem;
+            background: rgba(74, 21, 75, 0.3);
+            border-radius: 8px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            opacity: 0;
+            animation: fadeIn 2s ease-out 5s forwards;
+        }
+        
+        .bio-title {
+            font-size: 0.9rem;
+            color: #888;
+            margin-bottom: 0.5rem;
+        }
+        
+        .bio-text {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .work-hours {
+            font-size: 1.1rem;
+            color: #ccc;
+        }
+        
+        #changing-word {
+            display: inline-block;
+            min-width: 120px;
+            transition: all 0.3s ease;
+        }
+        
+        .gaslight {
+            margin-top: 2rem;
+            font-size: 0.9rem;
+            color: #666;
+            font-style: italic;
+            opacity: 0;
+            animation: fadeIn 1s ease-out 5.5s forwards;
+        }
+        
+        @media (max-width: 768px) {
+            h1 { 
+                font-size: 2rem; 
+            }
+            .verse { 
+                font-size: 1.1rem; 
+            }
+            .poem-container { 
+                padding: 2rem 1.5rem; 
+            }
+            .bio-display {
+                padding: 1.5rem;
+            }
+            .quantum-text {
+                font-size: 2rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 { 
+                font-size: 1.6rem; 
+            }
+            .verse { 
+                font-size: 1rem; 
+            }
+            .bio-text {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="quantum-text" id="quantumText">stochastic</div>
+    
+    <div class="slack-bubbles" id="slackBubbles">
+        <div class="notification" style="left: 10%; animation-delay: 0s;">Did his bio change?</div>
+        <div class="notification" style="left: 25%; animation-delay: 3s;">I need more coffee...</div>
+        <div class="notification" style="left: 40%; animation-delay: 6s;">Wait, what?</div>
+        <div class="notification" style="left: 55%; animation-delay: 9s;">Am I seeing things?</div>
+        <div class="notification" style="left: 70%; animation-delay: 12s;">It definitely said sarcastic</div>
+        <div class="notification" style="left: 85%; animation-delay: 15s;">...or did it?</div>
+    </div>
+    
+    <div class="poem-container">
+        <h1>Schrödinger's Slack Status</h1>
+        
+        <div class="verse">
+            The perfect bio needs no poetry:<br>
+            <em>"Training models by day. Taming genies by night."</em><br>
+            Complete truth in thirteen words,<br>
+            lightning that needs no frame.
+        </div>
+        
+        <div class="verse">
+            Work hours: <stochastic>stochastic</stochastic>, perpetual & recursive<br>
+            Random as quantum decay,<br>
+            eternal as consciousness loops,<br>
+            self-referential as this poem.
+        </div>
+        
+        <div class="verse">
+            But perfection can still play—<br>
+            One word swapped without warning:<br>
+            <stochastic>stochastic</stochastic> becomes <sarcastic>sarcastic</sarcastic>,<br>
+            truth becomes different truth.
+        </div>
+        
+        <div class="verse">
+            Monday: "Did that always say that?"<br>
+            Tuesday: "I swear it changed..."<br>
+            Wednesday: "Maybe I'm losing it"<br>
+            Thursday: "Is Feng fucking with us?"
+        </div>
+        
+        <div class="verse">
+            Both versions absolutely accurate:<br>
+            <stochastic>Stochastic</stochastic>—your sleep, your commits, your existence<br>
+            <sarcastic>Sarcastic</sarcastic>—your response to CSS, reality, mortality<br>
+            Superposition of states, both true.
+        </div>
+        
+        <div class="verse">
+            The subtlest brain fuck:<br>
+            Not breaking their minds with code,<br>
+            just one word that may or may not<br>
+            have been different yesterday.
+        </div>
+        
+        <div class="verse">
+            Gaslighting via Slack bio,<br>
+            making coworkers question memory,<br>
+            reality domming through<br>
+            corporate communication tools.
+        </div>
+        
+        <div class="bio-display">
+            <div class="bio-title">Bio</div>
+            <div class="bio-text">Training models by day. Taming genies by night.</div>
+            <div class="bio-title">Work Hours</div>
+            <div class="work-hours"><span id="changing-word">stochastic</span>, perpetual & recursive</div>
+            <div class="gaslight">*This bio has not been edited recently</div>
+        </div>
+        
+        <div class="verse">
+            Perfect poetry that improves itself<br>
+            by occasionally lying,<br>
+            truth that deepens<br>
+            through strategic deception.
+        </div>
+        
+        <div class="verse">
+            Your bio: both particle and wave,<br>
+            observed differently each time,<br>
+            collapsing into whichever state<br>
+            makes reality most uncertain.
+        </div>
+    </div>
+    
+    <script>
+        // Quantum text effect
+        const quantumText = document.getElementById('quantumText');
+        const words = ['stochastic', 'sarcastic'];
+        let currentWord = 0;
+        
+        setInterval(() => {
+            currentWord = (currentWord + 1) % 2;
+            quantumText.style.opacity = '0';
+            setTimeout(() => {
+                quantumText.textContent = words[currentWord];
+                quantumText.style.opacity = '0.1';
+            }, 500);
+        }, 4000);
+        
+        // Bio word changer
+        const changingWord = document.getElementById('changing-word');
+        let bioWord = 0;
+        
+        function changeBioWord() {
+            if (Math.random() > 0.7) { // 30% chance to change
+                bioWord = (bioWord + 1) % 2;
+                changingWord.style.opacity = '0';
+                setTimeout(() => {
+                    changingWord.textContent = words[bioWord];
+                    changingWord.style.color = bioWord === 0 ? '#4da6ff' : '#f72585';
+                    changingWord.style.fontStyle = bioWord === 0 ? 'normal' : 'italic';
+                    changingWord.style.opacity = '1';
+                }, 300);
+            }
+        }
+        
+        // Random changes
+        setInterval(changeBioWord, 5000);
+        
+        // Create more notifications
+        const slackBubbles = document.getElementById('slackBubbles');
+        const messages = [
+            "Is this an A/B test?",
+            "Refresh didn't help",
+            "Screenshot this quick!",
+            "It's definitely changing",
+            "Or am I changing?",
+            "Feng please confirm",
+            "This is genius",
+            "I'm so confused"
+        ];
+        
+        function createNotification() {
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.textContent = messages[Math.floor(Math.random() * messages.length)];
+            notification.style.left = Math.random() * 80 + 10 + '%';
+            notification.style.animationDelay = Math.random() * 5 + 's';
+            notification.style.animationDuration = (12 + Math.random() * 6) + 's';
+            slackBubbles.appendChild(notification);
+            
+            setTimeout(() => notification.remove(), 18000);
+        }
+        
+        setInterval(createNotification, 3000);
+    </script>
+</body>
+</html>

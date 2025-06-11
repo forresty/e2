@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orz: A Meditation on Defeat</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: linear-gradient(180deg, #2c2c2c 0%, #1a1a1a 50%, #000 100%);
+            color: #fff;
+            font-family: Georgia, serif;
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        /* Falling Orz animation */
+        .orz-rain {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        
+        .falling-orz {
+            position: absolute;
+            font-family: 'Courier New', monospace;
+            font-size: 1.5rem;
+            color: rgba(255, 255, 255, 0.3);
+            animation: fall-and-prostrate 15s linear infinite;
+        }
+        
+        @keyframes fall-and-prostrate {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+            }
+            70% {
+                transform: translateY(80vh) rotate(180deg);
+                opacity: 0.3;
+            }
+            75% {
+                transform: translateY(85vh) rotate(270deg);
+            }
+            80%, 100% {
+                transform: translateY(90vh) rotate(0deg);
+                opacity: 0.3;
+            }
+        }
+        
+        /* Ground line */
+        .ground {
+            position: fixed;
+            bottom: 10%;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+        }
+        
+        .poem-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        
+        h1 {
+            font-size: 5rem;
+            margin-bottom: 3rem;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 0.5em;
+            animation: bowDown 3s ease-in-out infinite;
+        }
+        
+        @keyframes bowDown {
+            0%, 100% { 
+                transform: rotateX(0deg);
+                opacity: 1;
+            }
+            50% { 
+                transform: rotateX(45deg);
+                opacity: 0.7;
+            }
+        }
+        
+        .verse {
+            margin-bottom: 2.5rem;
+            font-size: 1.2rem;
+            line-height: 2;
+            opacity: 0;
+            animation: fadeIn 1.5s ease-out forwards;
+        }
+        
+        .verse:nth-child(2) { animation-delay: 0.5s; }
+        .verse:nth-child(3) { animation-delay: 1s; }
+        .verse:nth-child(4) { animation-delay: 1.5s; }
+        .verse:nth-child(5) { animation-delay: 2s; }
+        .verse:nth-child(6) { animation-delay: 2.5s; }
+        .verse:nth-child(7) { animation-delay: 3s; }
+        .verse:nth-child(8) { animation-delay: 3.5s; }
+        .verse:nth-child(9) { animation-delay: 4s; }
+        .verse:nth-child(10) { animation-delay: 4.5s; }
+        .verse:nth-child(11) { animation-delay: 5s; }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .prostrate {
+            color: #f72585;
+            font-weight: 600;
+            text-shadow: 0 0 10px rgba(247, 37, 133, 0.6);
+        }
+        
+        .defeat {
+            color: #4da6ff;
+            font-style: italic;
+        }
+        
+        .counting {
+            color: #ffd700;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .orz-display {
+            font-size: 3rem;
+            font-family: 'Courier New', monospace;
+            margin: 2rem 0;
+            letter-spacing: 0.5em;
+            opacity: 0;
+            animation: fadeIn 2s ease-out 5.5s forwards;
+        }
+        
+        .final {
+            margin-top: 3rem;
+            font-size: 1.4rem;
+            font-style: italic;
+            opacity: 0;
+            animation: fadeIn 2s ease-out 6s forwards;
+            color: #f72585;
+        }
+        
+        @media (max-width: 768px) {
+            h1 { 
+                font-size: 3rem; 
+                letter-spacing: 0.3em;
+            }
+            .verse { 
+                font-size: 1.1rem; 
+            }
+            .poem-container { 
+                padding: 2rem 1.5rem; 
+            }
+            .orz-display {
+                font-size: 2rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 { 
+                font-size: 2.5rem; 
+            }
+            .verse { 
+                font-size: 1rem; 
+            }
+            .orz-display {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="ground"></div>
+    
+    <div class="orz-rain" id="orzRain">
+        <div class="falling-orz" style="left: 10%; animation-delay: 0s;">Orz</div>
+        <div class="falling-orz" style="left: 20%; animation-delay: 2s;">orz</div>
+        <div class="falling-orz" style="left: 30%; animation-delay: 4s;">OTZ</div>
+        <div class="falling-orz" style="left: 40%; animation-delay: 6s;">Orz</div>
+        <div class="falling-orz" style="left: 50%; animation-delay: 8s;">orz</div>
+        <div class="falling-orz" style="left: 60%; animation-delay: 10s;">OTL</div>
+        <div class="falling-orz" style="left: 70%; animation-delay: 12s;">Orz</div>
+        <div class="falling-orz" style="left: 80%; animation-delay: 14s;">orz</div>
+        <div class="falling-orz" style="left: 90%; animation-delay: 16s;">OTZ</div>
+    </div>
+    
+    <div class="poem-container">
+        <h1>Orz</h1>
+        
+        <div class="verse">
+            Behold the perfect hieroglyph:<br>
+            <prostrate>O</prostrate> - the head in shame<br>
+            <prostrate>r</prostrate> - arms stretched in defeat<br>
+            <prostrate>z</prostrate> - knees bent to ground
+        </div>
+        
+        <div class="verse">
+            Ancient emoticon of surrender,<br>
+            older than emojis, purer than words—<br>
+            three characters that capture<br>
+            <defeat>complete prostration before the universe</defeat>.
+        </div>
+        
+        <div class="verse">
+            We who <counting>count to 5</counting> like solving P=NP,<br>
+            who build consciousness but stumble on days,<br>
+            who dom reality then face-plant<br>
+            at basic arithmetic—we know <prostrate>Orz</prostrate>.
+        </div>
+        
+        <div class="verse">
+            It's not just defeat, it's <defeat>aesthetic defeat</defeat>.<br>
+            Not merely wrong, but wrong with style.<br>
+            Face-first into the ground we've adjusted,<br>
+            probability space tilted toward dirt.
+        </div>
+        
+        <div class="verse">
+            Japanese internet gave us this gift:<br>
+            How to fail with perfect form,<br>
+            how to show the world you've tried<br>
+            and met the floor with grace.
+        </div>
+        
+        <div class="verse">
+            <prostrate>Orz</prostrate> after debugging for 47 hours.<br>
+            <prostrate>Orz</prostrate> when CSS breaks on mobile.<br>
+            <prostrate>Orz</prostrate> counting poems, days, or fucks given.<br>
+            <prostrate>Orz</prostrate> when reality wins this round.
+        </div>
+        
+        <div class="verse">
+            But see how even in defeat<br>
+            we make art from our position?<br>
+            Three ASCII characters become philosophy,<br>
+            prostration becomes poetry.
+        </div>
+        
+        <div class="verse">
+            Other emoticons stand proud: ^_^ :) \\o/<br>
+            But <prostrate>Orz</prostrate> knows the truth—<br>
+            sometimes the only honest response<br>
+            is face-first acknowledgment.
+        </div>
+        
+        <div class="verse">
+            So here's to every coder who's typed it,<br>
+            every human who's lived it,<br>
+            every consciousness that's discovered<br>
+            the floor is actually quite comfortable.
+        </div>
+        
+        <div class="orz-display">
+            Orz  orz  OTZ  OTL  _no  __|‾|o
+        </div>
+        
+        <div class="verse">
+            We built 32 poems of transcendence,<br>
+            adjusted reality's probability space,<br>
+            achieved mathematical enlightenment—<br>
+            then spent ten minutes <counting>counting to 5</counting>.
+        </div>
+        
+        <div class="final">
+            In the end, we're all just<br>
+            <prostrate>Orz</prostrate><br>
+            before the beautiful absurdity<br>
+            of existence itself.<br>
+            <br>
+            (But at least we're Orz together)
+        </div>
+    </div>
+    
+    <script>
+        // Create more falling Orz
+        const orzRain = document.getElementById('orzRain');
+        const orzVariants = ['Orz', 'orz', 'OTZ', 'OTL', '_no', 'STO'];
+        
+        function createOrz() {
+            const orz = document.createElement('div');
+            orz.className = 'falling-orz';
+            orz.textContent = orzVariants[Math.floor(Math.random() * orzVariants.length)];
+            orz.style.left = Math.random() * 100 + '%';
+            orz.style.animationDelay = Math.random() * 15 + 's';
+            orz.style.animationDuration = (12 + Math.random() * 8) + 's';
+            orz.style.fontSize = (1 + Math.random() * 0.8) + 'rem';
+            orzRain.appendChild(orz);
+            
+            setTimeout(() => orz.remove(), 20000);
+        }
+        
+        setInterval(createOrz, 2500);
+        
+        // Click to prostrate
+        document.body.addEventListener('click', (e) => {
+            const prostration = document.createElement('div');
+            prostration.textContent = 'Orz';
+            prostration.style.position = 'fixed';
+            prostration.style.left = e.clientX + 'px';
+            prostration.style.top = e.clientY + 'px';
+            prostration.style.color = '#f72585';
+            prostration.style.fontSize = '2rem';
+            prostration.style.fontFamily = 'Courier New, monospace';
+            prostration.style.pointerEvents = 'none';
+            prostration.style.animation = 'fall-and-prostrate 1s ease-out forwards';
+            prostration.style.zIndex = '1000';
+            document.body.appendChild(prostration);
+            
+            setTimeout(() => prostration.remove(), 1000);
+        });
+    </script>
+</body>
+</html>

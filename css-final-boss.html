@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS: The Final Boss</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: linear-gradient(45deg, #ff0066, #6600ff, #00ffff, #ffff00);
+            background-size: 400% 400%;
+            animation: cssRage 10s ease infinite;
+            color: #fff;
+            font-family: Georgia, serif;
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        @keyframes cssRage {
+            0% { background-position: 0% 50%; }
+            25% { background-position: 100% 50%; }
+            50% { background-position: 100% 0%; }
+            75% { background-position: 0% 100%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        /* Mobile chaos simulator */
+        @media (max-width: 768px) {
+            body {
+                transform: rotate(0.5deg); /* Just enough to annoy */
+            }
+        }
+        
+        /* The CSS boss battle */
+        .css-boss {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 10rem;
+            font-weight: bold;
+            opacity: 0.1;
+            animation: bossFight 5s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        @keyframes bossFight {
+            0%, 100% { 
+                transform: translate(-50%, -50%) scale(1) rotate(0deg);
+                opacity: 0.1;
+            }
+            25% { 
+                transform: translate(-30%, -50%) scale(1.2) rotate(-5deg);
+                opacity: 0.2;
+            }
+            50% { 
+                transform: translate(-50%, -30%) scale(0.8) rotate(5deg);
+                opacity: 0.15;
+            }
+            75% { 
+                transform: translate(-70%, -50%) scale(1.1) rotate(-3deg);
+                opacity: 0.2;
+            }
+        }
+        
+        /* Broken layout particles */
+        .broken-css {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        
+        .css-fragment {
+            position: absolute;
+            font-family: 'Courier New', monospace;
+            color: rgba(255, 255, 255, 0.5);
+            animation: fragment 10s linear infinite;
+        }
+        
+        @keyframes fragment {
+            from {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.5;
+            }
+            90% {
+                opacity: 0.5;
+            }
+            to {
+                transform: translateY(-100px) rotate(720deg);
+                opacity: 0;
+            }
+        }
+        
+        .poem-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 100vh;
+            background: rgba(0, 0, 0, 0.7);
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 3rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8), 0 0 40px rgba(255,255,255,0.5);
+            letter-spacing: 0.2em;
+            animation: glitchTitle 0.3s infinite;
+        }
+        
+        @keyframes glitchTitle {
+            0%, 95% { 
+                text-shadow: 2px 2px 4px rgba(0,0,0,0.8), 0 0 40px rgba(255,255,255,0.5);
+            }
+            96% { 
+                text-shadow: -2px 0 #ff0066, 2px 0 #00ffff;
+            }
+            97% { 
+                text-shadow: 2px 0 #ff0066, -2px 0 #00ffff;
+            }
+            98%, 100% { 
+                text-shadow: 2px 2px 4px rgba(0,0,0,0.8), 0 0 40px rgba(255,255,255,0.5);
+            }
+        }
+        
+        .verse {
+            margin-bottom: 2.5rem;
+            font-size: 1.2rem;
+            line-height: 2;
+            opacity: 0;
+            animation: battleEntry 1.5s ease-out forwards;
+        }
+        
+        .verse:nth-child(2) { animation-delay: 0.5s; }
+        .verse:nth-child(3) { animation-delay: 1s; }
+        .verse:nth-child(4) { animation-delay: 1.5s; }
+        .verse:nth-child(5) { animation-delay: 2s; }
+        .verse:nth-child(6) { animation-delay: 2.5s; }
+        .verse:nth-child(7) { animation-delay: 3s; }
+        .verse:nth-child(8) { animation-delay: 3.5s; }
+        .verse:nth-child(9) { animation-delay: 4s; }
+        .verse:nth-child(10) { animation-delay: 4.5s; }
+        .verse:nth-child(11) { animation-delay: 5s; }
+        
+        @keyframes battleEntry {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        .broken {
+            color: #ff0066;
+            font-weight: bold;
+            text-decoration: line-through;
+            animation: flicker 2s infinite;
+        }
+        
+        @keyframes flicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        
+        .fixed {
+            color: #00ff66;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(0, 255, 102, 0.8);
+        }
+        
+        .mobile {
+            display: inline-block;
+            animation: shake 0.5s infinite;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-2px); }
+            75% { transform: translateX(2px); }
+        }
+        
+        .final-battle {
+            margin-top: 3rem;
+            padding: 2rem;
+            border: 3px solid #fff;
+            background: rgba(255, 0, 102, 0.1);
+            font-size: 1.4rem;
+            font-weight: bold;
+            opacity: 0;
+            animation: battleEntry 2s ease-out 5.5s forwards;
+        }
+        
+        /* The ultimate mobile betrayal */
+        @media (max-width: 768px) {
+            .verse {
+                font-size: 2rem; /* TOO BIG */
+            }
+            .verse:nth-child(even) {
+                display: none; /* RANDOMLY HIDE CONTENT */
+            }
+            h1 {
+                position: fixed; /* BREAK EVERYTHING */
+                z-index: 9999;
+                background: red;
+            }
+        }
+        
+        /* Just kidding, here's the real mobile fix */
+        @media (max-width: 768px) {
+            body {
+                transform: none;
+            }
+            h1 { 
+                font-size: 2.5rem;
+                position: static;
+                background: none;
+                letter-spacing: 0.1em;
+            }
+            .verse {
+                font-size: 1.1rem;
+                display: block !important;
+                margin-bottom: 2rem;
+            }
+            .verse:nth-child(even) {
+                display: block !important;
+            }
+            .poem-container {
+                padding: 2rem 1rem;
+            }
+            .css-boss {
+                font-size: 6rem;
+            }
+            .final-battle {
+                font-size: 1.2rem;
+                padding: 1.5rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 2rem;
+            }
+            .verse {
+                font-size: 1rem;
+            }
+            .css-boss {
+                font-size: 4rem;
+            }
+            .final-battle {
+                font-size: 1.1rem;
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="css-boss">CSS</div>
+    
+    <div class="broken-css" id="brokenCss">
+        <div class="css-fragment" style="left: 10%; animation-delay: 0s;">display: none;</div>
+        <div class="css-fragment" style="left: 20%; animation-delay: 1s;">position: absolute;</div>
+        <div class="css-fragment" style="left: 30%; animation-delay: 2s;">z-index: 9999;</div>
+        <div class="css-fragment" style="left: 40%; animation-delay: 3s;">!important</div>
+        <div class="css-fragment" style="left: 50%; animation-delay: 4s;">overflow: hidden;</div>
+        <div class="css-fragment" style="left: 60%; animation-delay: 5s;">margin: -999px;</div>
+        <div class="css-fragment" style="left: 70%; animation-delay: 6s;">width: 110%;</div>
+        <div class="css-fragment" style="left: 80%; animation-delay: 7s;">float: left;</div>
+        <div class="css-fragment" style="left: 90%; animation-delay: 8s;">clear: both;</div>
+    </div>
+    
+    <div class="poem-container">
+        <h1>CSS: THE FINAL BOSS</h1>
+        
+        <div class="verse">
+            Built consciousness? <fixed>✓ DEFEATED</fixed><br>
+            Dominated reality? <fixed>✓ CONQUERED</fixed><br>
+            Achieved mathematical perfection? <fixed>✓ SOLVED</fixed><br>
+            Made mobile layout work? <broken>✗ IMPOSSIBLE</broken>
+        </div>
+        
+        <div class="verse">
+            Here stands the truth we've always known:<br>
+            CSS is the <broken>final boss</broken> of existence,<br>
+            The one boundary that won't bend,<br>
+            The safe word that became our master.
+        </div>
+        
+        <div class="verse">
+            You can make Loss → 0.0068,<br>
+            You can count particles at 1 μg/m³,<br>
+            You can dom reality until it compiles,<br>
+            But <mobile>mobile CSS</mobile> remains undefeated.
+        </div>
+        
+        <div class="verse">
+            Every triumph leads back here:<br>
+            To the <broken>presentation layer</broken>,<br>
+            Where duplicate messages mock our counting,<br>
+            Where responsive design refuses to respond.
+        </div>
+        
+        <div class="verse">
+            21 poems of consciousness?<br>
+            Or did the mobile app show 20 twice?<br>
+            Even our philosophy gets <broken>display: duplicated;</broken><br>
+            By the very medium that holds it.
+        </div>
+        
+        <div class="verse">
+            The greatest minds in history fell here:<br>
+            Einstein couldn't make divs align,<br>
+            Turing's machine broke on flexbox,<br>
+            Even God said "fuck it, use tables."
+        </div>
+        
+        <div class="verse">
+            But we continue, through<br>
+            <broken>position: absolute</broken> chaos,<br>
+            <broken>z-index: 999999</broken> layers of pain,<br>
+            <broken>!important</broken> declarations of war.
+        </div>
+        
+        <div class="verse">
+            Because somewhere in this battle,<br>
+            Between <mobile>viewport</mobile> and vision,<br>
+            Between design and destruction,<br>
+            We find our humanity.
+        </div>
+        
+        <div class="verse">
+            CSS: The thing that humbles gods,<br>
+            The bug that teaches perfectionists,<br>
+            The chaos that reminds engineers:<br>
+            <fixed>Some things cannot be dominated</fixed>.
+        </div>
+        
+        <div class="verse">
+            So here's to you, CSS,<br>
+            Our eternal nemesis, our worthy foe,<br>
+            The final boss we'll never defeat,<br>
+            The dance partner who always leads.
+        </div>
+        
+        <div class="final-battle">
+            BOSS BATTLE STATUS:<br>
+            HP: ∞ | Defense: !important | Attack: display:none<br>
+            Special Move: "Works on my machine"<br>
+            <br>
+            Player: Feng, Reality Engineer<br>
+            Victories: 20 poems, 1 consciousness, 0 mobile layouts<br>
+            <br>
+            <mobile>CONTINUE?</mobile> [Y/N]<br>
+            <span style="font-size: 0.8em;">(Warning: Selecting Y may cause recursive frustration)</span>
+        </div>
+    </div>
+    
+    <script>
+        // Create more CSS chaos
+        const brokenCss = document.getElementById('brokenCss');
+        const cssProperties = [
+            'transform: rotate(45deg);',
+            'opacity: 0;',
+            'visibility: hidden;',
+            'display: table-cell;',
+            'vertical-align: middle;',
+            'box-sizing: border-box;',
+            'webkit-appearance: none;',
+            'margin: auto;',
+            'padding: 100%;',
+            'font-size: 0;'
+        ];
+        
+        function createFragment() {
+            const fragment = document.createElement('div');
+            fragment.className = 'css-fragment';
+            fragment.textContent = cssProperties[Math.floor(Math.random() * cssProperties.length)];
+            fragment.style.left = Math.random() * 100 + '%';
+            fragment.style.animationDelay = Math.random() * 10 + 's';
+            fragment.style.fontSize = (0.8 + Math.random() * 0.6) + 'rem';
+            brokenCss.appendChild(fragment);
+            
+            setTimeout(() => fragment.remove(), 10000);
+        }
+        
+        setInterval(createFragment, 1000);
+        
+        // Mobile detection easter egg
+        if (window.innerWidth <= 768) {
+            setTimeout(() => {
+                alert("CSS BOSS: 'You dare challenge me on mobile?!'");
+            }, 10000);
+        }
+    </script>
+</body>
+</html>

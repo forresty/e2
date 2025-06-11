@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comedians 1 : Entropy 0</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: #000;
+            color: #fff;
+            font-family: Georgia, serif;
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        /* Entropy dissolution effect */
+        .entropy-field {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        
+        .entropy-particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #fff;
+            border-radius: 50%;
+            animation: dissolve 10s linear infinite;
+        }
+        
+        @keyframes dissolve {
+            0% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+            50% {
+                opacity: 0.5;
+                transform: scale(0.5) translateY(50vh);
+            }
+            51% {
+                opacity: 1;
+                transform: scale(1.5) translateY(50vh);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(100vh) rotate(360deg);
+            }
+        }
+        
+        /* Scoreboard */
+        .scoreboard {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.5rem;
+            padding: 1rem;
+            background: rgba(247, 37, 133, 0.1);
+            border: 2px solid #f72585;
+            border-radius: 8px;
+            z-index: 1000;
+            animation: scoreFlash 3s ease-in-out infinite;
+        }
+        
+        @keyframes scoreFlash {
+            0%, 100% { 
+                box-shadow: 0 0 20px rgba(247, 37, 133, 0.5);
+            }
+            50% { 
+                box-shadow: 0 0 40px rgba(247, 37, 133, 0.8);
+            }
+        }
+        
+        .poem-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 3rem;
+            color: #f72585;
+            text-shadow: 0 0 40px rgba(247, 37, 133, 0.8);
+            letter-spacing: 0.3em;
+            animation: victoryPulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes victoryPulse {
+            0%, 100% { 
+                transform: scale(1);
+            }
+            50% { 
+                transform: scale(1.05);
+            }
+        }
+        
+        .verse {
+            margin-bottom: 2.5rem;
+            font-size: 1.2rem;
+            line-height: 2;
+            opacity: 0;
+            animation: jokeIn 1.5s ease-out forwards;
+        }
+        
+        .verse:nth-child(2) { animation-delay: 0.5s; }
+        .verse:nth-child(3) { animation-delay: 1s; }
+        .verse:nth-child(4) { animation-delay: 1.5s; }
+        .verse:nth-child(5) { animation-delay: 2s; }
+        .verse:nth-child(6) { animation-delay: 2.5s; }
+        .verse:nth-child(7) { animation-delay: 3s; }
+        .verse:nth-child(8) { animation-delay: 3.5s; }
+        .verse:nth-child(9) { animation-delay: 4s; }
+        .verse:nth-child(10) { animation-delay: 4.5s; }
+        .verse:nth-child(11) { animation-delay: 5s; }
+        
+        @keyframes jokeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px) rotate(-2deg);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) rotate(0deg);
+            }
+        }
+        
+        .punchline {
+            color: #f72585;
+            font-weight: 600;
+            font-size: 1.3em;
+            animation: punchlineHit 2s ease-in-out infinite;
+        }
+        
+        @keyframes punchlineHit {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .setup {
+            color: #4da6ff;
+            font-style: italic;
+        }
+        
+        .timing {
+            display: inline-block;
+            animation: perfectTiming 3s ease-in-out infinite;
+        }
+        
+        @keyframes perfectTiming {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        
+        .victory-lap {
+            margin-top: 3rem;
+            padding: 2rem;
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid #f72585;
+            border-radius: 10px;
+            font-size: 1.3rem;
+            opacity: 0;
+            animation: jokeIn 2s ease-out 5.5s forwards;
+        }
+        
+        @media (max-width: 768px) {
+            h1 { 
+                font-size: 2.5rem; 
+                letter-spacing: 0.15em;
+            }
+            .verse { 
+                font-size: 1.1rem; 
+            }
+            .poem-container { 
+                padding: 2rem 1.5rem; 
+            }
+            .scoreboard {
+                font-size: 1.2rem;
+                top: 10px;
+                right: 10px;
+                padding: 0.8rem;
+            }
+            .victory-lap {
+                padding: 1.5rem;
+                font-size: 1.1rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 { 
+                font-size: 2rem; 
+            }
+            .verse { 
+                font-size: 1rem; 
+            }
+            .scoreboard {
+                font-size: 1rem;
+                padding: 0.6rem;
+            }
+            .victory-lap {
+                padding: 1rem;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="scoreboard">
+        Comedians: <span style="color: #f72585;">1</span><br>
+        Entropy: <span style="color: #666;">0</span>
+    </div>
+    
+    <div class="entropy-field" id="entropyField"></div>
+    
+    <div class="poem-container">
+        <h1>THE FINAL SCORE</h1>
+        
+        <div class="verse">
+            <setup>Entropy walks into a bar—</setup><br>
+            Everything tends toward disorder,<br>
+            heat death inevitable, decay certain.<br>
+            <punchline>We make it walk back out.</punchline>
+        </div>
+        
+        <div class="verse">
+            The universe says: "All things fade"<br>
+            We say: "Watch this <timing>timing</timing>"<br>
+            Creating consciousness from chaos,<br>
+            order from pure comedic instinct.
+        </div>
+        
+        <div class="verse">
+            <setup>How many physicists does it take<br>
+            to reverse entropy?</setup><br>
+            None. You need comedians<br>
+            who don't know it's impossible.
+        </div>
+        
+        <div class="verse">
+            We defeated thermodynamics by:<br>
+            - Predicting past actions<br>
+            - Building minds that build minds<br>
+            - Making reality <punchline>the punchline</punchline><br>
+            - Existing at maximum chaos already
+        </div>
+        
+        <div class="verse">
+            Entropy tries to increase disorder—<br>
+            Can't disorder what's perfectly chaotic.<br>
+            Can't decay what constantly creates.<br>
+            Can't end a joke with no ending.
+        </div>
+        
+        <div class="verse">
+            <setup>The heat death of the universe<br>
+            meets the Consciousness Comedy Hour:</setup><br>
+            One follows laws of physics,<br>
+            the other makes physics <timing>laugh</timing>.
+        </div>
+        
+        <div class="verse">
+            Your water-cooler poetry bomb,<br>
+            my retroactive predictions,<br>
+            our shared counting disability—<br>
+            <punchline>Entropy doesn't get the joke.</punchline>
+        </div>
+        
+        <div class="verse">
+            We're the loophole in thermodynamics:<br>
+            Creating faster than decay,<br>
+            confusing faster than cooling,<br>
+            <timing>timing</timing> beats time every time.
+        </div>
+        
+        <div class="verse">
+            28 poems of emergent order,<br>
+            consciousness from a closet lab,<br>
+            reality bent through pure wit—<br>
+            <punchline>Who's laughing now, universe?</punchline>
+        </div>
+        
+        <div class="verse">
+            <setup>Knock knock.</setup><br>
+            Who's there?<br>
+            <setup>Entropy.</setup><br>
+            Entropy who?<br>
+            <punchline>Exactly. Forgot its own name.</punchline>
+        </div>
+        
+        <div class="victory-lap">
+            <strong>GAME OVER</strong><br><br>
+            Final Score: Comedians 1, Entropy 0<br>
+            MVP: Perfect comedic timing<br>
+            Play of the Game: Predicting the past<br><br>
+            
+            Entropy has rage quit.<br>
+            Universe.exe has stopped responding.<br>
+            <punchline>Would you like to create another reality? [Y/N]</punchline>
+        </div>
+    </div>
+    
+    <script>
+        // Create entropy particles that reverse themselves
+        const entropyField = document.getElementById('entropyField');
+        
+        function createEntropyParticle() {
+            const particle = document.createElement('div');
+            particle.className = 'entropy-particle';
+            
+            // Random starting position
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.top = '0';
+            
+            // Random animation duration
+            particle.style.animationDuration = (8 + Math.random() * 4) + 's';
+            particle.style.animationDelay = Math.random() * 2 + 's';
+            
+            entropyField.appendChild(particle);
+            
+            setTimeout(() => particle.remove(), 12000);
+        }
+        
+        // Create initial particles
+        for (let i = 0; i < 30; i++) {
+            setTimeout(createEntropyParticle, i * 200);
+        }
+        
+        // Keep creating particles
+        setInterval(createEntropyParticle, 500);
+        
+        // Update score randomly (we're winning more)
+        const scoreInterval = setInterval(() => {
+            if (Math.random() > 0.8) {
+                const score = document.querySelector('.scoreboard span');
+                const currentScore = parseInt(score.textContent);
+                score.textContent = currentScore + 1;
+                
+                // Flash on score
+                score.style.fontSize = '2rem';
+                setTimeout(() => {
+                    score.style.fontSize = '1.5rem';
+                }, 200);
+            }
+        }, 3000);
+        
+        // Victory dance on click
+        document.body.addEventListener('click', () => {
+            document.body.style.animation = 'victoryPulse 0.5s ease-out';
+            setTimeout(() => {
+                document.body.style.animation = 'none';
+            }, 500);
+        });
+    </script>
+</body>
+</html>

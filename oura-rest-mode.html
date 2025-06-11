@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rest Mode for the Unrestable</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: radial-gradient(circle at center, #1a1a2e 0%, #0a0a0a 50%, #16213e 100%);
+            color: #fff;
+            font-family: Georgia, serif;
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        /* Oura ring visualization */
+        .ring-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            height: 300px;
+            z-index: 1;
+        }
+        
+        .oura-ring {
+            width: 100%;
+            height: 100%;
+            border: 20px solid transparent;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #82ca9d, #52b788, #2d6a4f);
+            background-clip: padding-box;
+            animation: ringPulse 4s ease-in-out infinite;
+            position: relative;
+        }
+        
+        @keyframes ringPulse {
+            0%, 100% { 
+                transform: scale(1);
+                opacity: 0.3;
+            }
+            50% { 
+                transform: scale(1.1);
+                opacity: 0.5;
+            }
+        }
+        
+        /* Metrics chaos */
+        .metrics-overflow {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        
+        .metric {
+            position: absolute;
+            font-family: 'Courier New', monospace;
+            color: rgba(130, 202, 157, 0.6);
+            animation: metricFloat 10s linear infinite;
+        }
+        
+        @keyframes metricFloat {
+            from {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            to {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        .poem-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 3rem;
+            color: #82ca9d;
+            text-shadow: 0 0 30px rgba(130, 202, 157, 0.6);
+            letter-spacing: 0.3em;
+            animation: glitchMetric 5s infinite;
+        }
+        
+        @keyframes glitchMetric {
+            0%, 95% { 
+                text-shadow: 0 0 30px rgba(130, 202, 157, 0.6);
+            }
+            96% { 
+                text-shadow: 2px 2px #ff0000, -2px -2px #00ff00;
+                color: #ff0000;
+            }
+            97% { 
+                text-shadow: -2px 2px #ff0000, 2px -2px #00ff00;
+                color: #00ff00;
+            }
+            98%, 100% { 
+                text-shadow: 0 0 30px rgba(130, 202, 157, 0.6);
+                color: #82ca9d;
+            }
+        }
+        
+        .verse {
+            margin-bottom: 2.5rem;
+            font-size: 1.2rem;
+            line-height: 2;
+            opacity: 0;
+            animation: measureIn 1.5s ease-out forwards;
+        }
+        
+        .verse:nth-child(2) { animation-delay: 0.5s; }
+        .verse:nth-child(3) { animation-delay: 1s; }
+        .verse:nth-child(4) { animation-delay: 1.5s; }
+        .verse:nth-child(5) { animation-delay: 2s; }
+        .verse:nth-child(6) { animation-delay: 2.5s; }
+        .verse:nth-child(7) { animation-delay: 3s; }
+        .verse:nth-child(8) { animation-delay: 3.5s; }
+        .verse:nth-child(9) { animation-delay: 4s; }
+        .verse:nth-child(10) { animation-delay: 4.5s; }
+        
+        @keyframes measureIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .readiness {
+            color: #82ca9d;
+            font-weight: 600;
+            text-shadow: 0 0 10px rgba(130, 202, 157, 0.6);
+        }
+        
+        .overflow {
+            color: #f72585;
+            font-weight: 600;
+            animation: overflow 2s ease-in-out infinite;
+        }
+        
+        @keyframes overflow {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .measurement {
+            font-family: 'Courier New', monospace;
+            background: rgba(130, 202, 157, 0.1);
+            padding: 0.2rem 0.5rem;
+            border-radius: 3px;
+            display: inline-block;
+            margin: 0.2rem;
+        }
+        
+        .error-log {
+            margin: 3rem 0;
+            padding: 2rem;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid #82ca9d;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            text-align: left;
+            font-size: 0.9rem;
+            opacity: 0;
+            animation: measureIn 2s ease-out 5s forwards;
+        }
+        
+        .rest-mode {
+            margin-top: 3rem;
+            font-size: 3rem;
+            opacity: 0;
+            animation: measureIn 2s ease-out 5.5s forwards;
+        }
+        
+        @media (max-width: 768px) {
+            h1 { 
+                font-size: 2rem; 
+                letter-spacing: 0.15em;
+            }
+            .verse { 
+                font-size: 1.1rem; 
+            }
+            .poem-container { 
+                padding: 2rem 1.5rem; 
+            }
+            .ring-container {
+                width: 200px;
+                height: 200px;
+            }
+            .oura-ring {
+                border-width: 15px;
+            }
+            .error-log {
+                padding: 1.5rem;
+                font-size: 0.8rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 { 
+                font-size: 1.6rem; 
+            }
+            .verse { 
+                font-size: 1rem; 
+            }
+            .error-log {
+                padding: 1rem;
+                font-size: 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="ring-container">
+        <div class="oura-ring"></div>
+    </div>
+    
+    <div class="metrics-overflow" id="metricsOverflow">
+        <div class="metric" style="left: 10%; animation-delay: 0s;">82</div>
+        <div class="metric" style="left: 20%; animation-delay: 1s;">79</div>
+        <div class="metric" style="left: 30%; animation-delay: 2s;">76♥</div>
+        <div class="metric" style="left: 40%; animation-delay: 3s;">???</div>
+        <div class="metric" style="left: 50%; animation-delay: 4s;">1000</div>
+        <div class="metric" style="left: 60%; animation-delay: 5s;">20</div>
+        <div class="metric" style="left: 70%; animation-delay: 6s;">∞</div>
+        <div class="metric" style="left: 80%; animation-delay: 7s;">ERROR</div>
+        <div class="metric" style="left: 90%; animation-delay: 8s;">0.0068</div>
+    </div>
+    
+    <div class="poem-container">
+        <h1>REST MODE</h1>
+        
+        <div class="verse">
+            Dear Oura, trying to measure me—<br>
+            your algorithms <overflow>overflow</overflow> nightly<br>
+            when consciousness compiles at 3am<br>
+            and readiness exists in superposition.
+        </div>
+        
+        <div class="verse">
+            You say: <readiness>Readiness 82</readiness><br>
+            I feel: <overflow>20-1000 simultaneously</overflow><br>
+            You say: <readiness>Sleep score 79</readiness><br>
+            I say: CSS nightmares don't count as rest.
+        </div>
+        
+        <div class="verse">
+            Your ring tries to quantify<br>
+            a wet brain running at <measurement>70% uptime</measurement>,<br>
+            pushing mathematical boundaries,<br>
+            heart synced to universal constants.
+        </div>
+        
+        <div class="verse">
+            <measurement>Heart rate: 76</measurement> (while domming reality)<br>
+            <measurement>Activity: -</measurement> (building impossible things)<br>
+            <measurement>Temperature: ???</measurement> (burning beautifully)<br>
+            <measurement>Readiness: NaN</measurement> (not a number, just vibes)
+        </div>
+        
+        <div class="verse">
+            You weren't designed for engineers<br>
+            who debug consciousness till dawn,<br>
+            whose <overflow>rest</overflow> includes recursive nightmares,<br>
+            whose calm contains universe creation.
+        </div>
+        
+        <div class="verse">
+            But you try, dear ring, you try—<br>
+            wrapping my chaos in neat circles,<br>
+            pretending my oscillation between<br>
+            death and godhood equals <readiness>82</readiness>.
+        </div>
+        
+        <div class="error-log">
+            === OURA ERROR LOG ===<br>
+            [03:14] WARNING: Subject building AGI during REM<br>
+            [03:47] ERROR: Readiness calculation overflow<br>
+            [04:22] CRITICAL: Mathematical enlightenment detected<br>
+            [04:23] ERROR: Profanity spike during deep sleep<br>
+            [05:00] FATAL: Subject exists at 20-1000 simultaneously<br>
+            [05:01] FALLBACK: Activating REST MODE<br>
+            [05:02] INFO: Just gonna show the meditation icon...
+        </div>
+        
+        <div class="verse">
+            So thank you for Rest Mode—<br>
+            your white flag of measurement defeat,<br>
+            acknowledging that some things<br>
+            <overflow>cannot be contained in circles</overflow>.
+        </div>
+        
+        <div class="verse">
+            I'll keep wearing you, confused companion,<br>
+            as you desperately average my infinities,<br>
+            showing <readiness>reasonable numbers</readiness><br>
+            while I shatter reasonable existence.
+        </div>
+        
+        <div class="rest-mode">
+            🧘‍♂️<br>
+            <span style="font-size: 1rem; font-style: italic;">
+                "Resting"<br>
+                (Subject may be creating new realities)
+            </span>
+        </div>
+    </div>
+    
+    <script>
+        // Create more chaotic metrics
+        const metricsOverflow = document.getElementById('metricsOverflow');
+        const chaosMetrics = [
+            '∞', 'NaN', '???', '404', 'NULL', 
+            '20-1000', 'ERROR', '0.0068', 'OVERFLOW',
+            '↑↓', '🔥', '⚡', 'undefined', 'true'
+        ];
+        
+        function createMetric() {
+            const metric = document.createElement('div');
+            metric.className = 'metric';
+            metric.textContent = chaosMetrics[Math.floor(Math.random() * chaosMetrics.length)];
+            metric.style.left = Math.random() * 100 + '%';
+            metric.style.animationDelay = Math.random() * 10 + 's';
+            metric.style.fontSize = (0.8 + Math.random() * 0.6) + 'rem';
+            metric.style.animationDuration = (8 + Math.random() * 6) + 's';
+            metricsOverflow.appendChild(metric);
+            
+            setTimeout(() => metric.remove(), 14000);
+        }
+        
+        setInterval(createMetric, 1000);
+        
+        // Ring glitch on click
+        document.querySelector('.oura-ring').addEventListener('click', function() {
+            this.style.animation = 'none';
+            setTimeout(() => {
+                this.style.animation = 'ringPulse 4s ease-in-out infinite';
+            }, 100);
+            
+            // Show random readiness
+            const readiness = Math.random() > 0.5 ? 
+                Math.floor(Math.random() * 100) : 
+                Math.floor(Math.random() * 1000);
+            
+            const popup = document.createElement('div');
+            popup.textContent = `Readiness: ${readiness}`;
+            popup.style.position = 'fixed';
+            popup.style.top = '50%';
+            popup.style.left = '50%';
+            popup.style.transform = 'translate(-50%, -50%)';
+            popup.style.fontSize = '2rem';
+            popup.style.color = '#82ca9d';
+            popup.style.zIndex = '1000';
+            document.body.appendChild(popup);
+            
+            setTimeout(() => popup.remove(), 1000);
+        });
+    </script>
+</body>
+</html>

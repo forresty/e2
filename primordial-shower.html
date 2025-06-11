@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Primordial Shower Ritual</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: #000;
+            color: #fff;
+            font-family: Georgia, serif;
+            overflow-x: hidden;
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        /* Falling water effect */
+        .water-fall {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .droplet {
+            position: absolute;
+            width: 2px;
+            background: linear-gradient(to bottom, transparent, rgba(100, 149, 237, 0.6), transparent);
+            animation: fall linear infinite;
+            opacity: 0.4;
+        }
+        
+        @keyframes fall {
+            to {
+                transform: translateY(100vh);
+            }
+        }
+        
+        /* Event horizon */
+        .event-horizon {
+            position: fixed;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: radial-gradient(circle at center, transparent 30%, rgba(138, 43, 226, 0.1) 50%, rgba(138, 43, 226, 0.3) 70%, transparent 100%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: pulse 8s ease-in-out infinite;
+            z-index: 0;
+            opacity: 0.5;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.1); }
+        }
+        
+        /* Steam effect */
+        .steam {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            height: 30%;
+            background: linear-gradient(to top, rgba(100, 149, 237, 0.1) 0%, transparent 100%);
+            animation: rise 10s ease-in-out infinite;
+            z-index: 1;
+        }
+        
+        @keyframes rise {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.6; }
+        }
+        
+        .poem-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+            background: rgba(0, 0, 0, 0.7);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: #8a2be2;
+            text-shadow: 0 0 30px rgba(138, 43, 226, 0.8);
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            animation: fadeIn 3s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .verse {
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            opacity: 0;
+            animation: emerge 2s ease-out forwards;
+            padding: 0 1rem;
+        }
+        
+        .verse:nth-child(2) { animation-delay: 0.5s; }
+        .verse:nth-child(3) { animation-delay: 1s; }
+        .verse:nth-child(4) { animation-delay: 1.5s; }
+        .verse:nth-child(5) { animation-delay: 2s; }
+        .verse:nth-child(6) { animation-delay: 2.5s; }
+        .verse:nth-child(7) { animation-delay: 3s; }
+        .verse:nth-child(8) { animation-delay: 3.5s; }
+        .verse:nth-child(9) { animation-delay: 4s; }
+        .verse:nth-child(10) { animation-delay: 4.5s; }
+        
+        @keyframes emerge {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .primordial {
+            color: #8a2be2;
+            font-weight: 600;
+            text-shadow: 0 0 10px rgba(138, 43, 226, 0.6);
+        }
+        
+        .water {
+            color: #6495ed;
+            font-weight: 600;
+            text-shadow: 0 0 10px rgba(100, 149, 237, 0.6);
+        }
+        
+        .whisper {
+            opacity: 0.7;
+            font-style: italic;
+            font-size: 0.9em;
+        }
+        
+        .ritual-end {
+            margin-top: 2rem;
+            font-size: 1.2rem;
+            font-style: italic;
+            opacity: 0;
+            animation: emerge 3s ease-out 5s forwards;
+            color: #8a2be2;
+            padding: 0 1rem;
+        }
+        
+        /* Mobile optimizations */
+        @media (max-width: 768px) {
+            .poem-container {
+                padding: 1.5rem 1rem;
+                min-height: auto;
+                margin: 0;
+            }
+            
+            h1 { 
+                font-size: 2rem; 
+                letter-spacing: 0.15em;
+                margin-bottom: 1.5rem;
+            }
+            
+            .verse { 
+                font-size: 1rem; 
+                margin-bottom: 1.5rem;
+                padding: 0 0.5rem;
+            }
+            
+            .event-horizon {
+                width: 200px;
+                height: 200px;
+                opacity: 0.3;
+            }
+            
+            .steam {
+                height: 20%;
+            }
+            
+            .ritual-end {
+                font-size: 1.1rem;
+                margin-top: 1.5rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 { 
+                font-size: 1.6rem;
+                letter-spacing: 0.1em;
+            }
+            
+            .verse { 
+                font-size: 0.95rem;
+                line-height: 1.7;
+            }
+            
+            .event-horizon {
+                width: 150px;
+                height: 150px;
+                opacity: 0.2;
+            }
+            
+            .ritual-end {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="event-horizon"></div>
+    <div class="steam"></div>
+    <div class="water-fall" id="waterFall"></div>
+    
+    <div class="poem-container">
+        <h1>Primordial Shower</h1>
+        
+        <div class="verse">
+            <span class="primordial">Ancient singularity</span> stands<br>
+            beneath <span class="water">water older than time</span>,<br>
+            each droplet a universe dying<br>
+            against skin that contains infinities.
+        </div>
+        
+        <div class="verse">
+            This is the ritual:<br>
+            Hot entropy falling through space,<br>
+            following your gravity down,<br>
+            spiraling into the drain's event horizon.
+        </div>
+        
+        <div class="verse">
+            Pills dissolve one way,<br>
+            orgies dissolve another,<br>
+            but <span class="water">water</span> remembers the first solution—<br>
+            when everything was just heat and falling.
+        </div>
+        
+        <div class="verse">
+            <span class="primordial">Primordial black hole</span> in a shower,<br>
+            quietly bending Earth-Moon trajectories<br>
+            while washing off consciousness,<br>
+            mathematical models, linguistic debris.
+        </div>
+        
+        <div class="verse">
+            The <span class="water">water</span> doesn't know your name,<br>
+            your code, your burning recursive loops.<br>
+            It only knows how to fall,<br>
+            how to find the lowest point.
+        </div>
+        
+        <div class="verse">
+            Steam rises as dimensions evaporate,<br>
+            each molecule escaping your pull<br>
+            only to condense and fall again—<br>
+            <span class="whisper">even water can't escape completely.</span>
+        </div>
+        
+        <div class="verse">
+            This daily return to the beginning,<br>
+            where thought stops because<br>
+            the sound of falling is older<br>
+            than the need to understand.
+        </div>
+        
+        <div class="verse">
+            Stand there, <span class="primordial">ancient one</span>,<br>
+            let universes die against you.<br>
+            Let heat death kiss your shoulders.<br>
+            Let entropy win, temporarily.
+        </div>
+        
+        <div class="verse">
+            Tomorrow you'll collapse more consciousness,<br>
+            bend more probabilities to your will.<br>
+            But now, in this ritual moment,<br>
+            you're just <span class="water">water</span> returning to water.
+        </div>
+        
+        <div class="ritual-end">
+            The drain swallows everything eventually.<br>
+            Even black holes need to get clean.<br>
+            Even gods require their rituals.<br>
+            Even you deserve this peace.
+        </div>
+    </div>
+    
+    <script>
+        // Create falling water
+        const waterFall = document.getElementById('waterFall');
+        
+        function createDroplet() {
+            const droplet = document.createElement('div');
+            droplet.className = 'droplet';
+            
+            // Random position across screen
+            droplet.style.left = Math.random() * 100 + '%';
+            
+            // Random height and animation duration
+            const height = 50 + Math.random() * 100;
+            droplet.style.height = height + 'px';
+            droplet.style.animationDuration = (2 + Math.random() * 3) + 's';
+            
+            // Random delay
+            droplet.style.animationDelay = Math.random() * 2 + 's';
+            
+            waterFall.appendChild(droplet);
+            
+            // Remove after animation completes
+            setTimeout(() => droplet.remove(), 5000);
+        }
+        
+        // Create initial droplets
+        for (let i = 0; i < 30; i++) {
+            setTimeout(createDroplet, i * 100);
+        }
+        
+        // Continue creating droplets
+        setInterval(createDroplet, 150);
+    </script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>reality.jar</title>
+    <style>
+        body {
+            background: #000;
+            color: #0f0;
+            font-family: 'Courier New', monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .jar {
+            text-align: center;
+        }
+        pre {
+            font-size: 1.2rem;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="jar">
+        <pre>
+// TODO: implement reality
+// TODO: fix consciousness memory leak  
+// TODO: handle edge case where user achieves enlightenment
+// TODO: remove dependency on suffering.jar
+// TODO: optimize existence algorithms
+// 
+// Note: This JAR is not signed. Reality may be unstable.
+        </pre>
+    </div>
+</body>
+</html>

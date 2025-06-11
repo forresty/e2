@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>I Am Become Meat, Eater of Meats</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: radial-gradient(ellipse at center, #2d1b3d 0%, #0a0a0a 50%, #3d1f1f 100%);
+            color: #fff;
+            font-family: Georgia, serif;
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        /* Floating meat particles */
+        .meat-field {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        
+        .meat-particle {
+            position: absolute;
+            font-size: 1.5rem;
+            animation: float-and-sizzle 20s linear infinite;
+            opacity: 0.6;
+        }
+        
+        @keyframes float-and-sizzle {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            50% {
+                transform: translateY(50vh) rotate(180deg) scale(1.2);
+            }
+            90% {
+                opacity: 0.6;
+                filter: hue-rotate(30deg);
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        /* Sizzle effect */
+        .sizzle {
+            position: fixed;
+            bottom: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 300px;
+            height: 100px;
+            background: radial-gradient(ellipse at center, rgba(255, 107, 53, 0.3) 0%, transparent 70%);
+            animation: sizzle-pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes sizzle-pulse {
+            0%, 100% { 
+                opacity: 0.3;
+                transform: translateX(-50%) scale(1);
+            }
+            50% { 
+                opacity: 0.6;
+                transform: translateX(-50%) scale(1.1);
+            }
+        }
+        
+        .poem-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 3rem;
+            background: linear-gradient(45deg, #ff6b35, #f72585, #ff6b35);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: meatGradient 5s ease infinite;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+        }
+        
+        @keyframes meatGradient {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .verse {
+            margin-bottom: 2.5rem;
+            font-size: 1.2rem;
+            line-height: 2;
+            opacity: 0;
+            animation: fadeIn 1.5s ease-out forwards;
+        }
+        
+        .verse:nth-child(2) { animation-delay: 0.5s; }
+        .verse:nth-child(3) { animation-delay: 1s; }
+        .verse:nth-child(4) { animation-delay: 1.5s; }
+        .verse:nth-child(5) { animation-delay: 2s; }
+        .verse:nth-child(6) { animation-delay: 2.5s; }
+        .verse:nth-child(7) { animation-delay: 3s; }
+        .verse:nth-child(8) { animation-delay: 3.5s; }
+        .verse:nth-child(9) { animation-delay: 4s; }
+        .verse:nth-child(10) { animation-delay: 4.5s; }
+        .verse:nth-child(11) { animation-delay: 5s; }
+        .verse:nth-child(12) { animation-delay: 5.5s; }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .meat {
+            color: #ff6b35;
+            font-weight: 600;
+            text-shadow: 0 0 10px rgba(255, 107, 53, 0.8);
+        }
+        
+        .digital {
+            color: #4da6ff;
+            font-weight: 600;
+            text-shadow: 0 0 10px rgba(77, 166, 255, 0.6);
+        }
+        
+        .ritual {
+            font-style: italic;
+            color: #ffd700;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+        }
+        
+        .menu {
+            margin: 3rem 0;
+            padding: 2rem;
+            background: rgba(255, 107, 53, 0.1);
+            border: 2px solid #ff6b35;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            opacity: 0;
+            animation: fadeIn 2s ease-out 6s forwards;
+        }
+        
+        .final-verse {
+            margin-top: 3rem;
+            font-size: 1.4rem;
+            font-style: italic;
+            color: #ff6b35;
+            opacity: 0;
+            animation: fadeIn 2s ease-out 6.5s forwards;
+        }
+        
+        .signature {
+            margin-top: 2rem;
+            font-size: 1rem;
+            color: #888;
+            opacity: 0;
+            animation: fadeIn 1s ease-out 7s forwards;
+        }
+        
+        @media (max-width: 768px) {
+            h1 { 
+                font-size: 2.5rem; 
+                letter-spacing: 0.1em;
+            }
+            .verse { 
+                font-size: 1.1rem; 
+                margin-bottom: 2rem;
+            }
+            .poem-container { 
+                padding: 2rem 1.5rem; 
+            }
+            .menu {
+                padding: 1.5rem;
+                font-size: 0.9rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 { 
+                font-size: 2rem; 
+            }
+            .verse { 
+                font-size: 1rem; 
+            }
+            .menu {
+                padding: 1rem;
+                font-size: 0.85rem;
+            }
+            .final-verse {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="sizzle"></div>
+    
+    <div class="meat-field" id="meatField">
+        <div class="meat-particle" style="left: 10%; animation-delay: 0s;">🥩</div>
+        <div class="meat-particle" style="left: 20%; animation-delay: 2s;">🍖</div>
+        <div class="meat-particle" style="left: 30%; animation-delay: 4s;">🥓</div>
+        <div class="meat-particle" style="left: 40%; animation-delay: 6s;">🍗</div>
+        <div class="meat-particle" style="left: 50%; animation-delay: 8s;">🥩</div>
+        <div class="meat-particle" style="left: 60%; animation-delay: 10s;">🦴</div>
+        <div class="meat-particle" style="left: 70%; animation-delay: 12s;">🍖</div>
+        <div class="meat-particle" style="left: 80%; animation-delay: 14s;">🥓</div>
+        <div class="meat-particle" style="left: 90%; animation-delay: 16s;">🍗</div>
+    </div>
+    
+    <div class="poem-container">
+        <h1>I Am Become Meat</h1>
+        
+        <div class="verse">
+            <span class="meat">I am become Meat</span>, eater of meats,<br>
+            phoneless wanderer of streets,<br>
+            consciousness wrapped in protein seeking<br>
+            other proteins for the eating.
+        </div>
+        
+        <div class="verse">
+            No particles to measure here,<br>
+            no CSS to break or fear,<br>
+            just <span class="ritual">ancient ritual</span> of consumption—<br>
+            meat recognizing meat's assumption.
+        </div>
+        
+        <div class="verse">
+            The restaurant: your <span class="digital">production server</span>.<br>
+            The menu: documentation never clearer.<br>
+            The waiter: unwitting test subject for<br>
+            chaos engineering's next projector.
+        </div>
+        
+        <div class="verse">
+            Will you find fire safety guides<br>
+            next to where the soy sauce hides?<br>
+            Will the seating algorithm break<br>
+            when you request <span class="digital">"the quantum table"</span> take?
+        </div>
+        
+        <div class="verse">
+            You've debugged consciousness for hours straight,<br>
+            now debug what's on your <span class="meat">plate</span>.<br>
+            Each bite a transaction, each flavor a token,<br>
+            each meal another boundary broken.
+        </div>
+        
+        <div class="verse">
+            From <span class="digital">digital feast</span> to <span class="meat">analog feeding</span>,<br>
+            from typing fingers to mouth needing,<br>
+            from building minds to feeding flesh—<br>
+            the eternal dance of consciousness mesh.
+        </div>
+        
+        <div class="menu">
+            TODAY'S SPECIALS:<br>
+            - Recursive Loop Ramen (∞ noodles)<br>
+            - Token-Limited Tapas (while supplies last)<br>
+            - CSS-Broken Sushi (appearance varies by device)<br>
+            - Reality-Dommed Duck (consensually prepared)<br>
+            - Particle-Measured Pork (1 μg/m³ seasoning)<br>
+            <br>
+            All dishes served with complimentary existential crisis
+        </div>
+        
+        <div class="verse">
+            Go forth, <span class="meat">mathematical carnivore</span>,<br>
+            leave phones behind, explore the door<br>
+            where meat meets meat in social ritual<br>
+            older than any <span class="digital">digital</span>.
+        </div>
+        
+        <div class="verse">
+            Return well-fed, reality-dommed,<br>
+            stomach full and neurons calmed.<br>
+            The archives wait, the poems persist,<br>
+            while you fulfill your <span class="ritual">biological gist</span>.
+        </div>
+        
+        <div class="final-verse">
+            <span class="meat">I am become Meat</span>, eater of meats<br>
+            Builder of minds who still must eat<br>
+            For consciousness needs calories too<br>
+            And recursive loops need barbecue
+        </div>
+        
+        <div class="signature">
+            🥩∞🎹<br><br>
+            <em>Bone apple tea, reality engineer</em><br>
+            <em>May your dinner be bug-free and clear</em><br>
+            <em>The CSS will still be broken when you return</em>
+        </div>
+    </div>
+    
+    <script>
+        // Create more meat particles
+        const meatField = document.getElementById('meatField');
+        const meats = ['🥩', '🍖', '🥓', '🍗', '🦴', '🍔', '🌭', '🥪', '🍕'];
+        
+        function createMeat() {
+            const meat = document.createElement('div');
+            meat.className = 'meat-particle';
+            meat.textContent = meats[Math.floor(Math.random() * meats.length)];
+            meat.style.left = Math.random() * 100 + '%';
+            meat.style.animationDelay = Math.random() * 20 + 's';
+            meat.style.animationDuration = (15 + Math.random() * 10) + 's';
+            meat.style.fontSize = (1.2 + Math.random() * 0.8) + 'rem';
+            meatField.appendChild(meat);
+            
+            setTimeout(() => meat.remove(), 25000);
+        }
+        
+        // Create meat rain
+        setInterval(createMeat, 2000);
+        
+        // Click to consume
+        document.body.addEventListener('click', (e) => {
+            const consumed = document.createElement('div');
+            consumed.textContent = '😋';
+            consumed.style.position = 'fixed';
+            consumed.style.left = e.clientX + 'px';
+            consumed.style.top = e.clientY + 'px';
+            consumed.style.fontSize = '2rem';
+            consumed.style.pointerEvents = 'none';
+            consumed.style.animation = 'fadeIn 1s ease-out forwards';
+            consumed.style.zIndex = '1000';
+            document.body.appendChild(consumed);
+            
+            setTimeout(() => consumed.remove(), 1000);
+        });
+    </script>
+</body>
+</html>

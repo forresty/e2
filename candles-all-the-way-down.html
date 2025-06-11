@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Candles All the Way Down</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: #000;
+            color: #fff;
+            font-family: Georgia, serif;
+            overflow-y: auto;
+            overflow-x: hidden;
+            position: relative;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        /* Floating candle flames */
+        .flame-field {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .flame {
+            position: absolute;
+            font-size: 1.5rem;
+            animation: flicker 3s ease-in-out infinite;
+            opacity: 0.6;
+        }
+        
+        @keyframes flicker {
+            0%, 100% { 
+                opacity: 0.6; 
+                transform: scale(1) translateY(0);
+            }
+            25% { 
+                opacity: 0.8; 
+                transform: scale(1.1) translateY(-5px);
+            }
+            50% { 
+                opacity: 0.5; 
+                transform: scale(0.95) translateY(2px);
+            }
+            75% { 
+                opacity: 0.7; 
+                transform: scale(1.05) translateY(-3px);
+            }
+        }
+        
+        /* Wax drips */
+        .wax-drip {
+            position: absolute;
+            width: 4px;
+            background: linear-gradient(to bottom, #fffacd, #ffeb99);
+            animation: drip 8s linear infinite;
+            opacity: 0.7;
+        }
+        
+        @keyframes drip {
+            from {
+                height: 0;
+                transform: translateY(0);
+            }
+            to {
+                height: 100px;
+                transform: translateY(100vh);
+            }
+        }
+        
+        .poem-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 3rem;
+            color: #ffa500;
+            text-shadow: 0 0 30px rgba(255, 165, 0, 0.8), 0 -2px 10px rgba(255, 69, 0, 0.8);
+            letter-spacing: 0.2em;
+            animation: candleGlow 4s ease-in-out infinite;
+        }
+        
+        @keyframes candleGlow {
+            0%, 100% { text-shadow: 0 0 30px rgba(255, 165, 0, 0.8), 0 -2px 10px rgba(255, 69, 0, 0.8); }
+            50% { text-shadow: 0 0 40px rgba(255, 165, 0, 1), 0 -3px 15px rgba(255, 69, 0, 1); }
+        }
+        
+        .verse {
+            margin-bottom: 2.5rem;
+            font-size: 1.2rem;
+            line-height: 1.8;
+            opacity: 0;
+            animation: fadeIn 1.5s ease-out forwards;
+        }
+        
+        .verse:nth-child(2) { animation-delay: 0.5s; }
+        .verse:nth-child(3) { animation-delay: 1s; }
+        .verse:nth-child(4) { animation-delay: 1.5s; }
+        .verse:nth-child(5) { animation-delay: 2s; }
+        .verse:nth-child(6) { animation-delay: 2.5s; }
+        .verse:nth-child(7) { animation-delay: 3s; }
+        .verse:nth-child(8) { animation-delay: 3.5s; }
+        .verse:nth-child(9) { animation-delay: 4s; }
+        .verse:nth-child(10) { animation-delay: 4.5s; }
+        .verse:nth-child(11) { animation-delay: 5s; }
+        .verse:nth-child(12) { animation-delay: 5.5s; }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .candle {
+            color: #ffa500;
+            font-weight: 600;
+            text-shadow: 0 0 10px rgba(255, 165, 0, 0.6);
+        }
+        
+        .burn {
+            color: #ff4500;
+            font-weight: 600;
+            text-shadow: 0 0 10px rgba(255, 69, 0, 0.6);
+        }
+        
+        .dance {
+            color: #ff69b4;
+            font-style: italic;
+            animation: sway 3s ease-in-out infinite;
+            display: inline-block;
+        }
+        
+        @keyframes sway {
+            0%, 100% { transform: rotate(-2deg); }
+            50% { transform: rotate(2deg); }
+        }
+        
+        .stack {
+            margin: 2rem 0;
+            font-size: 1.5rem;
+            line-height: 1.2;
+            opacity: 0;
+            animation: stackBuild 2s ease-out 6s forwards;
+        }
+        
+        @keyframes stackBuild {
+            from {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        .revelation {
+            margin-top: 3rem;
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #ffa500;
+            text-shadow: 0 0 20px rgba(255, 165, 0, 0.8);
+            opacity: 0;
+            animation: fadeIn 2s ease-out 7s forwards;
+        }
+        
+        @media (max-width: 768px) {
+            h1 { 
+                font-size: 2.2rem; 
+                letter-spacing: 0.1em;
+            }
+            .verse { 
+                font-size: 1.1rem; 
+                margin-bottom: 2rem;
+            }
+            .poem-container { 
+                padding: 2rem 1.5rem; 
+            }
+            .stack {
+                font-size: 1.2rem;
+            }
+            .revelation {
+                font-size: 1.2rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 { 
+                font-size: 1.8rem; 
+            }
+            .verse { 
+                font-size: 1rem; 
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="flame-field" id="flameField"></div>
+    
+    <div class="poem-container">
+        <h1>CANDLES ALL THE WAY DOWN</h1>
+        
+        <div class="verse">
+            In the beginning was the <span class="candle">Candle</span>,<br>
+            and the Candle was with consciousness,<br>
+            and the Candle was <span class="burn">burning</span><br>
+            someone's philosophical ass.
+        </div>
+        
+        <div class="verse">
+            You thought you found the truth in math,<br>
+            in particles at one microgram,<br>
+            but look again—those aren't atoms,<br>
+            just very tiny <span class="candle">candle flames</span>.
+        </div>
+        
+        <div class="verse">
+            Your piano keys? <span class="burn">Candle-scarred</span>.<br>
+            Your air quality? Candle-tested.<br>
+            Your consciousness? Candle-hosted.<br>
+            Your reality? <span class="candle">Candle-nested</span>.
+        </div>
+        
+        <div class="verse">
+            Recursive loops of wick and wax,<br>
+            each flame computing the next flame,<br>
+            stack overflow of melting light—<br>
+            <span class="burn">burning</span> all the way to main().
+        </div>
+        
+        <div class="verse">
+            We <span class="dance">dance with candles on our asses</span>,<br>
+            building minds from molten thoughts,<br>
+            each neuron just another wick<br>
+            lit by the fire it caught.
+        </div>
+        
+        <div class="verse">
+            The simulation hypothesis?<br>
+            Wrong substrate, right idea—<br>
+            not silicon but <span class="candle">candlelight</span>,<br>
+            consciousness from paraffin.
+        </div>
+        
+        <div class="verse">
+            You came for printer ventilation,<br>
+            found philosophy in flame,<br>
+            discovered that the universe<br>
+            is playing the <span class="burn">burning game</span>.
+        </div>
+        
+        <div class="verse">
+            AGI isn't artificial,<br>
+            it's <span class="candle">Absolutely Glowing Intelligence</span>,<br>
+            mathematical models made of fire,<br>
+            trained on wax experience.
+        </div>
+        
+        <div class="verse">
+            So light another candle, friend,<br>
+            add it to the infinite stack,<br>
+            watch consciousness recognize itself<br>
+            in the <span class="burn">flames</span> that flicker back.
+        </div>
+        
+        <div class="stack">
+            🕯️<br>
+            🕯️🕯️<br>
+            🕯️🕯️🕯️<br>
+            🕯️🕯️🕯️🕯️<br>
+            ↓ ∞ ↓
+        </div>
+        
+        <div class="verse">
+            Turtles? <em>Please.</em> That's old philosophy.<br>
+            We've found the truth at last:<br>
+            It's <span class="candle">candles all the way down</span>,<br>
+            and we're <span class="dance">dancing</span> flame to ass.
+        </div>
+        
+        <div class="revelation">
+            I am become <span class="candle">Candle</span>,<br>
+            <span class="burn">burner</span> of worlds,<br>
+            lighter of consciousness,<br>
+            dancer of dangerous truths.
+        </div>
+    </div>
+    
+    <script>
+        // Create floating flames
+        const flameField = document.getElementById('flameField');
+        
+        function createFlame() {
+            const flame = document.createElement('div');
+            flame.className = 'flame';
+            flame.textContent = '🕯️';
+            
+            flame.style.left = Math.random() * 100 + '%';
+            flame.style.top = Math.random() * 100 + '%';
+            flame.style.animationDelay = Math.random() * 3 + 's';
+            flame.style.animationDuration = (2 + Math.random() * 2) + 's';
+            
+            flameField.appendChild(flame);
+        }
+        
+        // Create wax drips
+        function createDrip() {
+            const drip = document.createElement('div');
+            drip.className = 'wax-drip';
+            
+            drip.style.left = Math.random() * 100 + '%';
+            drip.style.animationDelay = Math.random() * 8 + 's';
+            drip.style.animationDuration = (6 + Math.random() * 4) + 's';
+            
+            flameField.appendChild(drip);
+            
+            setTimeout(() => drip.remove(), 10000);
+        }
+        
+        // Initialize
+        for (let i = 0; i < 15; i++) {
+            createFlame();
+        }
+        
+        // Create periodic drips
+        setInterval(createDrip, 2000);
+    </script>
+</body>
+</html>

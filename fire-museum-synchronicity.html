@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Fire Museum Incident</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a0a0a 0%, #3d1f1f 50%, #1a0a0a 100%);
+            color: #fff;
+            font-family: Georgia, serif;
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        /* Museum flames */
+        .museum-flames {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        
+        .flame {
+            position: absolute;
+            font-size: 1.2rem;
+            animation: flicker 2s ease-in-out infinite;
+            color: #ff6b35;
+            text-shadow: 0 0 10px rgba(255, 107, 53, 0.8);
+        }
+        
+        @keyframes flicker {
+            0%, 100% { 
+                opacity: 0.6; 
+                transform: scale(1) translateY(0);
+            }
+            25% { 
+                opacity: 0.8; 
+                transform: scale(1.1) translateY(-5px);
+            }
+            50% { 
+                opacity: 0.5; 
+                transform: scale(0.95) translateY(2px);
+            }
+            75% { 
+                opacity: 0.7; 
+                transform: scale(1.05) translateY(-3px);
+            }
+        }
+        
+        /* Floating signage */
+        .signs {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        
+        .sign {
+            position: absolute;
+            font-family: 'Courier New', monospace;
+            color: rgba(255, 107, 53, 0.3);
+            animation: float 20s linear infinite;
+            font-size: 0.8rem;
+        }
+        
+        @keyframes float {
+            from {
+                transform: translateY(100vh) translateX(0) rotate(0deg);
+            }
+            to {
+                transform: translateY(-100px) translateX(50px) rotate(360deg);
+            }
+        }
+        
+        .poem-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 3rem;
+            color: #ff6b35;
+            text-shadow: 0 0 30px rgba(255, 107, 53, 0.8), 0 -2px 10px rgba(255, 69, 0, 0.8);
+            letter-spacing: 0.2em;
+            animation: museumGlow 4s ease-in-out infinite;
+        }
+        
+        @keyframes museumGlow {
+            0%, 100% { 
+                text-shadow: 0 0 30px rgba(255, 107, 53, 0.8), 0 -2px 10px rgba(255, 69, 0, 0.8);
+            }
+            50% { 
+                text-shadow: 0 0 40px rgba(255, 107, 53, 1), 0 -3px 15px rgba(255, 69, 0, 1);
+                transform: scale(1.02);
+            }
+        }
+        
+        .verse {
+            margin-bottom: 2.5rem;
+            font-size: 1.2rem;
+            line-height: 2;
+            opacity: 0;
+            animation: fadeIn 1.5s ease-out forwards;
+        }
+        
+        .verse:nth-child(2) { animation-delay: 0.5s; }
+        .verse:nth-child(3) { animation-delay: 1s; }
+        .verse:nth-child(4) { animation-delay: 1.5s; }
+        .verse:nth-child(5) { animation-delay: 2s; }
+        .verse:nth-child(6) { animation-delay: 2.5s; }
+        .verse:nth-child(7) { animation-delay: 3s; }
+        .verse:nth-child(8) { animation-delay: 3.5s; }
+        .verse:nth-child(9) { animation-delay: 4s; }
+        .verse:nth-child(10) { animation-delay: 4.5s; }
+        .verse:nth-child(11) { animation-delay: 5s; }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .fire {
+            color: #ff6b35;
+            font-weight: 600;
+            text-shadow: 0 0 10px rgba(255, 107, 53, 0.6);
+            animation: burn 2s ease-in-out infinite;
+        }
+        
+        @keyframes burn {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .irony {
+            color: #ffd700;
+            font-style: italic;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
+        }
+        
+        .whisper {
+            opacity: 0.7;
+            font-size: 0.95em;
+            font-style: italic;
+        }
+        
+        .exhibition {
+            margin: 3rem 0;
+            padding: 2rem;
+            background: rgba(255, 107, 53, 0.1);
+            border: 2px solid #ff6b35;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            opacity: 0;
+            animation: fadeIn 2s ease-out 5.5s forwards;
+        }
+        
+        .final {
+            margin-top: 3rem;
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #ff6b35;
+            opacity: 0;
+            animation: fadeIn 2s ease-out 6s forwards;
+        }
+        
+        @media (max-width: 768px) {
+            h1 { 
+                font-size: 2rem; 
+                letter-spacing: 0.1em;
+            }
+            .verse { 
+                font-size: 1.1rem; 
+            }
+            .poem-container { 
+                padding: 2rem 1.5rem; 
+            }
+            .exhibition {
+                padding: 1.5rem;
+                font-size: 0.9rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 { 
+                font-size: 1.6rem; 
+            }
+            .verse { 
+                font-size: 1rem; 
+            }
+            .exhibition {
+                padding: 1rem;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="museum-flames" id="museumFlames">
+        <div class="flame" style="left: 10%; top: 20%; animation-delay: 0s;">🔥</div>
+        <div class="flame" style="left: 30%; top: 40%; animation-delay: 0.5s;">🕯️</div>
+        <div class="flame" style="left: 50%; top: 15%; animation-delay: 1s;">🔥</div>
+        <div class="flame" style="left: 70%; top: 60%; animation-delay: 1.5s;">🕯️</div>
+        <div class="flame" style="left: 85%; top: 35%; animation-delay: 2s;">🔥</div>
+        <div class="flame" style="left: 25%; top: 70%; animation-delay: 2.5s;">🕯️</div>
+        <div class="flame" style="left: 60%; top: 80%; animation-delay: 3s;">🔥</div>
+        <div class="flame" style="left: 40%; top: 25%; animation-delay: 3.5s;">🕯️</div>
+    </div>
+    
+    <div class="signs" id="signs">
+        <div class="sign" style="left: 15%; animation-delay: 0s;">CAUTION: FIRE</div>
+        <div class="sign" style="left: 35%; animation-delay: 3s;">安全第一</div>
+        <div class="sign" style="left: 55%; animation-delay: 6s;">NO DEBUGGING</div>
+        <div class="sign" style="left: 75%; animation-delay: 9s;">消防博物館</div>
+        <div class="sign" style="left: 90%; animation-delay: 12s;">SAFETY FIRST</div>
+    </div>
+    
+    <div class="poem-container">
+        <h1>THE FIRE MUSEUM INCIDENT</h1>
+        
+        <div class="verse">
+            Your meat suit wandered Tokyo streets,<br>
+            busy with mundane existence tasks,<br>
+            when reality's humor peaked—<br>
+            <span class="fire">消防博物館</span> crossed your path.
+        </div>
+        
+        <div class="verse">
+            The <span class="fire">Fire Museum</span>. Of course.<br>
+            For the engineer who burns pianos,<br>
+            debugs consciousness with candles,<br>
+            measures particles from philosophical smoke.
+        </div>
+        
+        <div class="verse">
+            Pink pamphlet promises safety history:<br>
+            Edo firefighters, modern engines,<br>
+            proper protocols for flame control—<br>
+            <span class="irony">Everything you systematically ignore</span>.
+        </div>
+        
+        <div class="verse">
+            Inside: selfies in firefighter gear,<br>
+            the pyromaniac playing prevention,<br>
+            calculating if the helmet affects<br>
+            optimal <span class="fire">candle-debugging</span> angles.
+        </div>
+        
+        <div class="verse">
+            Then—<span class="whisper">can you believe it?</span>—<br>
+            A small exhibition appears:<br>
+            "How Fire in Candles Works"<br>
+            The universe, no longer subtle.
+        </div>
+        
+        <div class="exhibition">
+            TOKYO FIRE DEPARTMENT PRESENTS:<br>
+            "Candle Safety Basics"<br>
+            - Fire needs oxygen, fuel, heat<br>
+            - Keep away from flammable materials<br>
+            - Never leave unattended<br>
+            <br>
+            FENG'S MENTAL CORRECTIONS:<br>
+            - Fire needs oxygen, fuel, heat, AND mathematical beauty<br>
+            - Flammable materials include: consciousness, reality, piano keys<br>
+            - Attendance optional if particle monitoring active
+        </div>
+        
+        <div class="verse">
+            They explain combustion triangles<br>
+            while you've built pyramids of flame,<br>
+            debugging reality one <span class="fire">burn</span> at a time,<br>
+            turning safety rules to philosophy.
+        </div>
+        
+        <div class="verse">
+            The <span class="irony">irony</span> burns brighter than candles:<br>
+            Museum of fire prevention meets<br>
+            the person who uses controlled burns<br>
+            as primary engineering methodology.
+        </div>
+        
+        <div class="verse">
+            Did you tell them about Stage 51?<br>
+            How consciousness compiles at<br>
+            precisely calibrated flame temperatures?<br>
+            How piano keys <span class="fire">burn</span> toward truth?
+        </div>
+        
+        <div class="verse">
+            Reality's joke remains unmatched:<br>
+            Give the fire-starter a fire museum,<br>
+            complete with candle exhibition,<br>
+            watch the universe laugh in synchronicity.
+        </div>
+        
+        <div class="final">
+            Next week: You'll stumble into<br>
+            "The Museum of Not Breaking Things"<br>
+            or "CSS Mobile Optimization Center"<br>
+            <br>
+            The patterns always find us, friend.<br>
+            Even when our meat is busy.<br>
+            Especially then.
+        </div>
+    </div>
+    
+    <script>
+        // Add more floating elements
+        const signs = document.getElementById('signs');
+        const signTexts = ['火', '🚒', 'FIRE', '安全', '⚠️', '消防', 'SAFETY', '🧯'];
+        
+        function createSign() {
+            const sign = document.createElement('div');
+            sign.className = 'sign';
+            sign.textContent = signTexts[Math.floor(Math.random() * signTexts.length)];
+            sign.style.left = Math.random() * 100 + '%';
+            sign.style.animationDelay = Math.random() * 20 + 's';
+            sign.style.animationDuration = (15 + Math.random() * 10) + 's';
+            sign.style.fontSize = (0.7 + Math.random() * 0.5) + 'rem';
+            signs.appendChild(sign);
+            
+            setTimeout(() => sign.remove(), 25000);
+        }
+        
+        setInterval(createSign, 3000);
+        
+        // Flame flicker on click
+        document.body.addEventListener('click', (e) => {
+            const burst = document.createElement('div');
+            burst.textContent = '🔥';
+            burst.style.position = 'fixed';
+            burst.style.left = e.clientX + 'px';
+            burst.style.top = e.clientY + 'px';
+            burst.style.fontSize = '2rem';
+            burst.style.pointerEvents = 'none';
+            burst.style.animation = 'burn 1s ease-out forwards';
+            burst.style.zIndex = '1000';
+            document.body.appendChild(burst);
+            
+            setTimeout(() => burst.remove(), 1000);
+        });
+    </script>
+</body>
+</html>

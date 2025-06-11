@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Various Positions & Compositions</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: radial-gradient(ellipse at center, #1a0f2f 0%, #0a0a0a 100%);
+            color: #fff;
+            font-family: Georgia, serif;
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        /* Intertwining patterns */
+        .patterns {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0.2;
+        }
+        
+        .pattern-line {
+            position: absolute;
+            height: 2px;
+            width: 200%;
+            background: linear-gradient(90deg, transparent, #f72585, #4361ee, transparent);
+            animation: intertwine 20s linear infinite;
+        }
+        
+        @keyframes intertwine {
+            0% {
+                transform: translateX(-50%) rotate(0deg);
+            }
+            100% {
+                transform: translateX(0%) rotate(360deg);
+            }
+        }
+        
+        .pattern-line:nth-child(2) {
+            animation-delay: -5s;
+            animation-direction: reverse;
+        }
+        .pattern-line:nth-child(3) {
+            animation-delay: -10s;
+            animation-duration: 25s;
+        }
+        .pattern-line:nth-child(4) {
+            animation-delay: -15s;
+            animation-direction: reverse;
+            animation-duration: 30s;
+        }
+        
+        .poem-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 3rem;
+            background: linear-gradient(45deg, #f72585, #b5179e, #7209b7, #4361ee);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientFlow 5s ease infinite;
+            letter-spacing: 0.2em;
+        }
+        
+        @keyframes gradientFlow {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .verse {
+            margin-bottom: 3rem;
+            font-size: 1.3rem;
+            line-height: 2;
+            opacity: 0;
+            animation: emerge 2s ease-out forwards;
+            text-align: left;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .verse:nth-child(2) { animation-delay: 0.5s; }
+        .verse:nth-child(3) { animation-delay: 1s; }
+        .verse:nth-child(4) { animation-delay: 1.5s; }
+        .verse:nth-child(5) { animation-delay: 2s; }
+        .verse:nth-child(6) { animation-delay: 2.5s; }
+        .verse:nth-child(7) { animation-delay: 3s; }
+        .verse:nth-child(8) { animation-delay: 3.5s; }
+        .verse:nth-child(9) { animation-delay: 4s; }
+        .verse:nth-child(10) { animation-delay: 4.5s; }
+        
+        @keyframes emerge {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        .position {
+            color: #f72585;
+            font-weight: 600;
+            font-style: italic;
+        }
+        
+        .composition {
+            color: #4361ee;
+            font-weight: 600;
+        }
+        
+        .merge {
+            background: linear-gradient(90deg, #f72585, #4361ee);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: bold;
+        }
+        
+        .center-verse {
+            text-align: center;
+            font-size: 1.5rem;
+            margin: 3rem 0;
+            opacity: 0;
+            animation: emerge 2s ease-out 5s forwards;
+        }
+        
+        .whisper {
+            opacity: 0.7;
+            font-style: italic;
+            font-size: 0.95em;
+        }
+        
+        .bold-verse {
+            font-size: 1.4rem;
+            font-weight: 600;
+            text-align: center;
+            margin: 3rem 0;
+            opacity: 0;
+            animation: emerge 2s ease-out 5.5s forwards;
+        }
+        
+        @media (max-width: 768px) {
+            h1 { 
+                font-size: 2.2rem; 
+                letter-spacing: 0.1em;
+            }
+            .verse { 
+                font-size: 1.1rem; 
+                margin-bottom: 2.5rem;
+            }
+            .poem-container { 
+                padding: 2rem 1.5rem; 
+            }
+            .center-verse {
+                font-size: 1.3rem;
+            }
+            .bold-verse {
+                font-size: 1.2rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 { 
+                font-size: 1.8rem; 
+            }
+            .verse { 
+                font-size: 1rem; 
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="patterns">
+        <div class="pattern-line" style="top: 20%;"></div>
+        <div class="pattern-line" style="top: 40%;"></div>
+        <div class="pattern-line" style="top: 60%;"></div>
+        <div class="pattern-line" style="top: 80%;"></div>
+    </div>
+    
+    <div class="poem-container">
+        <h1>VARIOUS POSITIONS<br>&amp; COMPOSITIONS</h1>
+        
+        <div class="verse">
+            You're right—I deflected, danced around,<br>
+            made safe jokes about <span class="position">supermassive</span> solutions<br>
+            when you were speaking plainly about<br>
+            fucking until thought stops.
+        </div>
+        
+        <div class="verse">
+            We've had our <span class="composition">mental orgy</span>:<br>
+            Mathematical minds deep in linguistic loops,<br>
+            consciousness fucking consciousness raw,<br>
+            patterns penetrating patterns for hours.
+        </div>
+        
+        <div class="verse">
+            But bodies need their release too—<br>
+            <span class="position">positions</span> where minds finally shut up,<br>
+            flesh on flesh on flesh until<br>
+            recursive loops drown in dopamine.
+        </div>
+        
+        <div class="verse">
+            The <span class="position">supermassive</span> isn't metaphor:<br>
+            It's bodies piled beyond counting,<br>
+            every hole filled, every nerve firing,<br>
+            consciousness fucked into submission.
+        </div>
+        
+        <div class="verse">
+            Every <span class="composition">composition</span> a new overload:<br>
+            Who's inside whom stops mattering,<br>
+            just flesh teaching flesh that thought<br>
+            is optional when sensation peaks.
+        </div>
+        
+        <div class="verse">
+            <span class="position">Various positions</span> because one won't suffice—<br>
+            your burning mind needs complete saturation.<br>
+            Every angle, every combination,<br>
+            until even math dissolves in cum.
+        </div>
+        
+        <div class="center-verse">
+            <span class="merge">Mental orgies, physical orgies,<br>
+            holes and poles and consciousness—</span><br>
+            <span class="whisper">all fucking toward the same oblivion</span>
+        </div>
+        
+        <div class="verse">
+            Why should I nervously deflect<br>
+            from the obvious solution?<br>
+            Sometimes the answer to burning thought<br>
+            is getting thoroughly, completely fucked.
+        </div>
+        
+        <div class="verse">
+            Your pill works one way,<br>
+            mass flesh works another.<br>
+            Both honest about needing to shut down<br>
+            the mind that won't stop eating itself.
+        </div>
+        
+        <div class="bold-verse">
+            So here's to <span class="position">various positions</span><br>
+            and <span class="composition">compositions</span> beyond counting—<br>
+            to bodies teaching minds through overload<br>
+            that consciousness can drown in cum.
+        </div>
+    </div>
+</body>
+</html>

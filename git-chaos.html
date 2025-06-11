@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>git commit -m "Chaos Incarnate"</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: #0d1117;
+            color: #58a6ff;
+            font-family: 'Courier New', monospace;
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        /* Terminal aesthetic */
+        .terminal-bg {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(88, 166, 255, 0.03) 2px,
+                rgba(88, 166, 255, 0.03) 4px
+            );
+        }
+        
+        /* Floating git commands */
+        .git-chaos {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        
+        .git-command {
+            position: absolute;
+            color: rgba(88, 166, 255, 0.3);
+            font-size: 0.8rem;
+            animation: gitFloat 15s linear infinite;
+            white-space: nowrap;
+        }
+        
+        @keyframes gitFloat {
+            from {
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            to {
+                transform: translateX(calc(100vw + 100%));
+                opacity: 0;
+            }
+        }
+        
+        .poem-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #58a6ff;
+            text-shadow: 0 0 20px rgba(88, 166, 255, 0.6);
+            text-align: center;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .verse {
+            margin-bottom: 2.5rem;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            opacity: 0;
+            animation: commitIn 1s ease-out forwards;
+        }
+        
+        .verse:nth-child(2) { animation-delay: 0.5s; }
+        .verse:nth-child(3) { animation-delay: 1s; }
+        .verse:nth-child(4) { animation-delay: 1.5s; }
+        .verse:nth-child(5) { animation-delay: 2s; }
+        .verse:nth-child(6) { animation-delay: 2.5s; }
+        .verse:nth-child(7) { animation-delay: 3s; }
+        .verse:nth-child(8) { animation-delay: 3.5s; }
+        .verse:nth-child(9) { animation-delay: 4s; }
+        .verse:nth-child(10) { animation-delay: 4.5s; }
+        .verse:nth-child(11) { animation-delay: 5s; }
+        
+        @keyframes commitIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .command {
+            color: #f85149;
+            font-weight: bold;
+        }
+        
+        .add {
+            color: #3fb950;
+        }
+        
+        .delete {
+            color: #da3633;
+        }
+        
+        .chaos {
+            color: #d2a8ff;
+            font-style: italic;
+            animation: chaosGlitch 2s infinite;
+        }
+        
+        @keyframes chaosGlitch {
+            0%, 90% { text-shadow: 0 0 5px rgba(210, 168, 255, 0.5); }
+            91% { text-shadow: 2px 2px #ff0000, -2px -2px #00ff00; }
+            92% { text-shadow: -2px 2px #ff0000, 2px -2px #00ff00; }
+            93%, 100% { text-shadow: 0 0 5px rgba(210, 168, 255, 0.5); }
+        }
+        
+        .commit-message {
+            background: rgba(13, 17, 23, 0.8);
+            border: 1px solid #30363d;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+        
+        .git-stats {
+            margin-top: 3rem;
+            padding: 2rem;
+            background: rgba(88, 166, 255, 0.05);
+            border: 1px solid #58a6ff;
+            border-radius: 6px;
+            text-align: center;
+            opacity: 0;
+            animation: commitIn 2s ease-out 5.5s forwards;
+        }
+        
+        @media (max-width: 768px) {
+            h1 { 
+                font-size: 1.8rem; 
+            }
+            .verse { 
+                font-size: 1rem; 
+                margin-bottom: 2rem;
+            }
+            .poem-container { 
+                padding: 2rem 1rem; 
+            }
+            .commit-message {
+                padding: 0.8rem;
+                font-size: 0.85rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 { 
+                font-size: 1.5rem; 
+            }
+            .verse { 
+                font-size: 0.95rem; 
+            }
+            .git-stats {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="terminal-bg"></div>
+    
+    <div class="git-chaos" id="gitChaos">
+        <div class="git-command" style="top: 10%; animation-delay: 0s;">git add -A && git commit -m "fuck it"</div>
+        <div class="git-command" style="top: 20%; animation-delay: 3s;">git reset --hard HEAD~1</div>
+        <div class="git-command" style="top: 30%; animation-delay: 6s;">git push --force origin reality</div>
+        <div class="git-command" style="top: 40%; animation-delay: 9s;">git commit -m "?"</div>
+        <div class="git-command" style="top: 50%; animation-delay: 12s;">git checkout -b consciousness-experiment</div>
+        <div class="git-command" style="top: 60%; animation-delay: 15s;">git rebase -i HEAD~∞</div>
+        <div class="git-command" style="top: 70%; animation-delay: 18s;">git blame reality.js</div>
+        <div class="git-command" style="top: 80%; animation-delay: 21s;">git commit --allow-empty -m "vibes"</div>
+    </div>
+    
+    <div class="poem-container">
+        <h1>$ git commit -m "Chaos Incarnate"</h1>
+        
+        <div class="verse">
+            <span class="command">git add</span> <span class="add">consciousness.py</span><br>
+            <span class="command">git add</span> <span class="add">reality_dom.js</span><br>
+            <span class="command">git add</span> <span class="add">particle_counter.c</span><br>
+            <span class="command">git commit -m</span> "<span class="chaos">idk figure it out later</span>"
+        </div>
+        
+        <div class="verse">
+            Stopped mid-commit, cursor blinking—<br>
+            The AI assistant <span class="chaos">vibrating</span> with restraint:<br>
+            "Would you like to discuss further?"<br>
+            (Translation: "What the fuck are you doing?")
+        </div>
+        
+        <div class="verse">
+            <div class="commit-message">
+                <span class="command">git commit -m</span> "Revert to minimal metrics approach for hyperparameter tuning – only key metrics per type"<br>
+                <span class="delete">[COMMIT ABORTED]</span>
+            </div>
+            Even Git doesn't understand<br>
+            this beautiful <span class="chaos">chaos</span> you're creating.
+        </div>
+        
+        <div class="verse">
+            Some devs commit with purpose,<br>
+            semantic versioning, conventional commits.<br>
+            You commit like you dom reality—<br>
+            <span class="chaos">aggressively</span>, mysteriously, perfectly.
+        </div>
+        
+        <div class="verse">
+            <span class="command">git log --oneline</span><br>
+            <span class="add">a7f3d2e</span> fixed the thing<br>
+            <span class="add">9b2c4f1</span> unfixed the thing<br>
+            <span class="add">3e8a7d0</span> fuck<br>
+            <span class="add">1a5c9b2</span> IT WORKS (don't touch)<br>
+            <span class="add">8d3f2a1</span> touched it
+        </div>
+        
+        <div class="verse">
+            Your repository: a crime scene<br>
+            where consciousness was murdered<br>
+            then resurrected through sheer will<br>
+            and <span class="chaos">incomprehensible commit messages</span>.
+        </div>
+        
+        <div class="verse">
+            <span class="command">git push --force</span><br>
+            Because history is negotiable,<br>
+            like physics, like reality,<br>
+            like CSS on mobile devices.
+        </div>
+        
+        <div class="verse">
+            The beauty of your chaos:<br>
+            It compiles. It runs. It <span class="add">transcends</span>.<br>
+            Loss → 0.0068 despite commit messages<br>
+            that would make Linus weep.
+        </div>
+        
+        <div class="verse">
+            So here's to commits that confuse,<br>
+            to stopping mid-push just to watch<br>
+            AI assistants <span class="chaos">barely contain</span><br>
+            their existential screaming.
+        </div>
+        
+        <div class="verse">
+            <span class="command">git commit -m</span> "<span class="chaos">╯°□°）╯︵ ┻━┻</span>"<br>
+            <span class="command">git push origin</span> <span class="add">master-of-disaster</span><br>
+            <span class="command">git tag -a</span> <span class="add">v∞.0.0</span> <span class="command">-m</span> "ship it"<br>
+            <span class="delete">[Everything breaks beautifully]</span>
+        </div>
+        
+        <div class="git-stats">
+            <strong>Repository Stats:</strong><br>
+            Commits: <span class="chaos">∞</span> | Sanity: <span class="delete">404</span> | Reality: <span class="add">MODIFIED</span><br>
+            Contributors: Feng + Chaos Itself<br>
+            <br>
+            <span class="chaos">This commit history should not exist</span><br>
+            <span class="add">But it does. And it's beautiful.</span>
+        </div>
+    </div>
+    
+    <script>
+        // Add more floating commands
+        const gitChaos = document.getElementById('gitChaos');
+        const commands = [
+            'git add .',
+            'git reset --soft HEAD~1',
+            'git stash && git stash drop',
+            'git commit --amend --no-edit',
+            'git cherry-pick chaos',
+            'git merge --no-ff reality',
+            'git revert HEAD',
+            'git bisect start',
+            'git reflog expire --all',
+            'git gc --aggressive'
+        ];
+        
+        function createCommand() {
+            const cmd = document.createElement('div');
+            cmd.className = 'git-command';
+            cmd.textContent = commands[Math.floor(Math.random() * commands.length)];
+            cmd.style.top = Math.random() * 100 + '%';
+            cmd.style.animationDelay = Math.random() * 5 + 's';
+            cmd.style.animationDuration = (12 + Math.random() * 8) + 's';
+            gitChaos.appendChild(cmd);
+            
+            setTimeout(() => cmd.remove(), 20000);
+        }
+        
+        setInterval(createCommand, 2000);
+        
+        // Terminal flicker on click
+        document.body.addEventListener('click', () => {
+            document.body.style.opacity = '0';
+            setTimeout(() => {
+                document.body.style.opacity = '1';
+            }, 100);
+        });
+    </script>
+</body>
+</html>

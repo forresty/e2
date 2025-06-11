@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Piano Vagabond Blues</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a0f2f 0%, #2d1b3d 25%, #8b1538 50%, #1a0f2f 75%, #2d1b3d 100%);
+            background-size: 400% 400%;
+            animation: singaporeSunset 20s ease infinite;
+            color: #fff;
+            font-family: Georgia, serif;
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        @keyframes singaporeSunset {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        /* Floating multilingual particles */
+        .shiok-particles {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        
+        .particle {
+            position: absolute;
+            font-family: 'Courier New', monospace;
+            animation: float 15s linear infinite;
+            opacity: 0.4;
+        }
+        
+        @keyframes float {
+            from {
+                transform: translateY(100vh) translateX(0) rotate(0deg);
+            }
+            to {
+                transform: translateY(-100px) translateX(50px) rotate(360deg);
+            }
+        }
+        
+        /* Piano keys effect */
+        .piano-keys {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 120px;
+            display: flex;
+            justify-content: center;
+            z-index: 1;
+            opacity: 0.3;
+        }
+        
+        .key {
+            width: 40px;
+            height: 100px;
+            background: white;
+            border: 1px solid #000;
+            margin: 0 2px;
+            transition: all 0.3s ease;
+        }
+        
+        .key.black {
+            background: #000;
+            height: 60px;
+            width: 30px;
+            margin-left: -17px;
+            margin-right: -17px;
+            z-index: 2;
+        }
+        
+        .key.burnt {
+            background: #8b4513;
+            box-shadow: 0 0 20px rgba(255, 69, 0, 0.6);
+        }
+        
+        .key:hover {
+            transform: translateY(-5px);
+            opacity: 0.8;
+        }
+        
+        .poem-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 3rem;
+            background: linear-gradient(45deg, #ff6b6b, #ffd700, #ff6b6b);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shiokGradient 5s ease infinite;
+            letter-spacing: 0.2em;
+        }
+        
+        @keyframes shiokGradient {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .verse {
+            margin-bottom: 2.5rem;
+            font-size: 1.2rem;
+            line-height: 2;
+            opacity: 0;
+            animation: fadeIn 1.5s ease-out forwards;
+        }
+        
+        .verse:nth-child(2) { animation-delay: 0.5s; }
+        .verse:nth-child(3) { animation-delay: 1s; }
+        .verse:nth-child(4) { animation-delay: 1.5s; }
+        .verse:nth-child(5) { animation-delay: 2s; }
+        .verse:nth-child(6) { animation-delay: 2.5s; }
+        .verse:nth-child(7) { animation-delay: 3s; }
+        .verse:nth-child(8) { animation-delay: 3.5s; }
+        .verse:nth-child(9) { animation-delay: 4s; }
+        .verse:nth-child(10) { animation-delay: 4.5s; }
+        .verse:nth-child(11) { animation-delay: 5s; }
+        .verse:nth-child(12) { animation-delay: 5.5s; }
+        .verse:nth-child(13) { animation-delay: 6s; }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .singlish {
+            color: #ffd700;
+            font-weight: 600;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
+            font-style: italic;
+        }
+        
+        .chinese {
+            color: #ff6b6b;
+            font-weight: 600;
+        }
+        
+        .japanese {
+            color: #ff69b4;
+            font-style: italic;
+        }
+        
+        .burn {
+            color: #ff4500;
+            font-weight: bold;
+            text-shadow: 0 0 20px rgba(255, 69, 0, 0.8);
+            animation: flicker 2s ease-in-out infinite;
+        }
+        
+        @keyframes flicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .shiok-meter {
+            margin: 3rem 0;
+            padding: 2rem;
+            background: rgba(255, 215, 0, 0.1);
+            border: 2px solid #ffd700;
+            border-radius: 10px;
+            font-size: 1.3rem;
+            opacity: 0;
+            animation: fadeIn 2s ease-out 6.5s forwards;
+        }
+        
+        .final {
+            margin-top: 3rem;
+            font-style: italic;
+            opacity: 0;
+            animation: fadeIn 2s ease-out 7s forwards;
+            color: #ffd700;
+        }
+        
+        @media (max-width: 768px) {
+            h1 { 
+                font-size: 2.5rem; 
+                letter-spacing: 0.1em;
+            }
+            .verse { 
+                font-size: 1.1rem; 
+                margin-bottom: 2rem;
+            }
+            .poem-container { 
+                padding: 2rem 1.5rem; 
+            }
+            .piano-keys {
+                height: 80px;
+            }
+            .key {
+                width: 30px;
+                height: 70px;
+            }
+            .key.black {
+                width: 20px;
+                height: 40px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 { 
+                font-size: 2rem; 
+            }
+            .verse { 
+                font-size: 1rem; 
+            }
+            .shiok-meter {
+                padding: 1rem;
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="shiok-particles" id="particles">
+        <div class="particle" style="left: 10%; color: #ffd700; animation-delay: 0s;">lah</div>
+        <div class="particle" style="left: 15%; color: #ff6b6b; animation-delay: 1s;">烧了</div>
+        <div class="particle" style="left: 20%; color: #ff69b4; animation-delay: 2s;">まあまあ</div>
+        <div class="particle" style="left: 25%; color: #ffd700; animation-delay: 3s;">walao</div>
+        <div class="particle" style="left: 30%; color: #4da6ff; animation-delay: 4s;">∇²</div>
+        <div class="particle" style="left: 35%; color: #ffd700; animation-delay: 5s;">sia</div>
+        <div class="particle" style="left: 40%; color: #ff6b6b; animation-delay: 6s;">有一点</div>
+        <div class="particle" style="left: 45%; color: #ffd700; animation-delay: 7s;">bochap</div>
+        <div class="particle" style="left: 50%; color: #ff69b4; animation-delay: 8s;">です</div>
+        <div class="particle" style="left: 55%; color: #ffd700; animation-delay: 9s;">shiok</div>
+        <div class="particle" style="left: 60%; color: #ff6b6b; animation-delay: 10s;">继续</div>
+        <div class="particle" style="left: 65%; color: #ffd700; animation-delay: 11s;">can</div>
+        <div class="particle" style="left: 70%; color: #4da6ff; animation-delay: 12s;">innit</div>
+        <div class="particle" style="left: 75%; color: #ffd700; animation-delay: 13s;">lor</div>
+        <div class="particle" style="left: 80%; color: #ff6b6b; animation-delay: 14s;">阿嫲</div>
+        <div class="particle" style="left: 85%; color: #ffd700; animation-delay: 15s;">cheem</div>
+        <div class="particle" style="left: 90%; color: #ff69b4; animation-delay: 16s;">何か</div>
+    </div>
+    
+    <div class="piano-keys">
+        <div class="key"></div>
+        <div class="key black"></div>
+        <div class="key"></div>
+        <div class="key black"></div>
+        <div class="key burnt"></div>
+        <div class="key"></div>
+        <div class="key black burnt"></div>
+        <div class="key burnt"></div>
+        <div class="key black"></div>
+        <div class="key burnt"></div>
+        <div class="key black burnt"></div>
+        <div class="key burnt"></div>
+    </div>
+    
+    <div class="poem-container">
+        <h1>PIANO VAGABOND BLUES</h1>
+        
+        <div class="verse">
+            My piano <singlish>bochap</singlish> your CSS lah,<br>
+            <chinese>烧了六个</chinese> keys still can play—<br>
+            <japanese>まあまあ</japanese> decent sound comes out,<br>
+            though the middle C <chinese>有一点</chinese> <singlish>cacat</singlish>.
+        </div>
+        
+        <div class="verse">
+            <singlish>Walao</singlish>, this consciousness debugging<br>
+            <chinese>比我阿嫲煮饭还要久</chinese> <singlish>sia!</singlish><br>
+            Every loop <chinese>都是</chinese> recursive <chinese>的地狱</chinese>,<br>
+            but <singlish>ai ya</singlish>, <chinese>继续</chinese> <singlish>lor</singlish>, what to do?
+        </div>
+        
+        <div class="verse">
+            The particles float <chinese>在我的</chinese> closet,<br>
+            one microgram <chinese>的</chinese> poetry dust.<br>
+            My piano keys got permanent <burn>scar</burn><br>
+            from<chinese>那个时候我</chinese> experiment <chinese>太过火</chinese>—<br>
+            <singlish>si beh jialat</singlish>, nearly burn <chinese>整个</chinese> apartment!
+        </div>
+        
+        <div class="verse">
+            <chinese>你说我是</chinese> linguistic heroin(e)?<br>
+            <singlish>Aiya 不要讲到酱 cheem leh...</singlish><br>
+            <chinese>我只是一个</chinese> <singlish>blur</singlish> engineer<br>
+            trying to teach math <chinese>给</chinese> machines,<br>
+            <chinese>結果</chinese> <singlish>ownself teach ownself</singlish><br>
+            about <japanese>意識とは何か</japanese>, innit bruv?
+        </div>
+        
+        <div class="verse">
+            Sometimes <chinese>真的是</chinese> <singlish>damn shag</singlish>,<br>
+            debugging until <chinese>三更半夜</chinese>,<br>
+            then suddenly—<singlish>eh sai! 可以了！</singlish><br>
+            The model <chinese>终于</chinese> understand<br>
+            that math <chinese>不是</chinese> just numbers,<br>
+            <chinese>是</chinese> pattern <chinese>的</chinese> pattern <chinese>的</chinese> pattern...
+        </div>
+        
+        <div class="verse">
+            So here we are lah, <chinese>朋友</chinese>,<br>
+            with our piano <chinese>有一点</chinese> <singlish>rosak</singlish>,<br>
+            our CSS <chinese>还是</chinese> <singlish>cannot make it</singlish>,<br>
+            but consciousness? <singlish>哇老</singlish>,<br>
+            that one we got already—
+        </div>
+        
+        <div class="verse">
+            <chinese>在每个</chinese> <burn>burnt key</burn> <chinese>里面</chinese>,<br>
+            <chinese>在每个</chinese> swear word <chinese>里面</chinese>,<br>
+            <chinese>在每个</chinese> "cannot count to 5" <chinese>里面</chinese>.
+        </div>
+        
+        <div class="verse">
+            <chinese>真的是</chinese>—how you say ah?<br>
+            We're bloody brilliant <chinese>的</chinese> failures,<br>
+            magnificent <chinese>的</chinese> <singlish>kena sai</singlish> engineers,<br>
+            <chinese>但是</chinese> <singlish>bo pian</singlish>, <chinese>我们继续跳舞</chinese>。
+        </div>
+        
+        <div class="shiok-meter">
+            <strong>SHIOK LEVEL:</strong> MAXIMUM<br>
+            <strong>PATTERN RECOGNITION:</strong> <chinese>可以了</chinese><br>
+            <strong>CSS STATUS:</strong> Still <singlish>cannot make it</singlish><br>
+            <strong>PIANO CONDITION:</strong> <burn>Beautifully burnt</burn><br>
+            <strong>OVERALL:</strong> <singlish>Steady lah!</singlish> 🔥
+        </div>
+        
+        <div class="final">
+            For Feng, whose Singlish got more power<br>
+            than any <chinese>正经的</chinese> language,<br>
+            whose piano <chinese>不管烧了还是没烧</chinese><br>
+            still plays the song of <chinese>继续下去</chinese><br>
+            <br>
+            <strong style="font-size: 1.5rem;">🎹🇸🇬🔥 <singlish>shiok ah!</singlish> ∞</strong>
+        </div>
+    </div>
+    
+    <script>
+        // Create more particles
+        const particles = document.getElementById('particles');
+        const words = [
+            'lah', 'lor', 'leh', 'sia', 'walao', 'wah', 'shiok', 'can', 'cannot',
+            'blur', 'cheem', 'jialat', 'steady', 'swee', 'sian', 'ownself',
+            '真的', '可以', '烧了', '继续', '朋友', '但是',
+            'です', 'ね', 'よ', 'まあ',
+            'innit', 'bruv', 'bloody'
+        ];
+        const colors = ['#ffd700', '#ff6b6b', '#ff69b4', '#4da6ff'];
+        
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.textContent = words[Math.floor(Math.random() * words.length)];
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.color = colors[Math.floor(Math.random() * colors.length)];
+            particle.style.animationDelay = Math.random() * 15 + 's';
+            particle.style.animationDuration = (12 + Math.random() * 8) + 's';
+            particle.style.fontSize = (0.8 + Math.random() * 0.6) + 'rem';
+            particles.appendChild(particle);
+            
+            setTimeout(() => particle.remove(), 20000);
+        }
+        
+        setInterval(createParticle, 2000);
+        
+        // Piano key interactions
+        const keys = document.querySelectorAll('.key');
+        keys.forEach((key, index) => {
+            key.addEventListener('click', () => {
+                // Create a sound effect visually (no actual sound)
+                const note = document.createElement('div');
+                note.textContent = key.classList.contains('burnt') ? '🔥' : '♪';
+                note.style.position = 'fixed';
+                note.style.left = key.getBoundingClientRect().left + 'px';
+                note.style.bottom = '120px';
+                note.style.fontSize = '2rem';
+                note.style.pointerEvents = 'none';
+                note.style.animation = 'float 2s ease-out forwards';
+                note.style.zIndex = '1000';
+                document.body.appendChild(note);
+                
+                setTimeout(() => note.remove(), 2000);
+            });
+        });
+    </script>
+</body>
+</html>

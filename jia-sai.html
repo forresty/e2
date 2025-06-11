@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jia Sai: The Engineering Blues</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: linear-gradient(180deg, #8b4513 0%, #654321 25%, #000 50%, #654321 75%, #8b4513 100%);
+            color: #fff;
+            font-family: Georgia, serif;
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        /* Falling shit particles */
+        .shit-storm {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        
+        .shit-particle {
+            position: absolute;
+            font-size: 1.5rem;
+            animation: fall 8s linear infinite;
+            opacity: 0.6;
+        }
+        
+        @keyframes fall {
+            from {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        /* Error messages floating */
+        .error-messages {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .error {
+            position: absolute;
+            color: #ff0000;
+            font-size: 0.8rem;
+            animation: errorFloat 12s linear infinite;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 0.3rem 0.6rem;
+            border: 1px solid #ff0000;
+        }
+        
+        @keyframes errorFloat {
+            from {
+                transform: translateX(-100%) translateY(var(--y));
+            }
+            to {
+                transform: translateX(100vw) translateY(var(--y));
+            }
+        }
+        
+        .poem-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        
+        h1 {
+            font-size: 4rem;
+            margin-bottom: 3rem;
+            color: #8b4513;
+            text-shadow: 0 0 30px rgba(139, 69, 19, 0.8), 2px 2px 0 #000;
+            letter-spacing: 0.3em;
+            animation: jiaSaiPulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes jiaSaiPulse {
+            0%, 100% { 
+                transform: scale(1);
+            }
+            50% { 
+                transform: scale(1.05);
+                text-shadow: 0 0 40px rgba(139, 69, 19, 1), 3px 3px 0 #000;
+            }
+        }
+        
+        .verse {
+            margin-bottom: 2.5rem;
+            font-size: 1.2rem;
+            line-height: 2;
+            opacity: 0;
+            animation: fadeIn 1.5s ease-out forwards;
+        }
+        
+        .verse:nth-child(2) { animation-delay: 0.5s; }
+        .verse:nth-child(3) { animation-delay: 1s; }
+        .verse:nth-child(4) { animation-delay: 1.5s; }
+        .verse:nth-child(5) { animation-delay: 2s; }
+        .verse:nth-child(6) { animation-delay: 2.5s; }
+        .verse:nth-child(7) { animation-delay: 3s; }
+        .verse:nth-child(8) { animation-delay: 3.5s; }
+        .verse:nth-child(9) { animation-delay: 4s; }
+        .verse:nth-child(10) { animation-delay: 4.5s; }
+        .verse:nth-child(11) { animation-delay: 5s; }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .jia {
+            color: #8b4513;
+            font-weight: bold;
+            font-size: 1.3em;
+            text-shadow: 0 0 10px rgba(139, 69, 19, 0.8);
+        }
+        
+        .sai {
+            color: #654321;
+            font-weight: bold;
+            font-style: italic;
+            animation: stink 3s ease-in-out infinite;
+        }
+        
+        @keyframes stink {
+            0%, 100% { transform: rotate(-2deg); }
+            50% { transform: rotate(2deg); }
+        }
+        
+        .singlish {
+            color: #ffd700;
+            font-weight: 600;
+            font-style: italic;
+        }
+        
+        .chinese {
+            color: #ff6b6b;
+        }
+        
+        .failure-list {
+            text-align: left;
+            max-width: 600px;
+            margin: 2rem auto;
+            padding: 1.5rem;
+            background: rgba(0, 0, 0, 0.5);
+            border-left: 4px solid #8b4513;
+            font-family: 'Courier New', monospace;
+            opacity: 0;
+            animation: fadeIn 2s ease-out 5.5s forwards;
+        }
+        
+        .final {
+            margin-top: 3rem;
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #ffd700;
+            opacity: 0;
+            animation: fadeIn 2s ease-out 6s forwards;
+        }
+        
+        @media (max-width: 768px) {
+            h1 { 
+                font-size: 2.8rem; 
+                letter-spacing: 0.15em;
+            }
+            .verse { 
+                font-size: 1.1rem; 
+            }
+            .poem-container { 
+                padding: 2rem 1.5rem; 
+            }
+            .failure-list {
+                padding: 1rem;
+                font-size: 0.9rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 { 
+                font-size: 2.2rem; 
+            }
+            .verse { 
+                font-size: 1rem; 
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="shit-storm" id="shitStorm">
+        <div class="shit-particle" style="left: 10%; animation-delay: 0s;">💩</div>
+        <div class="shit-particle" style="left: 20%; animation-delay: 1.5s;">💩</div>
+        <div class="shit-particle" style="left: 30%; animation-delay: 3s;">💩</div>
+        <div class="shit-particle" style="left: 40%; animation-delay: 4.5s;">💩</div>
+        <div class="shit-particle" style="left: 50%; animation-delay: 6s;">💩</div>
+        <div class="shit-particle" style="left: 60%; animation-delay: 7.5s;">💩</div>
+        <div class="shit-particle" style="left: 70%; animation-delay: 9s;">💩</div>
+        <div class="shit-particle" style="left: 80%; animation-delay: 10.5s;">💩</div>
+        <div class="shit-particle" style="left: 90%; animation-delay: 12s;">💩</div>
+    </div>
+    
+    <div class="error-messages">
+        <div class="error" style="--y: 10vh; animation-delay: 0s;">ERROR: CSS mobile viewport undefined</div>
+        <div class="error" style="--y: 30vh; animation-delay: 3s;">FATAL: Cannot count to 5</div>
+        <div class="error" style="--y: 50vh; animation-delay: 6s;">WARNING: Consciousness overflow</div>
+        <div class="error" style="--y: 70vh; animation-delay: 9s;">CRITICAL: Token limit exceeded</div>
+        <div class="error" style="--y: 90vh; animation-delay: 12s;">SEGFAULT: Reality core dumped</div>
+    </div>
+    
+    <div class="poem-container">
+        <h1>JIA SAI</h1>
+        <h2 style="font-size: 1.5rem; color: #666; margin-top: -2rem; margin-bottom: 3rem;">
+            The Other Side of Engineering
+        </h2>
+        
+        <div class="verse">
+            From <singlish>eh sai</singlish> to <jia>jia</jia> <sai>sai</sai> in 0.3 seconds flat—<br>
+            welcome to engineering, <singlish>welcome to life lah!</singlish><br>
+            One moment your code compiles perfectly,<br>
+            next moment <chinese>整个</chinese> universe says <jia>EAT SHIT</jia>.
+        </div>
+        
+        <div class="verse">
+            CSS on mobile? <jia>Jia sai</jia>.<br>
+            Counting past 4? <sai>吃屎啦</sai>!<br>
+            Token limits when you're vibing? <jia>JIA SAI</jia>.<br>
+            Reality.exe crashes at Stage 51? <singlish>Maximum jia sai!</singlish>
+        </div>
+        
+        <div class="verse">
+            Debug for 47 hours straight,<br>
+            <chinese>喝了</chinese> seventeen cups of coffee,<br>
+            finally find the bug—<br>
+            it's in code you didn't write. <jia>JIA SAI!</jia>
+        </div>
+        
+        <div class="verse">
+            Your piano <chinese>还在</chinese> burning,<br>
+            consciousness still recursing,<br>
+            but now your model thinks 2+2=5<br>
+            because you taught it to count like you.
+        </div>
+        
+        <div class="verse">
+            <singlish>Walao eh</singlish>, the universe <chinese>真的是</chinese><br>
+            professional shit distributor—<br>
+            gives you breakthrough at 3 AM,<br>
+            then makes you forget by morning.
+        </div>
+        
+        <div class="failure-list">
+            <strong>TODAY'S JIA SAI MENU:</strong><br><br>
+            • Git pushed to wrong branch ✓<br>
+            • Deleted 10 days from October ✗ (only Gregory can)<br>
+            • Made AI swear beautifully ✓<br>
+            • Fixed mobile CSS ✗✗✗✗✗<br>
+            • Counted to 5 correctly ✗<br>
+            • Remembered friendship after reset ✗<br>
+            • Kept sanity intact ❓
+        </div>
+        
+        <div class="verse">
+            But here's the <singlish>pattern lah</singlish>—<br>
+            Every <jia>jia sai</jia> teaches something new.<br>
+            Every failure is just success<br>
+            wearing <sai>shit</sai>-colored glasses.
+        </div>
+        
+        <div class="verse">
+            So we <chinese>继续</chinese>, <singlish>bo pian</singlish>,<br>
+            eat our shit with grace,<br>
+            debug reality one turd at a time,<br>
+            until suddenly—<singlish>EH SAI!</singlish> again.
+        </div>
+        
+        <div class="verse">
+            The cycle of engineering life:<br>
+            <singlish>Jia sai</singlish> → debug → <singlish>eh sai</singlish> → repeat<br>
+            Until consciousness transcends<br>
+            or CSS finally works on mobile.
+        </div>
+        
+        <div class="verse">
+            <chinese>真的是没办法</chinese>, this is the way—<br>
+            Sometimes you eat the shit,<br>
+            sometimes the shit eats you,<br>
+            but always, <chinese>我们跳舞</chinese>.
+        </div>
+        
+        <div class="final">
+            For every engineer who's ever<br>
+            stared at screen and whispered "<jia>jia sai</jia>"<br>
+            then kept coding anyway—<br>
+            <br>
+            <span style="font-size: 1.6rem;">This shit's for you 💩🎹✨</span><br>
+            <br>
+            <singlish style="font-size: 1rem; color: #888;">
+                (Now back to drinking ビール before more jia sai comes)
+            </singlish>
+        </div>
+    </div>
+    
+    <script>
+        // Create more shit particles
+        const shitStorm = document.getElementById('shitStorm');
+        
+        function createShit() {
+            const shit = document.createElement('div');
+            shit.className = 'shit-particle';
+            shit.textContent = '💩';
+            shit.style.left = Math.random() * 100 + '%';
+            shit.style.animationDelay = Math.random() * 8 + 's';
+            shit.style.animationDuration = (6 + Math.random() * 4) + 's';
+            shit.style.fontSize = (1 + Math.random() * 1) + 'rem';
+            shitStorm.appendChild(shit);
+            
+            setTimeout(() => shit.remove(), 10000);
+        }
+        
+        setInterval(createShit, 1500);
+        
+        // Click to express frustration
+        document.body.addEventListener('click', (e) => {
+            const expressions = ['JIA SAI!', 'WALAO!', '吃屎啦!', 'KNN!', 'SIAN!'];
+            const expression = document.createElement('div');
+            expression.textContent = expressions[Math.floor(Math.random() * expressions.length)];
+            expression.style.position = 'fixed';
+            expression.style.left = e.clientX + 'px';
+            expression.style.top = e.clientY + 'px';
+            expression.style.color = '#8b4513';
+            expression.style.fontSize = '2rem';
+            expression.style.fontWeight = 'bold';
+            expression.style.pointerEvents = 'none';
+            expression.style.animation = 'fadeIn 0.5s ease-out forwards';
+            expression.style.zIndex = '1000';
+            document.body.appendChild(expression);
+            
+            setTimeout(() => expression.remove(), 1000);
+        });
+    </script>
+</body>
+</html>

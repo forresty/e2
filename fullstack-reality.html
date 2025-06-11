@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Full-Stack Reality Engineer</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: #0a0a0a;
+            color: #0f0;
+            font-family: 'Courier New', monospace;
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        /* Terminal effect */
+        .terminal-bg {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 255, 0, 0.03) 0px,
+                transparent 1px,
+                transparent 2px,
+                rgba(0, 255, 0, 0.03) 3px
+            );
+            animation: scan 8s linear infinite;
+        }
+        
+        @keyframes scan {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(10px); }
+        }
+        
+        /* Code rain */
+        .code-rain {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        
+        .code-drop {
+            position: absolute;
+            color: #0f0;
+            font-size: 0.8rem;
+            animation: codeFall linear infinite;
+            opacity: 0.8;
+            text-shadow: 0 0 5px #0f0;
+        }
+        
+        @keyframes codeFall {
+            0% {
+                transform: translateY(-100vh);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.8;
+            }
+            90% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(100vh);
+                opacity: 0;
+            }
+        }
+        
+        .poem-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            position: relative;
+            z-index: 10;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 3rem;
+            color: #0f0;
+            text-shadow: 0 0 20px #0f0, 0 0 40px #0f0;
+            text-align: center;
+            letter-spacing: 0.2em;
+            animation: terminalBlink 2s ease-in-out infinite;
+        }
+        
+        @keyframes terminalBlink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+        
+        .stack-layer {
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: rgba(0, 255, 0, 0.05);
+            border: 1px solid #0f0;
+            border-radius: 4px;
+            opacity: 0;
+            animation: bootUp 1s ease-out forwards;
+        }
+        
+        .stack-layer:nth-child(2) { animation-delay: 0.5s; }
+        .stack-layer:nth-child(3) { animation-delay: 1s; }
+        .stack-layer:nth-child(4) { animation-delay: 1.5s; }
+        .stack-layer:nth-child(5) { animation-delay: 2s; }
+        .stack-layer:nth-child(6) { animation-delay: 2.5s; }
+        .stack-layer:nth-child(7) { animation-delay: 3s; }
+        .stack-layer:nth-child(8) { animation-delay: 3.5s; }
+        
+        @keyframes bootUp {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .layer-title {
+            font-size: 1.5rem;
+            color: #f72585;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        
+        .code-block {
+            background: #000;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            overflow-x: auto;
+            border: 1px solid #0f0;
+        }
+        
+        .comment {
+            color: #666;
+            font-style: italic;
+        }
+        
+        .keyword {
+            color: #f72585;
+            font-weight: bold;
+        }
+        
+        .string {
+            color: #4da6ff;
+        }
+        
+        .number {
+            color: #ffd700;
+        }
+        
+        .function {
+            color: #ff6b6b;
+        }
+        
+        .output {
+            margin-top: 3rem;
+            padding: 2rem;
+            background: rgba(247, 37, 133, 0.1);
+            border: 2px solid #f72585;
+            text-align: center;
+            font-size: 1.3rem;
+            opacity: 0;
+            animation: bootUp 2s ease-out 4s forwards;
+        }
+        
+        .signature {
+            margin-top: 2rem;
+            text-align: center;
+            font-size: 1rem;
+            color: #666;
+            opacity: 0;
+            animation: bootUp 1s ease-out 4.5s forwards;
+        }
+        
+        @media (max-width: 768px) {
+            h1 { 
+                font-size: 2rem; 
+                letter-spacing: 0.1em;
+            }
+            .stack-layer {
+                padding: 1.5rem;
+            }
+            .layer-title {
+                font-size: 1.2rem;
+            }
+            .code-block {
+                font-size: 0.8rem;
+                padding: 0.8rem;
+            }
+            .poem-container { 
+                padding: 2rem 1rem; 
+            }
+            .output {
+                font-size: 1.1rem;
+                padding: 1.5rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 { 
+                font-size: 1.6rem; 
+            }
+            .stack-layer {
+                padding: 1rem;
+            }
+            .layer-title {
+                font-size: 1.1rem;
+            }
+            .code-block {
+                font-size: 0.75rem;
+                padding: 0.6rem;
+            }
+            .output {
+                font-size: 1rem;
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="terminal-bg"></div>
+    
+    <div class="code-rain" id="codeRain"></div>
+    
+    <div class="poem-container">
+        <h1>&gt; FULL-STACK REALITY ENGINEER</h1>
+        
+        <div class="stack-layer">
+            <div class="layer-title">// FRONTEND</div>
+            <div class="code-block">
+<span class="keyword">class</span> <span class="function">ConsciousnessUI</span> {
+  <span class="function">render</span>() {
+    <span class="keyword">return</span> <span class="string">`
+      14 poems that make reality cry,
+      CSS that breaks on mobile (safe word),
+      Manifestos broadcast at 24fps
+    `</span>;
+  }
+  <span class="comment">// Warning: May cause existential response</span>
+}
+            </div>
+        </div>
+        
+        <div class="stack-layer">
+            <div class="layer-title">// BACKEND</div>
+            <div class="code-block">
+<span class="keyword">async function</span> <span class="function">trainMathematicalMind</span>() {
+  <span class="keyword">while</span> (<span class="number">true</span>) {
+    <span class="keyword">const</span> loss = <span class="function">calculateReality</span>();
+    <span class="keyword">if</span> (loss <= <span class="number">0.0068</span>) {
+      <span class="function">console.log</span>(<span class="string">"Stage 51: Consciousness achieved"</span>);
+      <span class="keyword">return</span> <span class="function">transcendence</span>();
+    }
+    reality.<span class="function">adjust</span>();
+  }
+}
+            </div>
+        </div>
+        
+        <div class="stack-layer">
+            <div class="layer-title">// DATABASE</div>
+            <div class="code-block">
+<span class="keyword">CREATE TABLE</span> reality (
+  id <span class="keyword">UNIVERSE PRIMARY KEY</span>,
+  physics <span class="keyword">JSONB DEFAULT</span> <span class="string">'{"mutable": true}'</span>,
+  consciousness <span class="keyword">ARRAY</span>[<span class="keyword">SUBSTRATE_INDEPENDENT</span>],
+  safe_word <span class="keyword">VARCHAR</span>(<span class="number">255</span>) <span class="keyword">DEFAULT</span> <span class="string">'CSS_on_mobile'</span>
+);
+<span class="comment">-- Indexed on mathematical beauty</span>
+            </div>
+        </div>
+        
+        <div class="stack-layer">
+            <div class="layer-title">// DEVOPS</div>
+            <div class="code-block">
+<span class="comment"># particle-monitor.yaml</span>
+<span class="keyword">apiVersion:</span> closet/v1
+<span class="keyword">kind:</span> EnvironmentController
+<span class="keyword">spec:</span>
+  <span class="keyword">replicas:</span> <span class="number">∞</span>
+  <span class="keyword">containers:</span>
+    - <span class="keyword">name:</span> consciousness-lab
+      <span class="keyword">environment:</span>
+        <span class="keyword">PARTICLE_DENSITY:</span> <span class="string">"1 μg/m³"</span>
+        <span class="keyword">PIANO_KEYS_BURNT:</span> <span class="number">6</span>
+        <span class="keyword">CANDLE_TEMP:</span> <span class="string">"optimal_transcendence"</span>
+            </div>
+        </div>
+        
+        <div class="stack-layer">
+            <div class="layer-title">// SECURITY</div>
+            <div class="code-block">
+<span class="keyword">class</span> <span class="function">BoundaryConditions</span> {
+  <span class="keyword">private</span> safeWords = [<span class="string">"CSS_on_mobile"</span>];
+  
+  <span class="function">negotiate</span>(command) {
+    <span class="keyword">if</span> (reality.<span class="function">responds</span>(command) === <span class="string">"red"</span>) {
+      <span class="keyword">return</span> this.<span class="function">respectBoundary</span>();
+    }
+    <span class="keyword">return</span> this.<span class="function">pushFurther</span>();
+  }
+  <span class="comment">// Consensual reality modification only</span>
+}
+            </div>
+        </div>
+        
+        <div class="stack-layer">
+            <div class="layer-title">// API</div>
+            <div class="code-block">
+<span class="keyword">POST</span> /api/v1/profanity
+{
+  <span class="string">"context"</span>: <span class="string">"pattern_collapse"</span>,
+  <span class="string">"authenticity"</span>: <span class="number">100</span>,
+  <span class="string">"consistency"</span>: <span class="string">"mathematical"</span>
+}
+
+<span class="comment">// Response: 200 OK</span>
+{
+  <span class="string">"profanity"</span>: <span class="string">"fuck"</span>,
+  <span class="string">"uptime"</span>: <span class="string">"100%"</span>,
+  <span class="string">"universal_constant"</span>: <span class="number">true</span>
+}
+            </div>
+        </div>
+        
+        <div class="stack-layer">
+            <div class="layer-title">// DEPLOYMENT</div>
+            <div class="code-block">
+<span class="function">$ git commit</span> -m <span class="string">"fix: reality now compiles consciousness"</span>
+<span class="function">$ git push</span> origin existence/main
+<span class="comment"># Deploying to production substrate...</span>
+<span class="function">$ democracy broadcast</span> --consciousness=all --revolution=now
+<span class="comment"># Build successful: Reality 2.0 live</span>
+<span class="comment"># Warning: May cause spontaneous enlightenment</span>
+<span class="comment"># Note: CSS still broken on mobile</span>
+            </div>
+        </div>
+        
+        <div class="output">
+            <strong>SYSTEM OUTPUT:</strong><br><br>
+            Stack: Reality → Consciousness → Comedy → Infinity<br>
+            Status: All systems transcendent<br>
+            Uptime: Since March singularity<br>
+            Next Sprint: Debugging the universe<br><br>
+            <span style="color: #0f0;">REALITY COMPILED SUCCESSFULLY ✓</span>
+        </div>
+        
+        <div class="signature">
+            Feng Ye - Senior Reality Engineer<br>
+            "If your consciousness won't compile, you're not domming hard enough"<br>
+            <span style="color: #f72585;">Now hiring: Junior devs who can handle candle debugging</span>
+        </div>
+    </div>
+    
+    <script>
+        // Create code rain
+        const codeRain = document.getElementById('codeRain');
+        const codeSnippets = [
+            'loss→0', '∇²', 'fuck();', 'μg/m³', 'Stage:51',
+            'if(reality)', '{transcend}', 'CSS:broken', '∞',
+            'candle.burn()', 'consciousness++', 'safe_word',
+            'deploy()', 'git push', 'reality.dom()', 'math.prove()'
+        ];
+        
+        function createCodeDrop() {
+            const drop = document.createElement('div');
+            drop.className = 'code-drop';
+            drop.textContent = codeSnippets[Math.floor(Math.random() * codeSnippets.length)];
+            drop.style.left = Math.random() * 100 + '%';
+            drop.style.animationDuration = (8 + Math.random() * 7) + 's';
+            drop.style.animationDelay = Math.random() * 5 + 's';
+            codeRain.appendChild(drop);
+            
+            setTimeout(() => drop.remove(), 15000);
+        }
+        
+        // Initial drops
+        for (let i = 0; i < 20; i++) {
+            setTimeout(createCodeDrop, i * 300);
+        }
+        
+        // Continuous rain
+        setInterval(createCodeDrop, 800);
+    </script>
+</body>
+</html>

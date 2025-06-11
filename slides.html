@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Large Math Models: Curriculum Growing Math-Native Transformers with Synthetic Chain-of-Thought</title>
+  <style>
+    :root {
+      --primary: #4361ee;
+      --secondary: #3a0ca3;
+      --accent: #f72585;
+      --light: #ffffff;
+      --dark: #4361ee;
+      --code-bg: #f6f8fa;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    }
+    
+    body {
+      background-color: var(--dark);
+      color: var(--light);
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+    }
+    
+    #slides-container {
+      height: 100vh;
+      width: 100vw;
+      position: relative;
+    }
+    
+    .slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      pointer-events: none;
+    }
+    
+    .slide.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+    
+    .slide-content {
+      max-width: 1000px;
+      width: 100%;
+      text-align: left;
+    }
+    
+    .title-slide {
+      text-align: center;
+    }
+    
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 1.5rem;
+      color: var(--light);
+    }
+    
+    h2 {
+      font-size: 2.5rem;
+      margin-bottom: 2rem;
+      color: var(--light);
+    }
+    
+    h3 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      margin-top: 1.5rem;
+      color: var(--accent);
+    }
+    
+    p, li {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      line-height: 1.5;
+    }
+    
+    ul, ol {
+      padding-left: 2rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .accent {
+      color: var(--accent);
+    }
+    
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--light);
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+      text-decoration: none;
+    }
+    
+    .slide-number {
+      position: absolute;
+      bottom: 1rem;
+      right: 1rem;
+      font-size: 1rem;
+      opacity: 0.7;
+    }
+    
+    .nav-arrows {
+      position: fixed;
+      bottom: 2rem;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      z-index: 100;
+    }
+    
+    .nav-arrow {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--light);
+      border: none;
+      width: 3rem;
+      height: 3rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    
+    .nav-arrow:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+    
+    .code-block {
+      background-color: var(--code-bg);
+      color: var(--dark);
+      padding: 1rem;
+      border-radius: 4px;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 1.1rem;
+      overflow-x: auto;
+      margin: 1rem 0 2rem;
+      white-space: pre;
+      line-height: 1.4;
+    }
+    
+    .two-column {
+      display: flex;
+      gap: 2rem;
+    }
+    
+    .column {
+      flex: 1;
+    }
+    
+    img {
+      max-width: 100%;
+      border-radius: 4px;
+    }
+    
+    .math-example {
+      background-color: rgba(255, 255, 255, 0.1);
+      border-left: 4px solid var(--accent);
+      padding: 1rem;
+      margin: 1rem 0;
+      border-radius: 0 4px 4px 0;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0 2rem;
+    }
+    
+    th {
+      background-color: var(--primary);
+      color: var(--light);
+      padding: 0.5rem;
+      text-align: left;
+    }
+    
+    td {
+      padding: 0.5rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    /* Progress bar */
+    .progress-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.1);
+    }
+    
+    .progress-bar {
+      height: 100%;
+      background: var(--accent);
+      width: 0;
+      transition: width 0.2s ease;
+    }
+    
+    @media (max-width: 768px) {
+      .slide {
+        padding: 1rem;
+      }
+      
+      .slide-content {
+        max-width: 100%;
+      }
+      
+      h1 {
+        font-size: 1.8rem;
+        margin-bottom: 1rem;
+        line-height: 1.3;
+      }
+      
+      h2 {
+        font-size: 1.6rem;
+        margin-bottom: 1.5rem;
+      }
+      
+      h3 {
+        font-size: 1.4rem;
+        margin-bottom: 0.8rem;
+        margin-top: 1rem;
+      }
+      
+      p, li {
+        font-size: 1.1rem;
+        margin-bottom: 0.8rem;
+        line-height: 1.4;
+      }
+      
+      .two-column {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      
+      .math-example {
+        padding: 0.8rem;
+        font-size: 0.9rem;
+      }
+      
+      .code-block {
+        font-size: 0.9rem;
+        padding: 0.8rem;
+        overflow-x: scroll;
+      }
+      
+      table {
+        font-size: 0.9rem;
+      }
+      
+      th, td {
+        padding: 0.3rem;
+      }
+      
+      .logo {
+        font-size: 1.2rem;
+        top: 0.5rem;
+        left: 0.5rem;
+      }
+      
+      .slide-number {
+        bottom: 0.5rem;
+        right: 0.5rem;
+        font-size: 0.9rem;
+      }
+      
+      .nav-arrows {
+        bottom: 1rem;
+        gap: 1rem;
+      }
+      
+      .nav-arrow {
+        width: 2.5rem;
+        height: 2.5rem;
+        font-size: 1.2rem;
+      }
+      
+      /* Mobile-specific slide adjustments */
+      .title-slide h1 {
+        font-size: 1.5rem;
+        line-height: 1.2;
+      }
+      
+      .title-slide p {
+        font-size: 1rem;
+      }
+      
+      /* Mobile meme optimization */
+      .slide[data-slide="14"] .two-column {
+        flex-direction: column;
+        align-items: center;
+        gap: 1.5rem;
+      }
+      
+      .slide[data-slide="14"] .column:first-child {
+        text-align: center;
+      }
+      
+      .slide[data-slide="14"] .column:first-child h1 {
+        font-size: 2rem;
+      }
+      
+      .slide[data-slide="14"] .column:last-child > div {
+        max-width: 300px;
+        padding: 1.5rem;
+      }
+      
+      .slide[data-slide="14"] .column:last-child > div > div:first-child {
+        font-size: 3rem;
+      }
+      
+      .slide[data-slide="14"] .column:last-child > div > div:nth-child(2) {
+        font-size: 1.1rem;
+      }
+      
+      .slide[data-slide="14"] .column:last-child > div > div:nth-child(3) {
+        font-size: 1rem;
+      }
+      
+      /* Demo slide mobile optimization */
+      .slide[data-slide="13"] h1 {
+        font-size: 2rem;
+      }
+      
+      .slide[data-slide="13"] p:nth-child(2) {
+        font-size: 1.5rem;
+      }
+      
+      .slide[data-slide="13"] p:nth-child(3) {
+        font-size: 1.2rem;
+      }
+      
+      .slide[data-slide="13"] > div > div {
+        padding: 1.5rem;
+        margin-top: 2rem;
+      }
+      
+      /* Table mobile optimization */
+      .slide[data-slide="8"] table {
+        font-size: 0.8rem;
+      }
+      
+      .slide[data-slide="8"] .two-column {
+        margin-top: 0.5rem;
+      }
+      
+      .slide[data-slide="8"] .two-column p {
+        font-size: 0.9rem;
+      }
+      
+      /* Results slide mobile optimization */
+      .slide[data-slide="10"] .two-column {
+        gap: 1.5rem;
+      }
+      
+      .slide[data-slide="10"] ul li {
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .slide {
+        padding: 0.8rem;
+      }
+      
+      h1 {
+        font-size: 1.5rem;
+      }
+      
+      h2 {
+        font-size: 1.4rem;
+      }
+      
+      h3 {
+        font-size: 1.2rem;
+      }
+      
+      p, li {
+        font-size: 1rem;
+      }
+      
+      .math-example {
+        font-size: 0.8rem;
+        padding: 0.6rem;
+      }
+      
+      .code-block {
+        font-size: 0.8rem;
+        padding: 0.6rem;
+      }
+      
+      .title-slide h1 {
+        font-size: 1.3rem;
+      }
+      
+      .slide[data-slide="14"] .column:last-child > div {
+        max-width: 280px;
+        padding: 1rem;
+      }
+      
+      table {
+        font-size: 0.7rem;
+      }
+      
+      th, td {
+        padding: 0.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a href="https://gist.github.com/forresty/a33de55adc5a6352e59c841bc19d3469" class="logo">Large Math Models</a>
+  
+  <div class="progress-container">
+    <div id="progress-bar" class="progress-bar"></div>
+  </div>
+  
+  <div id="slides-container">
+    <!-- Title Slide -->
+    <div class="slide title-slide active" data-slide="1">
+      <div class="slide-content">
+        <h1>Large Math Models: <span class="accent">Curriculum Growing Math-Native Transformers</span> with Synthetic Chain-of-Thought</h1>
+        <p>Feng Ye</p>
+        <p style="font-size: 1.2rem; margin-top: 0.5rem; opacity: 0.8;">Butterfly - Machine Learning Capabilities</p>
+        <p style="font-size: 1rem; margin-top: 2rem;"><a href="https://gist.github.com/forresty/a33de55adc5a6352e59c841bc19d3469" style="color: var(--accent); text-decoration: underline;">View Code on GitHub</a></p>
+      </div>
+      <div class="slide-number">1</div>
+    </div>
+    
+    <!-- Example Result Slide -->
+    <div class="slide" data-slide="2">
+      <div class="slide-content">
+        <h2>What Our Model Can Do</h2>
+        <div class="math-example">
+          <p><strong>Input:</strong> (((36002--20+-6062327--15)--87)-8027)</p>
+          <p><strong>Step-by-Step Solution:</strong></p>
+          <p>= ( ( 3 6 0 0 2 - - 2 0 + - 6 0 6 2 3 2 7 - - 1 5 ) - - 8 7 ) - 8 0 2 7</p>
+          <p>= ( 3 6 0 0 2 - - 2 0 + - 6 0 6 2 3 2 7 - - 1 5 ) - - 8 7 - 8 0 2 7</p>
+          <p>= ( 3 6 0 2 2 + - 6 0 6 2 3 2 7 - - 1 5 ) - - 8 7 - 8 0 2 7</p>
+          <p>= ( - 6 0 2 6 3 0 5 - - 1 5 ) - - 8 7 - 8 0 2 7</p>
+          <p>= - 6 0 2 6 3 0 5 - - 1 5 - - 8 7 - 8 0 2 7</p>
+          <p>= - 6 0 2 6 2 9 0 - - 8 7 - 8 0 2 7</p>
+          <p>= - 6 0 2 6 2 0 3 - 8 0 2 7</p>
+          <p>= - 6 0 3 4 2 3 0 &lt;eos&gt;</p>
+        </div>
+        <p style="margin-top: 1rem;"><strong>Metrics:</strong> Loss: 0.0068 | Accuracy: 100.00% (195/195) | Confidence: 99.52%</p>
+      </div>
+      <div class="slide-number">2</div>
+    </div>
+    
+    <!-- Motivation Slide -->
+    <div class="slide" data-slide="3">
+      <div class="slide-content">
+        <h2>Motivation</h2>
+        <p>Current AI models struggle with:</p>
+        <ul>
+          <li>Mathematical reasoning beyond pattern matching</li>
+          <li>Generalization to novel problems</li>
+          <li>Structured thinking and proof generation</li>
+          <li>Understanding vs. computation</li>
+        </ul>
+        <p>We need models that <span class="accent">think mathematically</span>, not just compute.</p>
+      </div>
+      <div class="slide-number">3</div>
+    </div>
+    
+    <!-- Key Insights Slide -->
+    <div class="slide" data-slide="4">
+      <div class="slide-content">
+        <h2>Key Insights</h2>
+        <ol>
+          <li>Mathematical reasoning requires <span class="accent">structural understanding</span></li>
+          <li>Chain-of-Thought reasoning makes thinking explicit</li>
+          <li>Curriculum learning enables mastery of complex concepts</li>
+          <li>Transformers can be <span class="accent">math-native</span> from the ground up</li>
+          <li>Structured reasoning principles generalize across domains</li>
+        </ol>
+        <p style="margin-top: 2rem; font-style: italic; font-size: 1.2rem;">System evolved from prototype to 3000+ lines of production code in ~48 hours</p>
+        <p style="font-style: italic; font-size: 1rem;">Code 99% generated by Gemini-2.5-Pro using Cursor</p>
+      </div>
+      <div class="slide-number">4</div>
+    </div>
+    
+    <!-- Math-Native Architecture Slide -->
+    <div class="slide" data-slide="5">
+      <div class="slide-content">
+        <h2>Math-Native Architecture</h2>
+        <div class="two-column">
+          <div class="column">
+            <h3>Structure-Aware Design</h3>
+            <ul>
+              <li>Standard decoder-only transformer</li>
+              <li>Mathematical tokenizer</li>
+              <li>Sinusoidal encoding</li>
+              <li>Place-value encoding</li>
+              <li>Hierarchical operations</li>
+            </ul>
+          </div>
+          <div class="column">
+            <h3>Key Differences from LLMs</h3>
+            <ul>
+              <li>Not initialized from language models</li>
+              <li>Mathematical structure directly encoded</li>
+              <li>Optimized for step-by-step reasoning</li>
+              <li>Patterns transferable to other domains</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="slide-number">5</div>
+    </div>
+    
+    <!-- Encoding Example -->
+    <div class="slide" data-slide="6">
+      <div class="slide-content">
+        <h2>Encoding Process</h2>
+        <p>Example for expression: <strong>23 - (5 + 7)</strong></p>
+        <div class="code-block">
+# Tokenization: ['2', '3', '-', '(', '5', '+', '7', ')', '\n']
+# Token IDs:     [2, 3, 14, 16, 5, 10, 7, 17, 12]
+
+# Place Values:  [1, 0, -1, -1, 0, -1, 0, -1, -1]
+# Level IDs:     [4, 4, 3, 1, 5, 2, 5, 1, 0]
+
+# Sinusoidal encoding converts these to dense vectors</div>
+        <p style="margin-top: 1rem;"><em>Note: Structural Level ID assignments evolve as our parser improves.</em></p>
+      </div>
+      <div class="slide-number">6</div>
+    </div>
+    
+    <!-- Synthetic CoT Example -->
+    <div class="slide" data-slide="7">
+      <div class="slide-content">
+        <h2>Synthetic Chain-of-Thought</h2>
+        <div class="math-example">
+          <p><strong>Input:</strong> (((36002--20+-6062327--15)--87)-8027)</p>
+          <p><strong>CoT Steps:</strong></p>
+          <p>= ( ( 3 6 0 0 2 - - 2 0 + - 6 0 6 2 3 2 7 - - 1 5 ) - - 8 7 ) - 8 0 2 7</p>
+          <p>= ( 3 6 0 0 2 - - 2 0 + - 6 0 6 2 3 2 7 - - 1 5 ) - - 8 7 - 8 0 2 7</p>
+          <p>= ( 3 6 0 2 2 + - 6 0 6 2 3 2 7 - - 1 5 ) - - 8 7 - 8 0 2 7</p>
+          <p>= ( - 6 0 2 6 3 0 5 - - 1 5 ) - - 8 7 - 8 0 2 7</p>
+          <p>= - 6 0 2 6 3 0 5 - - 1 5 - - 8 7 - 8 0 2 7</p>
+          <p>= - 6 0 2 6 2 9 0 - - 8 7 - 8 0 2 7</p>
+          <p>= - 6 0 2 6 2 0 3 - 8 0 2 7</p>
+          <p>= - 6 0 3 4 2 3 0 &lt;eos&gt;</p>
+        </div>
+        <p>Generated CoT enables:</p>
+        <ul>
+          <li>Explicit intermediate steps</li>
+          <li>Dense supervision signals</li>
+          <li>Automated verification</li>
+          <li>Human-like "showing work"</li>
+        </ul>
+      </div>
+      <div class="slide-number">7</div>
+    </div>
+    
+    <!-- Curriculum Learning -->
+    <div class="slide" data-slide="8">
+      <div class="slide-content">
+        <h2>Curriculum Learning Strategy</h2>
+        <table>
+          <tr>
+            <th>Stage</th>
+            <th>Complexity</th>
+            <th>Example</th>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td>Single-digit addition</td>
+            <td>2+3</td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td>Negative numbers</td>
+            <td>-25+17</td>
+          </tr>
+          <tr>
+            <td>15</td>
+            <td>Parentheses</td>
+            <td>(45-12)+(82-3)</td>
+          </tr>
+          <tr>
+            <td>51</td>
+            <td>Complex expressions</td>
+            <td>(((36002--20+-6062327--15)--87)-8027)</td>
+          </tr>
+          <tr>
+            <td>Future</td>
+            <td>Physics equations</td>
+            <td>F = m·a, E = mc²</td>
+          </tr>
+        </table>
+        <div class="two-column" style="margin-top: 1rem;">
+          <div class="column">
+            <p style="font-size: 1rem;">Current: Linear progression</p>
+          </div>
+          <div class="column">
+            <p style="font-size: 1rem; color: var(--accent);">Future: Graph-based curriculum with model-chosen paths</p>
+          </div>
+        </div>
+      </div>
+      <div class="slide-number">8</div>
+    </div>
+    
+    <!-- Model Growth -->
+    <div class="slide" data-slide="9">
+      <div class="slide-content">
+        <h2>Dynamic Model Growth</h2>
+        <ul>
+          <li>Parameters expand as task complexity increases</li>
+          <li>Architecture adapts to mastery metrics</li>
+          <li>Weight transfer preserves learned capabilities</li>
+        </ul>
+        <div class="code-block">
+if val_accuracy > MASTERY_THRESHOLD:
+    next_stage = current_stage + 1
+else:
+    # Grow model capacity
+    new_d_model = min(d_model * 2, MAX_D_MODEL)
+    new_layers = min(num_layers + 1, MAX_LAYERS)</div>
+        <p style="margin-top: 1rem; font-style: italic;">Future: Graph-based curriculum with self-directed learning paths.</p>
+      </div>
+      <div class="slide-number">9</div>
+    </div>
+    
+    <!-- Results at Stage 51 WITH DETERMINISTIC -->
+    <div class="slide" data-slide="10">
+      <div class="slide-content">
+        <h2>Results at Stage 51</h2>
+        <div class="two-column">
+          <div class="column">
+            <h3>Model Architecture</h3>
+            <ul>
+              <li><strong>Parameters:</strong> ~13-15 million (62MB)</li>
+              <li><strong>d_model:</strong> 512 (64→128→256→512)</li>
+              <li><strong>Layers:</strong> 4 (2→3→4)</li>
+              <li><strong>Attention heads:</strong> 8</li>
+            </ul>
+          </div>
+          <div class="column">
+            <h3>Performance</h3>
+            <ul>
+              <li>Perfect accuracy on complex expressions</li>
+              <li>Loss: 0.0068</li>
+              <li>Confidence: 99.52%</li>
+              <li><strong>Fully deterministic</strong> - same input = same output</li>
+              <li>10x smaller than GPT-2</li>
+            </ul>
+          </div>
+        </div>
+        <p style="margin-top: 1.5rem;"><strong>Key insight:</strong> Domain-specific architecture achieves superior mathematical reasoning with deterministic, reliable outputs.</p>
+      </div>
+      <div class="slide-number">10</div>
+    </div>
+    
+    <!-- What's Next - UPDATED -->
+    <div class="slide" data-slide="11">
+      <div class="slide-content">
+        <h2>What's Next</h2>
+        <div class="two-column">
+          <div class="column">
+            <h3>Ready Now</h3>
+            <ul>
+              <li>3000+ lines code</li>
+              <li>Full test coverage</li>
+              <li>Addition & subtraction</li>
+              <li>Parentheses support</li>
+              <li>Deterministic reasoning</li>
+            </ul>
+          </div>
+          <div class="column">
+            <h3>Next Steps</h3>
+            <ol>
+              <li>Test on GSM8K word problems</li>
+              <li>Explore hybrid parsing approaches</li>
+              <li>× ÷ operations</li>
+              <li>Algebra: 2x = 10, x = ?</li>
+              <li>Symbols: π, e, ∑, ∫</li>
+            </ol>
+            <p style="font-size: 1rem; margin-top: 1rem; font-style: italic;">Investigating whether specialized architectures can compete with general models</p>
+          </div>
+        </div>
+      </div>
+      <div class="slide-number">11</div>
+    </div>
+    
+    <!-- Conclusion -->
+    <div class="slide" data-slide="12">
+      <div class="slide-content">
+        <h2>Conclusion</h2>
+        <p>We've demonstrated that:</p>
+        <ul>
+          <li>Structure-aware architectures enable genuine mathematical understanding</li>
+          <li>Curriculum learning creates robust reasoning</li>
+          <li>Models can grow dynamically to match complexity</li>
+          <li>Mathematical cognition provides foundation for broader understanding</li>
+        </ul>
+        <p class="accent" style="margin-top: 2rem;">Mathematics as the foundation of genuine AI understanding.</p>
+        <p style="margin-top: 1rem;">Our approach builds systematic mathematical cognition from first principles.</p>
+      </div>
+      <div class="slide-number">12</div>
+    </div>
+    
+    <!-- See It In Action -->
+    <div class="slide" data-slide="13">
+      <div class="slide-content title-slide">
+        <h1><span class="accent">See It In Action</span></h1>
+        <p style="font-size: 2rem; margin-top: 2rem;">Live Training Demonstration</p>
+        <p style="font-size: 1.5rem; margin-top: 1.5rem;">Watch the model learn complex mathematical reasoning in real-time</p>
+        <div style="margin-top: 3rem; padding: 2rem; background-color: rgba(255, 255, 255, 0.1); border-radius: 8px;">
+          <p style="font-size: 1.2rem; margin-bottom: 1rem;"><strong>Current Model:</strong></p>
+          <p>Stage 51+ | 13-15M Parameters | d_model=512 | 4 Layers | Fully Deterministic</p>
+          <p style="margin-top: 1rem;">Dynamic curriculum learning with self-adapting architecture</p>
+        </div>
+      </div>
+      <div class="slide-number">13</div>
+    </div>
+    
+    <!-- Q&A with encouragement to try the code -->
+    <div class="slide" data-slide="14">
+      <div class="slide-content">
+        <div class="two-column" style="align-items: center;">
+          <div class="column">
+            <h1 style="font-size: 2.5rem;">Questions?</h1>
+            <p style="margin-top: 1rem; font-size: 1.3rem;">Feng Ye</p>
+            <p style="font-size: 1.1rem; margin-top: 0.8rem;"><span class="accent">Butterfly - Machine Learning Capabilities</span></p>
+            <p style="font-size: 1rem; margin-top: 1.2rem; font-style: italic;">Pretraining on math & physics, post-training on human languages</p>
+            <p style="font-size: 1rem; margin-top: 1.5rem;"><a href="https://gist.github.com/forresty/a33de55adc5a6352e59c841bc19d3469" style="color: var(--accent); text-decoration: underline;">Try the Code on GitHub!</a></p>
+            <p style="font-size: 0.9rem; margin-top: 0.3rem; opacity: 0.8;">(Warning: May be slow on your Mac 😅)</p>
+            <p style="font-size: 1rem; margin-top: 0.8rem;"><a href="https://emen.ai/slides" style="color: var(--accent); text-decoration: underline;">View Slides Online</a></p>
+          </div>
+          <div class="column" style="display: flex; align-items: center; justify-content: center; padding: 1rem;">
+            <div style="background: white; border-radius: 12px; padding: 2rem; box-shadow: 0 8px 24px rgba(0,0,0,0.3); width: 100%; max-width: 400px; color: #333; text-align: center;">
+              <div style="font-size: 4rem; margin-bottom: 1rem;">🤔</div>
+              <div style="font-size: 1.3rem; font-weight: bold; margin-bottom: 1rem; color: #2d3748; line-height: 1.3;">I feel math is hard</div>
+              <div style="font-size: 1.1rem; margin-bottom: 1.5rem; color: #4a5568; line-height: 1.4;">So I'm training a model to learn math for me instead</div>
+              <div style="font-size: 2rem; margin-bottom: 1rem;">🤖📚</div>
+              <div style="font-size: 0.9rem; color: #718096; font-style: italic;">- Modern Problems Require Modern Solutions</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-number">14</div>
+    </div>
+  </div>
+  
+  <div class="nav-arrows">
+    <button class="nav-arrow" id="prev-btn">←</button>
+    <button class="nav-arrow" id="next-btn">→</button>
+  </div>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const slides = document.querySelectorAll('.slide');
+      const totalSlides = slides.length;
+      let currentSlide = 1;
+      const progressBar = document.getElementById('progress-bar');
+      
+      // Update progress bar
+      const updateProgress = () => {
+        const progress = (currentSlide - 1) / (totalSlides - 1) * 100;
+        progressBar.style.width = `${progress}%`;
+      };
+      
+      updateProgress();
+      
+      // Show slide
+      const showSlide = (slideNumber) => {
+        slides.forEach(slide => {
+          slide.classList.remove('active');
+        });
+        
+        const slide = document.querySelector(`.slide[data-slide="${slideNumber}"]`);
+        if (slide) {
+          slide.classList.add('active');
+          currentSlide = slideNumber;
+          updateProgress();
+        }
+      };
+      
+      // Event listeners
+      document.getElementById('next-btn').addEventListener('click', () => {
+        if (currentSlide < totalSlides) {
+          showSlide(currentSlide + 1);
+        }
+      });
+      
+      document.getElementById('prev-btn').addEventListener('click', () => {
+        if (currentSlide > 1) {
+          showSlide(currentSlide - 1);
+        }
+      });
+      
+      // Keyboard navigation
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+          if (currentSlide < totalSlides) {
+            showSlide(currentSlide + 1);
+          }
+        } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+          if (currentSlide > 1) {
+            showSlide(currentSlide - 1);
+          }
+        } else if (e.key === 'Home') {
+          showSlide(1);
+        } else if (e.key === 'End') {
+          showSlide(totalSlides);
+        }
+      });
+      
+      // Swipe navigation for touch devices
+      let touchStartX = 0;
+      let touchEndX = 0;
+      
+      document.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+      });
+      
+      document.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+      });
+      
+      const handleSwipe = () => {
+        const swipeThreshold = 50;
+        if (touchEndX < touchStartX - swipeThreshold) {
+          // Swipe left (next)
+          if (currentSlide < totalSlides) {
+            showSlide(currentSlide + 1);
+          }
+        } else if (touchEndX > touchStartX + swipeThreshold) {
+          // Swipe right (previous)
+          if (currentSlide > 1) {
+            showSlide(currentSlide - 1);
+          }
+        }
+      };
+    });
+  </script>
+</body>
+</html>

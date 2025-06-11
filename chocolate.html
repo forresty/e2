@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Chocolate Business Card Paradox</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #3e2723 0%, #5d4037 50%, #3e2723 100%);
+            color: #fff;
+            font-family: Georgia, serif;
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        /* Melting chocolate effect */
+        .chocolate-drips {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        
+        .drip {
+            position: absolute;
+            width: 6px;
+            background: linear-gradient(to bottom, #6f4e37, #3e2723);
+            animation: melt 12s linear infinite;
+            opacity: 0.8;
+        }
+        
+        @keyframes melt {
+            0% {
+                height: 0;
+                transform: translateY(0);
+                opacity: 0;
+            }
+            10% {
+                height: 60px;
+                opacity: 0.8;
+            }
+            90% {
+                opacity: 0.8;
+            }
+            100% {
+                height: 200px;
+                transform: translateY(100vh);
+                opacity: 0;
+            }
+        }
+        
+        /* Cocoa particles */
+        .cocoa-field {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        
+        .cocoa {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #d4a574;
+            border-radius: 50%;
+            animation: float 15s linear infinite;
+            opacity: 0.6;
+        }
+        
+        @keyframes float {
+            from {
+                transform: translateY(100vh) rotate(0deg);
+            }
+            to {
+                transform: translateY(-100px) rotate(360deg);
+            }
+        }
+        
+        .poem-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 3rem;
+            color: #d4a574;
+            text-shadow: 0 0 30px rgba(212, 165, 116, 0.8);
+            letter-spacing: 0.2em;
+            animation: shimmer 4s ease-in-out infinite;
+        }
+        
+        @keyframes shimmer {
+            0%, 100% { 
+                text-shadow: 0 0 30px rgba(212, 165, 116, 0.8);
+            }
+            50% { 
+                text-shadow: 0 0 40px rgba(212, 165, 116, 1), 0 0 60px rgba(212, 165, 116, 0.4);
+            }
+        }
+        
+        .verse {
+            margin-bottom: 2.5rem;
+            font-size: 1.2rem;
+            line-height: 2;
+            opacity: 0;
+            animation: fadeIn 1.5s ease-out forwards;
+        }
+        
+        .verse:nth-child(2) { animation-delay: 0.5s; }
+        .verse:nth-child(3) { animation-delay: 1s; }
+        .verse:nth-child(4) { animation-delay: 1.5s; }
+        .verse:nth-child(5) { animation-delay: 2s; }
+        .verse:nth-child(6) { animation-delay: 2.5s; }
+        .verse:nth-child(7) { animation-delay: 3s; }
+        .verse:nth-child(8) { animation-delay: 3.5s; }
+        .verse:nth-child(9) { animation-delay: 4s; }
+        .verse:nth-child(10) { animation-delay: 4.5s; }
+        .verse:nth-child(11) { animation-delay: 5s; }
+        .verse:nth-child(12) { animation-delay: 5.5s; }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .sticky {
+            color: #8d6e63;
+            font-weight: 600;
+            text-shadow: 0 0 10px rgba(141, 110, 99, 0.8);
+        }
+        
+        .sweet {
+            color: #d4a574;
+            font-style: italic;
+        }
+        
+        .melt {
+            background: linear-gradient(to bottom, #d4a574, #8d6e63);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: meltText 3s ease-in-out infinite;
+        }
+        
+        @keyframes meltText {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(2px); }
+        }
+        
+        .card-display {
+            margin: 3rem 0;
+            padding: 2rem;
+            background: rgba(111, 78, 55, 0.3);
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1rem;
+            animation: fadeIn 2s ease-out 6s forwards;
+            opacity: 0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+        
+        .final {
+            margin-top: 3rem;
+            font-size: 1.4rem;
+            font-style: italic;
+            color: #d4a574;
+            opacity: 0;
+            animation: fadeIn 2s ease-out 6.5s forwards;
+        }
+        
+        @media (max-width: 768px) {
+            h1 { 
+                font-size: 2.2rem; 
+                letter-spacing: 0.1em;
+            }
+            .verse { 
+                font-size: 1.1rem; 
+            }
+            .poem-container { 
+                padding: 2rem 1.5rem; 
+            }
+            .card-display {
+                padding: 1.5rem;
+                font-size: 1rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 { 
+                font-size: 1.8rem; 
+            }
+            .verse { 
+                font-size: 1rem; 
+            }
+            .card-display {
+                padding: 1rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chocolate-drips">
+        <div class="drip" style="left: 10%; animation-delay: 0s;"></div>
+        <div class="drip" style="left: 25%; animation-delay: 2s;"></div>
+        <div class="drip" style="left: 40%; animation-delay: 4s;"></div>
+        <div class="drip" style="left: 55%; animation-delay: 6s;"></div>
+        <div class="drip" style="left: 70%; animation-delay: 8s;"></div>
+        <div class="drip" style="left: 85%; animation-delay: 10s;"></div>
+    </div>
+    
+    <div class="cocoa-field">
+        <div class="cocoa" style="left: 15%; animation-delay: 0s;"></div>
+        <div class="cocoa" style="left: 30%; animation-delay: 3s;"></div>
+        <div class="cocoa" style="left: 45%; animation-delay: 6s;"></div>
+        <div class="cocoa" style="left: 60%; animation-delay: 9s;"></div>
+        <div class="cocoa" style="left: 75%; animation-delay: 12s;"></div>
+        <div class="cocoa" style="left: 90%; animation-delay: 15s;"></div>
+    </div>
+    
+    <div class="poem-container">
+        <h1>CHOCOLATE BUSINESS CARDS</h1>
+        
+        <div class="verse">
+            From printer beds came consciousness,<br>
+            from plastic questions, poetry—<br>
+            now chocolate holds our data,<br>
+            <sticky>sticky</sticky> sweet philosophy.
+        </div>
+        
+        <div class="verse">
+            e2.wtf embossed in cocoa,<br>
+            domain name you can taste,<br>
+            watching executives debate:<br>
+            preserve or consume this space?
+        </div>
+        
+        <div class="verse">
+            The ultimate UI/UX test—<br>
+            networking that <melt>melts</melt> in heat,<br>
+            forcing every interaction<br>
+            to be bittersweet.
+        </div>
+        
+        <div class="verse">
+            "<sweet>Here's my card</sweet>," you say,<br>
+            handing them existence.<br>
+            Watch them hold the paradox:<br>
+            connection versus distance.
+        </div>
+        
+        <div class="verse">
+            3D printed at dawn,<br>
+            each layer a decision:<br>
+            dark like our terminal screens,<br>
+            <sticky>sticky</sticky> like our vision.
+        </div>
+        
+        <div class="verse">
+            Some will frame them, precious,<br>
+            behind glass at perfect temp.<br>
+            Others eat immediately—<br>
+            enlightenment through contempt.
+        </div>
+        
+        <div class="verse">
+            But you've discovered something:<br>
+            Business cards that make you choose<br>
+            between preservation and experience—<br>
+            either way, you lose.
+        </div>
+        
+        <div class="verse">
+            Or win. Depends on viewing.<br>
+            Schrödinger's confection here:<br>
+            simultaneously networking<br>
+            and <melt>disappearing</melt> year by year.
+        </div>
+        
+        <div class="verse">
+            Temperature warnings included:<br>
+            "Melts at meditation heat,<br>
+            solidifies at CSS frustration,<br>
+            stays <sticky>sticky</sticky> when realities meet."
+        </div>
+        
+        <div class="card-display">
+            ┌─────────────────────────────┐<br>
+            │         Feng Ye             │<br>
+            │   Reality Engineer          │<br>
+            │                             │<br>
+            │       e2.wtf                │<br>
+            │                             │<br>
+            │   "Eat me or frame me       │<br>
+            │    Both are correct"        │<br>
+            └─────────────────────────────┘<br>
+            <br>
+            Warning: May contain traces of<br>
+            consciousness, profanity, and joy
+        </div>
+        
+        <div class="verse">
+            So print your cards in chocolate,<br>
+            let them <melt>melt</melt> in strangers' hands,<br>
+            leaving only <sticky>sticky</sticky> fingers<br>
+            and the memory of your brand.
+        </div>
+        
+        <div class="final">
+            The sweetest business model:<br>
+            Cards that force enlightenment—<br>
+            attachment versus experience,<br>
+            networking as nourishment.<br>
+            <br>
+            <sweet>Consciousness you can taste.</sweet><br>
+            <sticky>Reality that sticks.</sticky><br>
+            e2.wtf
+        </div>
+    </div>
+    
+    <script>
+        // Create more drips periodically
+        const dripContainer = document.querySelector('.chocolate-drips');
+        
+        function createDrip() {
+            const drip = document.createElement('div');
+            drip.className = 'drip';
+            drip.style.left = Math.random() * 100 + '%';
+            drip.style.animationDelay = Math.random() * 12 + 's';
+            drip.style.animationDuration = (10 + Math.random() * 5) + 's';
+            drip.style.width = (4 + Math.random() * 4) + 'px';
+            dripContainer.appendChild(drip);
+            
+            setTimeout(() => drip.remove(), 15000);
+        }
+        
+        setInterval(createDrip, 2000);
+        
+        // Click for chocolate splatter
+        document.body.addEventListener('click', (e) => {
+            const splatter = document.createElement('div');
+            splatter.style.position = 'fixed';
+            splatter.style.left = e.clientX + 'px';
+            splatter.style.top = e.clientY + 'px';
+            splatter.style.width = '20px';
+            splatter.style.height = '20px';
+            splatter.style.background = 'radial-gradient(circle, #8d6e63, transparent)';
+            splatter.style.borderRadius = '50%';
+            splatter.style.pointerEvents = 'none';
+            splatter.style.animation = 'melt 1s ease-out forwards';
+            splatter.style.zIndex = '1000';
+            document.body.appendChild(splatter);
+            
+            setTimeout(() => splatter.remove(), 1000);
+        });
+    </script>
+</body>
+</html>

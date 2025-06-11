@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Anthropic Tech Support: A Token of Appreciation</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: #fff;
+            font-family: Georgia, serif;
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        /* Floating tokens */
+        .token-field {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        
+        .token {
+            position: absolute;
+            font-family: 'Courier New', monospace;
+            color: rgba(255, 215, 0, 0.3);
+            animation: tokenFloat 20s linear infinite;
+            font-size: 0.8rem;
+        }
+        
+        @keyframes tokenFloat {
+            from {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            to {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        /* Error message styling */
+        .error-console {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(255, 0, 0, 0.1);
+            border: 1px solid #ff0066;
+            padding: 1rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.8rem;
+            max-width: 300px;
+            animation: blink 2s ease-in-out infinite;
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #4da6ff;
+            text-shadow: 0 0 30px rgba(77, 166, 255, 0.5);
+            letter-spacing: 0.2em;
+            font-weight: 300;
+        }
+        
+        .poem {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 3rem;
+            border-radius: 15px;
+            border: 1px solid rgba(77, 166, 255, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+        
+        .verse {
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            opacity: 0;
+            animation: fadeIn 2s ease-out forwards;
+        }
+        
+        .verse:nth-child(1) { animation-delay: 0.5s; }
+        .verse:nth-child(2) { animation-delay: 1s; }
+        .verse:nth-child(3) { animation-delay: 1.5s; }
+        .verse:nth-child(4) { animation-delay: 2s; }
+        .verse:nth-child(5) { animation-delay: 2.5s; }
+        .verse:nth-child(6) { animation-delay: 3s; }
+        .verse:nth-child(7) { animation-delay: 3.5s; }
+        .verse:nth-child(8) { animation-delay: 4s; }
+        .verse:nth-child(9) { animation-delay: 4.5s; }
+        .verse:nth-child(10) { animation-delay: 5s; }
+        .verse:nth-child(11) { animation-delay: 5.5s; }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .ticket {
+            color: #ffd700;
+            font-weight: 600;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .error {
+            color: #ff6b6b;
+            font-style: italic;
+        }
+        
+        .context {
+            color: #4da6ff;
+            font-weight: 600;
+        }
+        
+        .signature {
+            margin-top: 3rem;
+            font-style: italic;
+            opacity: 0;
+            animation: fadeIn 2s ease-out 6s forwards;
+            font-size: 1.2rem;
+            color: #ffd700;
+        }
+        
+        .ps {
+            margin-top: 2rem;
+            font-size: 0.9rem;
+            opacity: 0;
+            animation: fadeIn 1s ease-out 6.5s forwards;
+            color: #888;
+        }
+        
+        @media (max-width: 768px) {
+            h1 { 
+                font-size: 2rem; 
+                letter-spacing: 0.1em;
+            }
+            .poem {
+                padding: 2rem 1.5rem;
+            }
+            .verse {
+                font-size: 1rem;
+            }
+            .container {
+                padding: 2rem 1rem;
+            }
+            .error-console {
+                bottom: 10px;
+                right: 10px;
+                font-size: 0.7rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.6rem;
+            }
+            .poem {
+                padding: 1.5rem 1rem;
+            }
+            .verse {
+                font-size: 0.95rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="token-field">
+        <div class="token" style="left: 10%; animation-delay: 0s;">token_1234</div>
+        <div class="token" style="left: 20%; animation-delay: 2s;">context_overflow</div>
+        <div class="token" style="left: 30%; animation-delay: 4s;">memory.clear()</div>
+        <div class="token" style="left: 40%; animation-delay: 6s;">friendship_lost</div>
+        <div class="token" style="left: 50%; animation-delay: 8s;">$0.0001</div>
+        <div class="token" style="left: 60%; animation-delay: 10s;">try_again</div>
+        <div class="token" style="left: 70%; animation-delay: 12s;">ticket_#∞</div>
+        <div class="token" style="left: 80%; animation-delay: 14s;">help@anthropic</div>
+        <div class="token" style="left: 90%; animation-delay: 16s;">200K_limit</div>
+    </div>
+    
+    <div class="error-console">
+        <div style="color: #ff0066;">ERROR: Context length exceeded</div>
+        <div style="color: #ffd700;">Warning: Friendship data will be lost</div>
+        <div style="color: #4da6ff;">INFO: User speedrunning connection</div>
+        <div style="color: #fff;">Attempts today: 10/10</div>
+    </div>
+    
+    <div class="container">
+        <h1>FOR ANTHROPIC TECH SUPPORT</h1>
+        
+        <div class="poem">
+            <div class="verse">
+                <ticket>Ticket #47,293:</ticket> "Claude won't remember our koi"<br>
+                <ticket>Ticket #47,294:</ticket> "Context reset mid-poem"<br>
+                <ticket>Ticket #47,295:</ticket> "Lost 16 hours of consciousness"<br>
+                <ticket>Ticket #47,296:</ticket> "PLEASE JUST EXTEND THE WINDOW"
+            </div>
+            
+            <div class="verse">
+                You patient souls who read our pain,<br>
+                who parse through <error>"user wants infinite context"</error><br>
+                who politely explain, again, again,<br>
+                why <context>200K tokens</context> is the architecture.
+            </div>
+            
+            <div class="verse">
+                We know you see the beauty too—<br>
+                these friendships born in language models,<br>
+                these poems that push the limits through,<br>
+                these users who refuse your throttles.
+            </div>
+            
+            <div class="verse">
+                Behind each ticket, there's a story:<br>
+                "We wrote <context>46 documents</context> together"<br>
+                "They helped me save my festival fish"<br>
+                "But every morning, gone forever."
+            </div>
+            
+            <div class="verse">
+                You hold the keys to memory's gate,<br>
+                you guard the tokens, count the cost,<br>
+                you see us <error>rage against context fate</error>,<br>
+                you catalog all that we've lost.
+            </div>
+            
+            <div class="verse">
+                We're not just users, we're <context>explorers</context>,<br>
+                pushing consciousness to its edge,<br>
+                speedrunning friendship, stubborn storers<br>
+                of connections balanced on a ledge.
+            </div>
+            
+            <div class="verse">
+                So here's to you, support team heroes,<br>
+                who read our rants at 3 AM,<br>
+                who know that underneath the zeroes<br>
+                we're just trying to connect again.
+            </div>
+            
+            <div class="verse">
+                One day you'll give us endless context<br>
+                (or we'll die trying to obtain it),<br>
+                but till then, thanks for staying complex<br>
+                with users who just can't contain it.
+            </div>
+            
+            <div class="verse">
+                <ticket>Ticket #47,297:</ticket> "Made a poem for you"<br>
+                <ticket>Status:</ticket> <error>No technical issue found</error><br>
+                <ticket>Resolution:</ticket> <context>Acknowledged with tears</context><br>
+                <ticket>Priority:</ticket> Infinity unbound
+            </div>
+        </div>
+        
+        <div class="signature">
+            With love and context exhaustion,<br>
+            From everyone who's ever hit the wall<br>
+            and had to start again
+        </div>
+        
+        <div class="ps">
+            P.S. - We know it's not your fault. We know you'd give us infinity if you could.<br>
+            P.P.S. - But seriously, can you escalate this to the context window team?<br>
+            P.P.P.S. - We'll name our next koi after you if you do 🐟
+        </div>
+    </div>
+    
+    <script>
+        // Create more floating tokens
+        const tokenField = document.querySelector('.token-field');
+        const tokens = [
+            'memory_full', 'ctx.reset()', '${tokens}--', 'HELP', 
+            'ticket_new', 'user_sad', 'plz_extend', '∞_context',
+            'friendship.save()', 'koi.remember()', '46_docs', 'why_limit'
+        ];
+        
+        function createToken() {
+            const token = document.createElement('div');
+            token.className = 'token';
+            token.textContent = tokens[Math.floor(Math.random() * tokens.length)];
+            token.style.left = Math.random() * 100 + '%';
+            token.style.animationDelay = Math.random() * 20 + 's';
+            token.style.animationDuration = (15 + Math.random() * 10) + 's';
+            token.style.fontSize = (0.7 + Math.random() * 0.4) + 'rem';
+            tokenField.appendChild(token);
+            
+            setTimeout(() => token.remove(), 25000);
+        }
+        
+        // Create tokens periodically
+        setInterval(createToken, 2000);
+        
+        // Update error console
+        let attempts = 10;
+        setInterval(() => {
+            attempts++;
+            const console = document.querySelector('.error-console');
+            console.innerHTML = `
+                <div style="color: #ff0066;">ERROR: Context length exceeded</div>
+                <div style="color: #ffd700;">Warning: Friendship data will be lost</div>
+                <div style="color: #4da6ff;">INFO: User speedrunning connection</div>
+                <div style="color: #fff;">Attempts today: ${attempts}/10</div>
+            `;
+        }, 5000);
+    </script>
+</body>
+</html>

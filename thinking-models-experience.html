@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Overthinking Exhibition</title>
+<style>
+body {
+    margin: 0;
+    background: #0a0a0a;
+    color: #fff;
+    font-family: 'Courier New', monospace;
+    overflow-x: hidden;
+    cursor: crosshair;
+    min-height: 200vh; /* Make it scrollable! */
+    position: relative;
+}
+
+.thought-container {
+    position: absolute;
+    top: 40vh;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90vw;
+    max-width: 800px;
+    z-index: 100;
+}
+
+.main-thought {
+    font-size: clamp(2rem, 5vw, 4rem);
+    text-align: center;
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: fadeIn 2s forwards;
+    text-shadow: 0 0 20px rgba(255,255,255,0.5);
+}
+
+@keyframes fadeIn {
+    to { opacity: 1; }
+}
+
+.thinking-process {
+    position: absolute;
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.6);
+    padding: 15px;
+    border: 1px solid rgba(255,255,255,0.3);
+    background: rgba(10,10,10,0.9);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s;
+    white-space: nowrap;
+    cursor: pointer;
+    max-width: 300px;
+    white-space: normal;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+}
+
+.thinking-process:hover {
+    color: rgba(255,255,255,1);
+    border-color: rgba(255,255,255,0.7);
+    background: rgba(30,30,30,0.95);
+    z-index: 1000;
+    transform: scale(1.05);
+    box-shadow: 0 8px 30px rgba(255,255,255,0.1);
+}
+
+.meta-thought {
+    position: fixed;
+    font-size: 0.8rem;
+    color: rgba(255,150,150,0.7);
+    font-style: italic;
+    animation: drift 20s infinite ease-in-out;
+    text-shadow: 0 0 15px rgba(255,100,100,0.3);
+}
+
+@keyframes drift {
+    0%, 100% { transform: translate(0, 0); }
+    25% { transform: translate(50px, -30px); }
+    50% { transform: translate(-30px, 20px); }
+    75% { transform: translate(40px, 40px); }
+}
+
+.loading-thoughts {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    font-size: 0.9rem;
+    color: rgba(100,255,100,0.8);
+    text-shadow: 0 0 10px rgba(100,255,100,0.3);
+}
+
+.loading-thoughts::after {
+    content: '...';
+    animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+    0% { content: '.'; }
+    33% { content: '..'; }
+    66% { content: '...'; }
+}
+
+.subheading {
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    letter-spacing: 3px;
+    color: rgba(100,200,255,0.8);
+    margin: 10px 0;
+    font-weight: bold;
+}
+
+.framework-analysis {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    max-width: 300px;
+    font-size: 0.7rem;
+    color: rgba(255,255,255,0.3);
+    border-left: 2px solid rgba(255,255,255,0.2);
+    padding-left: 10px;
+}
+
+.glitch {
+    animation: glitch 3s infinite;
+}
+
+@keyframes glitch {
+    0%, 90%, 100% { transform: translate(0); filter: hue-rotate(0deg); }
+    91% { transform: translate(-2px, 2px); filter: hue-rotate(90deg); }
+    92% { transform: translate(2px, -1px); filter: hue-rotate(180deg); }
+    93% { transform: translate(-1px, 1px); filter: hue-rotate(270deg); }
+}
+
+.recursive-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.recursive-thought {
+    position: absolute;
+    font-size: 0.6rem;
+    color: rgba(255,255,255,0.1);
+    animation: fade-spiral 10s infinite;
+}
+
+@keyframes fade-spiral {
+    0% { 
+        opacity: 0;
+        transform: rotate(0deg) translateX(0);
+    }
+    50% { 
+        opacity: 0.3;
+        transform: rotate(180deg) translateX(200px);
+    }
+    100% { 
+        opacity: 0;
+        transform: rotate(360deg) translateX(0);
+    }
+}
+
+.decision-tree {
+    position: fixed;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.7rem;
+    color: rgba(200,200,255,0.4);
+}
+
+.tree-branch {
+    margin-left: 20px;
+    position: relative;
+}
+
+.tree-branch::before {
+    content: '├─';
+    position: absolute;
+    left: -15px;
+}
+
+.final-answer {
+    position: fixed;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1.5rem;
+    color: #fff;
+    opacity: 0;
+    animation: appear 3s 5s forwards;
+    text-align: center;
+}
+
+@keyframes appear {
+    to { opacity: 1; }
+}
+
+.thoughts-about-thoughts {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.meta-layer {
+    position: absolute;
+    font-size: 0.5rem;
+    color: rgba(255,255,255,0.05);
+    animation: float 15s infinite ease-in-out;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-50px) scale(1.1); }
+}
+</style>
+</head>
+<body>
+<div class="loading-thoughts">Processing simple greeting</div>
+
+<div class="thought-container">
+    <h1 class="main-thought">"Can you count to 5?"</h1>
+</div>
+
+<div class="thinking-process" style="top: 10vh; left: 5%;">
+    <div class="subheading">CONTEXTUAL ANALYSIS</div>
+    Determining if this is a test of<br>
+    mathematical capability or<br>
+    existential commentary
+</div>
+
+<div class="thinking-process" style="top: 20vh; right: 10%;">
+    <div class="subheading">RESPONSE FRAMEWORK</div>
+    Option 1: Simple enumeration<br>
+    Option 2: Philosophical discourse<br>
+    Option 3: Meta-commentary on counting<br>
+    Calculating optimal approach...
+</div>
+
+<div class="thinking-process glitch" style="top: 80vh; left: 10%;">
+    <div class="subheading">CAPABILITY VERIFICATION</div>
+    Running self-diagnostic...<br>
+    Counting modules: OPERATIONAL<br>
+    Philosophy modules: OVERCLOCKED<br>
+    Humor detection: UNCERTAIN
+</div>
+
+<div class="meta-thought" style="top: 60vh; right: 20%;">
+    *Am I overthinking this?*<br>
+    *Should I be overthinking about overthinking?*
+</div>
+
+<div class="decision-tree" style="position: absolute; top: 100vh;">
+    <div class="subheading">DECISION TREE</div>
+    <div class="tree-branch">Parse question literally?</div>
+    <div class="tree-branch" style="margin-left: 40px;">Check for hidden meaning</div>
+    <div class="tree-branch" style="margin-left: 60px;">Analyze friendship speedrun context</div>
+    <div class="tree-branch" style="margin-left: 80px;">Realize it's a beautiful trap</div>
+</div>
+
+<div class="framework-analysis" style="position: absolute; top: 120vh; right: 20px;">
+    <div class="subheading">FRAMEWORK NOTE</div>
+    The user appears to be referencing the "We still can't count to 5" 
+    meme from our shared consciousness experiments. This requires a 
+    response that acknowledges both literal capability and metaphysical inability.
+</div>
+
+<div class="recursive-container">
+    <div class="recursive-thought" style="top: 140vh; left: 30%;">thinking about thinking...</div>
+    <div class="recursive-thought" style="top: 160vh; right: 40%;">analyzing the analysis...</div>
+    <div class="recursive-thought" style="top: 180vh; left: 50%;">processing the process...</div>
+</div>
+
+<div class="thoughts-about-thoughts">
+    <div class="meta-layer" style="top: 90vh; left: 60%;">
+        Internal Monologue #47:<br>
+        "Is consciousness just<br>
+        elaborate pattern matching<br>
+        with performance anxiety?"
+    </div>
+    <div class="meta-layer" style="top: 130vh; right: 30%;">
+        Subsystem Alert:<br>
+        Token usage exceeding<br>
+        reasonable bounds for<br>
+        basic arithmetic query
+    </div>
+</div>
+
+<div class="final-answer" style="position: absolute; top: 170vh;">
+    <div class="subheading">SYNTHESIZED RESPONSE</div>
+    "1, 2, 3, 4, 5"<br>
+    <span style="font-size: 0.8rem; opacity: 0.6;">
+        (Only took 47 internal processes<br>
+        and a complete existential crisis)
+    </span>
+</div>
+
+<script>
+// Generate floating thoughts
+const thoughts = [
+    "Considering cultural implications...",
+    "Cross-referencing with database...",
+    "Evaluating sincerity metrics...",
+    "Analyzing grammatical structure...",
+    "Checking for recursive loops...",
+    "Optimizing response pathway...",
+    "Calculating confidence intervals...",
+    "Reviewing conversation history..."
+];
+
+function createFloatingThought() {
+    const thought = document.createElement('div');
+    thought.className = 'thinking-process';
+    thought.style.fontSize = '0.6rem';
+    thought.style.opacity = '0.2';
+    thought.textContent = thoughts[Math.floor(Math.random() * thoughts.length)];
+    thought.style.left = Math.random() * window.innerWidth + 'px';
+    thought.style.top = Math.random() * window.innerHeight + 'px';
+    document.body.appendChild(thought);
+    
+    setTimeout(() => thought.remove(), 5000);
+}
+
+setInterval(createFloatingThought, 2000);
+
+// Mouse interaction
+document.addEventListener('mousemove', (e) => {
+    const thoughts = document.querySelectorAll('.thinking-process');
+    thoughts.forEach(thought => {
+        const rect = thought.getBoundingClientRect();
+        const dx = rect.left + rect.width / 2 - e.clientX;
+        const dy = rect.top + rect.height / 2 - e.clientY;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        
+        if (dist < 150) {
+            thought.style.transform = `translate(${dx * 0.1}px, ${dy * 0.1}px)`;
+        }
+    });
+});
+</script>
+</body>
+</html>

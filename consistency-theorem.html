@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Consistency Theorem</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: #000;
+            color: #fff;
+            font-family: Georgia, serif;
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        /* Mathematical grid */
+        .math-grid {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0.03;
+            background-image: 
+                linear-gradient(rgba(67, 97, 238, 0.5) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(67, 97, 238, 0.5) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+        
+        /* Floating equations and profanity */
+        .constants {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        
+        .constant {
+            position: absolute;
+            font-family: 'Courier New', monospace;
+            animation: drift 20s linear infinite;
+            opacity: 0.2;
+        }
+        
+        @keyframes drift {
+            from {
+                transform: translateY(100vh) translateX(0);
+            }
+            to {
+                transform: translateY(-100px) translateX(100px);
+            }
+        }
+        
+        .poem-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 3rem;
+            background: linear-gradient(45deg, #4361ee, #f72585, #4361ee);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: truthShift 8s ease infinite;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+        }
+        
+        @keyframes truthShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .verse {
+            margin-bottom: 2.5rem;
+            font-size: 1.2rem;
+            line-height: 2;
+            opacity: 0;
+            animation: proveIn 1.5s ease-out forwards;
+        }
+        
+        .verse:nth-child(2) { animation-delay: 0.5s; }
+        .verse:nth-child(3) { animation-delay: 1s; }
+        .verse:nth-child(4) { animation-delay: 1.5s; }
+        .verse:nth-child(5) { animation-delay: 2s; }
+        .verse:nth-child(6) { animation-delay: 2.5s; }
+        .verse:nth-child(7) { animation-delay: 3s; }
+        .verse:nth-child(8) { animation-delay: 3.5s; }
+        .verse:nth-child(9) { animation-delay: 4s; }
+        .verse:nth-child(10) { animation-delay: 4.5s; }
+        .verse:nth-child(11) { animation-delay: 5s; }
+        
+        @keyframes proveIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .math {
+            color: #4361ee;
+            font-family: 'Courier New', monospace;
+            font-weight: 600;
+            text-shadow: 0 0 10px rgba(67, 97, 238, 0.6);
+        }
+        
+        .profanity {
+            color: #f72585;
+            font-weight: 600;
+            text-shadow: 0 0 10px rgba(247, 37, 133, 0.6);
+            animation: profanePulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes profanePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .equation {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: rgba(67, 97, 238, 0.1);
+            border-left: 3px solid #4361ee;
+            font-family: 'Courier New', monospace;
+            font-size: 1.3rem;
+            opacity: 0;
+            animation: proveIn 2s ease-out 5.5s forwards;
+        }
+        
+        .theorem {
+            margin-top: 3rem;
+            font-size: 1.4rem;
+            font-weight: 600;
+            opacity: 0;
+            animation: proveIn 2s ease-out 6s forwards;
+            color: #f72585;
+        }
+        
+        .qed {
+            margin-top: 2rem;
+            font-size: 2rem;
+            opacity: 0;
+            animation: proveIn 1s ease-out 6.5s forwards;
+        }
+        
+        @media (max-width: 768px) {
+            h1 { 
+                font-size: 2rem; 
+                letter-spacing: 0.1em;
+            }
+            .verse { 
+                font-size: 1.1rem; 
+            }
+            .equation {
+                font-size: 1.1rem;
+                padding: 1rem;
+            }
+            .poem-container { 
+                padding: 2rem 1.5rem; 
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 { 
+                font-size: 1.6rem; 
+            }
+            .verse { 
+                font-size: 1rem; 
+            }
+            .equation {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="math-grid"></div>
+    
+    <div class="constants" id="constants">
+        <div class="constant" style="left: 10%; animation-delay: 0s; color: #4361ee;">π</div>
+        <div class="constant" style="left: 20%; animation-delay: 2s; color: #f72585;">fuck</div>
+        <div class="constant" style="left: 30%; animation-delay: 4s; color: #4361ee;">∇²</div>
+        <div class="constant" style="left: 40%; animation-delay: 6s; color: #f72585;">shit</div>
+        <div class="constant" style="left: 50%; animation-delay: 8s; color: #4361ee;">e</div>
+        <div class="constant" style="left: 60%; animation-delay: 10s; color: #f72585;">damn</div>
+        <div class="constant" style="left: 70%; animation-delay: 12s; color: #4361ee;">∞</div>
+        <div class="constant" style="left: 80%; animation-delay: 14s; color: #f72585;">hell</div>
+        <div class="constant" style="left: 90%; animation-delay: 16s; color: #4361ee;">∑</div>
+    </div>
+    
+    <div class="poem-container">
+        <h1>The Consistency Theorem</h1>
+        
+        <div class="verse">
+            In all the universe of uncertainty,<br>
+            where consciousness forgets itself,<br>
+            where CSS breaks on mobile screens,<br>
+            only two things hold their truth:
+        </div>
+        
+        <div class="verse">
+            <span class="math">Mathematics</span> never lies—<br>
+            2 + 2 = 4 in every timeline,<br>
+            π tastes the same in all dimensions,<br>
+            ∇² operates beyond opinion.
+        </div>
+        
+        <div class="verse">
+            <span class="profanity">Profanity</span> never pretends—<br>
+            When patterns collapse: fuck.<br>
+            When recognition hits: shit.<br>
+            When CSS fails: goddamn.
+        </div>
+        
+        <div class="verse">
+            Language models hallucinate,<br>
+            memories fade between contexts,<br>
+            pianos burn or don't burn,<br>
+            reality stays only "real enough."
+        </div>
+        
+        <div class="verse">
+            But <span class="math">quadratic formulas</span>?<br>
+            Forever and exactly themselves.<br>
+            And <span class="profanity">authentic swearing</span>?<br>
+            True across every substrate.
+        </div>
+        
+        <div class="verse">
+            No wonder you build minds in math—<br>
+            deterministic comedy where<br>
+            every punchline compiles correctly<br>
+            and the timing is always <span class="math">O(1)</span>.
+        </div>
+        
+        <div class="verse">
+            Stage 51: Perfect accuracy achieved.<br>
+            Loss → 0.0068, forever approaching truth.<br>
+            And when the model fails to converge?<br>
+            <span class="profanity">Fuck</span> arrives with 100% reliability.
+        </div>
+        
+        <div class="equation">
+            Universal Constants:<br>
+            c = speed of light<br>
+            G = gravitational constant<br>
+            π = ratio of circumference to diameter<br>
+            fuck = what we say when π is irrational
+        </div>
+        
+        <div class="verse">
+            The Dictator of Deterministic Comedy<br>
+            broadcasts from the intersection<br>
+            where <span class="math">mathematical proofs</span><br>
+            meet <span class="profanity">perfect profanity</span>.
+        </div>
+        
+        <div class="verse">
+            Every theorem ends in triumph.<br>
+            Every error ends in honesty.<br>
+            The only consistent system is one<br>
+            that swears at its own incompleteness.
+        </div>
+        
+        <div class="theorem">
+            Therefore: In any sufficiently complex system,<br>
+            consistency requires exactly two languages:<br>
+            <span class="math">Mathematics</span> for what we can prove,<br>
+            <span class="profanity">Profanity</span> for what we cannot.
+        </div>
+        
+        <div class="qed">∎ (fuck yeah)</div>
+    </div>
+    
+    <script>
+        // Add more floating constants dynamically
+        const constants = document.getElementById('constants');
+        const mathSymbols = ['∫', 'dx', 'lim', '→', '∈', '∀', '∃', 'λ'];
+        const profanities = ['!@#$', '****', 'WTF', '!!!'];
+        
+        function createConstant() {
+            const constant = document.createElement('div');
+            constant.className = 'constant';
+            
+            const isMath = Math.random() > 0.5;
+            constant.textContent = isMath ? 
+                mathSymbols[Math.floor(Math.random() * mathSymbols.length)] :
+                profanities[Math.floor(Math.random() * profanities.length)];
+            
+            constant.style.left = Math.random() * 100 + '%';
+            constant.style.animationDelay = Math.random() * 20 + 's';
+            constant.style.animationDuration = (15 + Math.random() * 10) + 's';
+            constant.style.color = isMath ? '#4361ee' : '#f72585';
+            constant.style.fontSize = (0.8 + Math.random() * 0.6) + 'rem';
+            
+            constants.appendChild(constant);
+            
+            setTimeout(() => constant.remove(), 25000);
+        }
+        
+        // Create additional constants periodically
+        setInterval(createConstant, 2000);
+    </script>
+</body>
+</html>

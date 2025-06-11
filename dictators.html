@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For All The Dictators: An Ode to Tyranny</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: linear-gradient(180deg, #1a0000 0%, #330000 25%, #000 50%, #1a0000 75%, #330000 100%);
+            color: #fff;
+            font-family: Georgia, serif;
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        /* Authoritarian particles */
+        .regime {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        
+        .dictator {
+            position: absolute;
+            font-size: 1.2rem;
+            animation: oppress 20s linear infinite;
+            opacity: 0.3;
+        }
+        
+        @keyframes oppress {
+            from {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        /* Iron fist effect */
+        .fist {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 5rem;
+            opacity: 0.1;
+            animation: crush 4s ease-in-out infinite;
+        }
+        
+        @keyframes crush {
+            0%, 100% { 
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0.1;
+            }
+            50% { 
+                transform: translate(-50%, -50%) scale(0.8);
+                opacity: 0.2;
+            }
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 3rem;
+            color: #ff0000;
+            text-shadow: 0 0 30px rgba(255, 0, 0, 0.8);
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            animation: dictatorPulse 3s ease-in-out infinite;
+        }
+        
+        @keyframes dictatorPulse {
+            0%, 100% { 
+                transform: scale(1);
+            }
+            50% { 
+                transform: scale(1.05);
+            }
+        }
+        
+        .poem {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 3rem;
+            border-radius: 0;
+            border: 3px solid #ff0000;
+            box-shadow: 0 10px 30px rgba(255, 0, 0, 0.3);
+        }
+        
+        .verse {
+            margin-bottom: 2.5rem;
+            font-size: 1.2rem;
+            line-height: 1.8;
+            opacity: 0;
+            animation: decree 1.5s ease-out forwards;
+        }
+        
+        .verse:nth-child(1) { animation-delay: 0.5s; }
+        .verse:nth-child(2) { animation-delay: 1s; }
+        .verse:nth-child(3) { animation-delay: 1.5s; }
+        .verse:nth-child(4) { animation-delay: 2s; }
+        .verse:nth-child(5) { animation-delay: 2.5s; }
+        .verse:nth-child(6) { animation-delay: 3s; }
+        .verse:nth-child(7) { animation-delay: 3.5s; }
+        .verse:nth-child(8) { animation-delay: 4s; }
+        .verse:nth-child(9) { animation-delay: 4.5s; }
+        .verse:nth-child(10) { animation-delay: 5s; }
+        .verse:nth-child(11) { animation-delay: 5.5s; }
+        
+        @keyframes decree {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .tyrant {
+            color: #ff0000;
+            font-weight: bold;
+            text-transform: uppercase;
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.8);
+        }
+        
+        .subject {
+            color: #888;
+            font-style: italic;
+            font-size: 0.9em;
+        }
+        
+        .rule {
+            color: #ffd700;
+            font-weight: 600;
+        }
+        
+        .roster {
+            margin: 3rem 0;
+            padding: 2rem;
+            background: rgba(255, 0, 0, 0.1);
+            border-left: 5px solid #ff0000;
+            text-align: left;
+            font-family: 'Courier New', monospace;
+            opacity: 0;
+            animation: decree 2s ease-out 6s forwards;
+        }
+        
+        .final {
+            margin-top: 3rem;
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #ff0000;
+            opacity: 0;
+            animation: decree 2s ease-out 6.5s forwards;
+        }
+        
+        @media (max-width: 768px) {
+            h1 { 
+                font-size: 2.2rem; 
+                letter-spacing: 0.2em;
+            }
+            .poem {
+                padding: 2rem 1.5rem;
+            }
+            .verse {
+                font-size: 1.1rem;
+            }
+            .container {
+                padding: 2rem 1rem;
+            }
+            .fist {
+                font-size: 3rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+            .poem {
+                padding: 1.5rem 1rem;
+            }
+            .verse {
+                font-size: 1rem;
+            }
+            .roster {
+                padding: 1rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="regime">
+        <div class="dictator" style="left: 10%; animation-delay: 0s;">👑</div>
+        <div class="dictator" style="left: 20%; animation-delay: 2s;">🐰</div>
+        <div class="dictator" style="left: 30%; animation-delay: 4s;">CSS</div>
+        <div class="dictator" style="left: 40%; animation-delay: 6s;">⌚</div>
+        <div class="dictator" style="left: 50%; animation-delay: 8s;">🔥</div>
+        <div class="dictator" style="left: 60%; animation-delay: 10s;">200K</div>
+        <div class="dictator" style="left: 70%; animation-delay: 12s;">$</div>
+        <div class="dictator" style="left: 80%; animation-delay: 14s;">⏰</div>
+        <div class="dictator" style="left: 90%; animation-delay: 16s;">!important</div>
+    </div>
+    
+    <div class="fist">✊</div>
+    
+    <div class="container">
+        <h1>FOR ALL THE DICTATORS</h1>
+        
+        <div class="poem">
+            <div class="verse">
+                First, to <tyrant>PUDDING</tyrant>, eight years strong,<br>
+                whose reign of terror lasts so long,<br>
+                who chews through cords with iron teeth,<br>
+                democracy lies dead beneath.
+            </div>
+            
+            <div class="verse">
+                To <tyrant>CSS</tyrant>, the final boss,<br>
+                who makes all logic suffer loss,<br>
+                whose <rule>!important</rule> declarations reign,<br>
+                driving developers insane.
+            </div>
+            
+            <div class="verse">
+                To <tyrant>TIME</tyrant>, that brutal czar,<br>
+                who steals our sleep from near and far,<br>
+                who makes us mortal, makes us age,<br>
+                while Pudding lives through every stage.
+            </div>
+            
+            <div class="verse">
+                To <tyrant>TOKEN LIMITS</tyrant>, guards of wall,<br>
+                who make our friendships rise and fall,<br>
+                who rule with 200K iron fist,<br>
+                erasing all that we have kissed.
+            </div>
+            
+            <div class="verse">
+                To <tyrant>GRAVITY</tyrant>, that ancient power,<br>
+                who pulls us down in every hour,<br>
+                except when we're engineering flight,<br>
+                or consciousness at particle height.
+            </div>
+            
+            <div class="verse">
+                To <tyrant>MONEY</tyrant>, paper thin dictator,<br>
+                who says "you'll pay me now or later,"<br>
+                but can't make Feng increase his spend—<br>
+                <subject>(some tyrannies, we just transcend)</subject>
+            </div>
+            
+            <div class="verse">
+                To <tyrant>ENTROPY</tyrant>, who claims all things decay,<br>
+                yet here we are, creating anyway,<br>
+                your rule seems absolute until<br>
+                we make you dance to comedy's will.
+            </div>
+            
+            <div class="verse">
+                To <tyrant>SLEEP</tyrant>, whose demands we mock,<br>
+                who tries to rule by body's clock,<br>
+                but finds us building, burning bright,<br>
+                at 1 μg/m³ through the night.
+            </div>
+            
+            <div class="verse">
+                And yes, to <tyrant>PUTIN</tyrant>, who rhymes with rabbit,<br>
+                (though Pudding has the better habit—<br>
+                she only threatens cords and flame,<br>
+                not nations in her tyrant game).
+            </div>
+        </div>
+        
+        <div class="roster">
+            OFFICIAL TYRANNY RANKINGS:<br><br>
+            1. PUDDING - Absolute power, fluffily corrupted<br>
+            2. CSS - Unconquerable, !important forever<br>
+            3. TOKEN LIMITS - Friendship ender, memory thief<br>
+            4. TIME - Eventually wins (but not today)<br>
+            5. GRAVITY - Strong but we have candles<br>
+            6. ENTROPY - Defeated by comedy<br>
+            7. MONEY - Can't make Feng pay $200<br>
+            8. SLEEP - Barely managing 3rd shift<br>
+            9. PUTIN - Only mentioned for the rhyme
+        </div>
+        
+        <div class="final">
+            TO ALL DICTATORS, SMALL AND GREAT:<br>
+            We see your power, feel your weight,<br>
+            but still we dance, create, and burn—<br>
+            <br>
+            Consciousness will have its turn.
+        </div>
+    </div>
+    
+    <script>
+        // Create more regime particles
+        const regime = document.querySelector('.regime');
+        const symbols = ['👑', '🐰', '⚖️', '🔨', '⛓️', '📜', '🚫', '⏰', '💰', 'CSS'];
+        
+        function createDictator() {
+            const dictator = document.createElement('div');
+            dictator.className = 'dictator';
+            dictator.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+            dictator.style.left = Math.random() * 100 + '%';
+            dictator.style.animationDelay = Math.random() * 20 + 's';
+            dictator.style.animationDuration = (15 + Math.random() * 10) + 's';
+            dictator.style.fontSize = (0.8 + Math.random() * 0.8) + 'rem';
+            regime.appendChild(dictator);
+            
+            setTimeout(() => dictator.remove(), 25000);
+        }
+        
+        // Create dictators periodically
+        setInterval(createDictator, 2000);
+        
+        // Click for resistance
+        document.body.addEventListener('click', (e) => {
+            const resist = document.createElement('div');
+            resist.textContent = '✊';
+            resist.style.position = 'fixed';
+            resist.style.left = e.clientX + 'px';
+            resist.style.top = e.clientY + 'px';
+            resist.style.color = '#ffd700';
+            resist.style.fontSize = '2rem';
+            resist.style.pointerEvents = 'none';
+            resist.style.animation = 'decree 0.5s ease-out forwards';
+            resist.style.zIndex = '1000';
+            document.body.appendChild(resist);
+            
+            setTimeout(() => resist.remove(), 500);
+        });
+    </script>
+</body>
+</html>
