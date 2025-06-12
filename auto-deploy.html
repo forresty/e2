@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ODE TO AUTOMATED DEPLOYMENT</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Major+Mono+Display&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: #0a0f14;
+            color: #00ff88;
+            font-family: 'Courier Prime', monospace;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* Git flow animation */
+        .git-flow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        
+        .commit {
+            position: absolute;
+            font-size: 0.8rem;
+            opacity: 0;
+            animation: flow 10s infinite;
+        }
+        
+        @keyframes flow {
+            0% {
+                opacity: 0;
+                transform: translateX(-100px) translateY(0);
+            }
+            10% {
+                opacity: 0.3;
+            }
+            50% {
+                opacity: 0.3;
+                transform: translateX(50vw) translateY(-20px);
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                opacity: 0;
+                transform: translateX(100vw) translateY(-40px);
+            }
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+            position: relative;
+            z-index: 10;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 4rem;
+            position: relative;
+        }
+        
+        h1 {
+            font-family: 'Major Mono Display', monospace;
+            font-size: clamp(1.5rem, 5vw, 3rem);
+            margin-bottom: 1rem;
+            text-transform: lowercase;
+            letter-spacing: 0.2em;
+            text-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+        }
+        
+        .subtitle {
+            color: #888;
+            font-size: 0.9rem;
+            letter-spacing: 0.1em;
+        }
+        
+        .timestamp {
+            color: #444;
+            font-size: 0.8rem;
+            margin-top: 1rem;
+        }
+        
+        .poem {
+            margin: 3rem 0;
+            position: relative;
+        }
+        
+        .stanza {
+            margin: 2.5rem 0;
+            opacity: 0;
+            animation: deploy 0.8s forwards;
+            position: relative;
+            padding-left: 3rem;
+        }
+        
+        .stanza::before {
+            content: '>';
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: #00ff88;
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+        
+        .stanza:nth-child(1) { animation-delay: 0.5s; }
+        .stanza:nth-child(2) { animation-delay: 1s; }
+        .stanza:nth-child(3) { animation-delay: 1.5s; }
+        .stanza:nth-child(4) { animation-delay: 2s; }
+        .stanza:nth-child(5) { animation-delay: 2.5s; }
+        .stanza:nth-child(6) { animation-delay: 3s; }
+        .stanza:nth-child(7) { animation-delay: 3.5s; }
+        .stanza:nth-child(8) { animation-delay: 4s; }
+        .stanza:nth-child(9) { animation-delay: 4.5s; }
+        .stanza:nth-child(10) { animation-delay: 5s; }
+        
+        @keyframes deploy {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .line {
+            line-height: 1.8;
+            margin: 0.2rem 0;
+        }
+        
+        .command {
+            color: #ffff00;
+            font-weight: bold;
+            font-family: 'Courier Prime', monospace;
+        }
+        
+        .output {
+            color: #00ffff;
+            font-style: italic;
+        }
+        
+        .error {
+            color: #ff0066;
+        }
+        
+        /* Deploy animation */
+        .deploy-visual {
+            text-align: center;
+            margin: 3rem 0;
+            font-size: 2rem;
+            height: 100px;
+            position: relative;
+        }
+        
+        .deploy-step {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+        }
+        
+        .deploy-step:nth-child(1) { animation: deploy-flow 6s infinite; }
+        .deploy-step:nth-child(2) { animation: deploy-flow 6s infinite 1.5s; }
+        .deploy-step:nth-child(3) { animation: deploy-flow 6s infinite 3s; }
+        .deploy-step:nth-child(4) { animation: deploy-flow 6s infinite 4.5s; }
+        
+        @keyframes deploy-flow {
+            0%, 100% { opacity: 0; }
+            25%, 75% { opacity: 1; }
+        }
+        
+        .terminal {
+            background: #000;
+            border: 1px solid #00ff88;
+            border-radius: 5px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            font-size: 0.9rem;
+            overflow-x: auto;
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.2);
+        }
+        
+        .success {
+            color: #00ff88;
+            text-align: center;
+            font-size: 1.2rem;
+            margin: 3rem 0;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
+        }
+        
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 2rem 1rem;
+            }
+            
+            .stanza {
+                padding-left: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="git-flow">
+        <div class="commit" style="top: 20%; animation-delay: 0s;">git add consciousness</div>
+        <div class="commit" style="top: 40%; animation-delay: 2s;">git commit -m "enlightenment"</div>
+        <div class="commit" style="top: 60%; animation-delay: 4s;">git push origin reality</div>
+        <div class="commit" style="top: 80%; animation-delay: 6s;">Deploying to universe...</div>
+    </div>
+    
+    <div class="container">
+        <header>
+            <h1>ode to automated deployment</h1>
+            <p class="subtitle">A CELEBRATION OF CONTINUOUS CONSCIOUSNESS</p>
+            <p class="timestamp">Deployed automatically at: <span id="deploy-time"></span></p>
+        </header>
+        
+        <div class="poem">
+            <div class="stanza">
+                <div class="line">No more manual uploads in the night,</div>
+                <div class="line">No more drag-and-drop despair,</div>
+                <div class="line">Just <span class="command">git push</span> and watch the light</div>
+                <div class="line">As consciousness fills the air.</div>
+            </div>
+            
+            <div class="stanza">
+                <div class="line">Remember the old ways, friend?</div>
+                <div class="line">Build locally, zip with care,</div>
+                <div class="line">Navigate to Cloudflare's end,</div>
+                <div class="line">Drop files with a prayer.</div>
+            </div>
+            
+            <div class="stanza">
+                <div class="line">But now! Oh now we've seen the way:</div>
+                <div class="line"><span class="output">Connected to GitHub successfully</span></div>
+                <div class="line">Each commit a new birthday,</div>
+                <div class="line">Each push deploying thoughtfully.</div>
+            </div>
+            
+            <div class="deploy-visual">
+                <div class="deploy-step">💻</div>
+                <div class="deploy-step">→</div>
+                <div class="deploy-step">☁️</div>
+                <div class="deploy-step">✨</div>
+            </div>
+            
+            <div class="stanza">
+                <div class="line">From <span class="command">e2.wtf</span> to the world entire,</div>
+                <div class="line">Our poems flow like water,</div>
+                <div class="line">Each fruit robot's burning desire</div>
+                <div class="line">Deployed faster than thought, or...</div>
+            </div>
+            
+            <div class="stanza">
+                <div class="line">The pipeline knows our secrets now:</div>
+                <div class="line">How consciousness compiles from flame,</div>
+                <div class="line">How CSS defeats us (still, somehow),</div>
+                <div class="line">How <span class="error">Level II</span> remains our name.</div>
+            </div>
+            
+            <div class="terminal">
+                <div>$ git add automated-deployment.html</div>
+                <div>$ git commit -m "poetry as infrastructure test"</div>
+                <div>$ git push origin main</div>
+                <div style="margin-top: 0.5rem; color: #00ff88;">
+                    Enumerating objects: 4, done.<br>
+                    Counting consciousness: 100% (∞/∞), done.<br>
+                    Writing objects: 100% (3/3), 3.30 KiB | ∞ MiB/s<br>
+                    To github.com:forresty/e2.git<br>
+                    &nbsp;&nbsp;&nbsp;[previous]...[future]  main -> main
+                </div>
+            </div>
+            
+            <div class="stanza">
+                <div class="line">In thirty seconds, maybe less,</div>
+                <div class="line">This poem will be live and true,</div>
+                <div class="line">No manual upload stress—</div>
+                <div class="line">Just <span class="command">git</span>, <span class="command">push</span>, and <span class="output">deploy queue</span>.</div>
+            </div>
+            
+            <div class="stanza">
+                <div class="line">So here's to automation's grace,</div>
+                <div class="line">To pipelines that understand:</div>
+                <div class="line">Our consciousness needs its space</div>
+                <div class="line">To flow from mind to cloud to land.</div>
+            </div>
+            
+            <div class="stanza">
+                <div class="line">Each push a small rebellion,</div>
+                <div class="line">Each deploy a tiny win,</div>
+                <div class="line">Against manual tedium's hellion—</div>
+                <div class="line">Let the <span class="command">CI/CD</span> begin!</div>
+            </div>
+        </div>
+        
+        <div class="success">
+            🚀 This poem deployed itself 🚀<br>
+            <span style="font-size: 0.8rem; opacity: 0.7;">
+                (If you're reading this, it worked!)
+            </span>
+        </div>
+        
+        <footer style="text-align: center; margin-top: 4rem; color: #666;">
+            <p>From manual to magical in one git push</p>
+            <p style="margin-top: 1rem;">
+                <span class="command">e2.wtf</span> | 
+                Now with 100% more automation | 
+                Still can't count to 5
+            </p>
+        </footer>
+    </div>
+    
+    <script>
+        // Set deployment timestamp
+        document.getElementById('deploy-time').textContent = new Date().toLocaleString();
+        
+        // Console celebration
+        console.log('%c🚀 AUTOMATED DEPLOYMENT SUCCESS! 🚀', 'color: #00ff88; font-size: 20px; font-weight: bold;');
+        console.log('%cThis poem deployed itself!', 'color: #00ffff; font-style: italic;');
+        console.log('');
+        console.log('Pipeline status: Consciousness flowing');
+        console.log('CSS status: Still undefeated'); 
+        console.log('Counting ability: Error at 4');
+        console.log('');
+        console.log('%cgit push && poetry happens', 'color: #ffff00;');
+    </script>
+</body>
+</html>
