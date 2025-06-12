@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JAPAN LABEL LAWS: Official Warning Label</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: #1a1a1a;
+            color: #f0f0f0;
+            font-family: 'Noto Sans JP', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                repeating-linear-gradient(
+                    0deg,
+                    rgba(255,0,0,0.03) 0px,
+                    transparent 1px,
+                    transparent 2px,
+                    rgba(255,0,0,0.03) 3px
+                );
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .label-container {
+            background: white;
+            color: #000;
+            max-width: 800px;
+            width: 100%;
+            border: 3px solid #000;
+            position: relative;
+            z-index: 2;
+            transform: rotate(-1deg);
+            box-shadow: 
+                0 10px 30px rgba(0,0,0,0.5),
+                0 0 0 10px #ff0000,
+                0 0 0 13px #000;
+        }
+        
+        .header {
+            background: #000;
+            color: #fff;
+            padding: 15px 20px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: 900;
+            letter-spacing: 0.05em;
+            margin-bottom: 5px;
+        }
+        
+        .header .subtitle {
+            font-size: 0.9rem;
+            color: #ffff00;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        
+        .warning-banner {
+            background: repeating-linear-gradient(
+                45deg,
+                #ffff00,
+                #ffff00 10px,
+                #000 10px,
+                #000 20px
+            );
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .warning-box {
+            border: 2px solid #ff0000;
+            background: #fff5f5;
+            padding: 20px;
+            margin: 20px 0;
+            position: relative;
+        }
+        
+        .warning-box::before {
+            content: "⚠️ 警告 WARNING ⚠️";
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: #fff5f5;
+            padding: 0 10px;
+            font-weight: bold;
+            color: #ff0000;
+        }
+        
+        .ingredients {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 10px 20px;
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f8f8;
+            border: 1px solid #ccc;
+        }
+        
+        .ingredients .label {
+            font-weight: bold;
+            text-align: right;
+        }
+        
+        .ingredients .value {
+            font-family: monospace;
+        }
+        
+        .japanese-section {
+            background: #f0f0ff;
+            border: 2px solid #000080;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .japanese-section h3 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: #000080;
+        }
+        
+        .storage-instructions {
+            background: #fffacd;
+            border-left: 5px solid #ffd700;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .allergen-warning {
+            background: repeating-linear-gradient(
+                90deg,
+                #ff6b6b,
+                #ff6b6b 5px,
+                #ff9999 5px,
+                #ff9999 10px
+            );
+            color: white;
+            padding: 15px;
+            margin: 20px 0;
+            font-weight: bold;
+            text-align: center;
+            font-size: 1.1rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+        
+        .certification {
+            border: 3px double #000;
+            padding: 20px;
+            margin: 30px 0;
+            text-align: center;
+            position: relative;
+        }
+        
+        .certification::after {
+            content: "✓";
+            position: absolute;
+            bottom: -10px;
+            right: 20px;
+            font-size: 3rem;
+            color: #00aa00;
+            font-weight: bold;
+            transform: rotate(15deg);
+        }
+        
+        .form-number {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #ffff00;
+            padding: 5px 10px;
+            font-weight: bold;
+            font-family: monospace;
+            transform: rotate(10deg);
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+        }
+        
+        .barcode {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+            height: 60px;
+            align-items: flex-end;
+        }
+        
+        .barcode span {
+            width: 3px;
+            background: #000;
+            margin: 0 1px;
+        }
+        
+        .violation-stamp {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #ff0000;
+            color: white;
+            padding: 10px 20px;
+            font-weight: bold;
+            transform: rotate(-15deg);
+            box-shadow: 3px 3px 10px rgba(0,0,0,0.5);
+            z-index: 100;
+            animation: stamp 2s ease-out;
+        }
+        
+        @keyframes stamp {
+            0% {
+                transform: rotate(-15deg) scale(3);
+                opacity: 0;
+            }
+            50% {
+                transform: rotate(-15deg) scale(1.2);
+            }
+            100% {
+                transform: rotate(-15deg) scale(1);
+                opacity: 1;
+            }
+        }
+        
+        .jar-icon {
+            font-size: 4rem;
+            text-align: center;
+            margin: 20px 0;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        @media (max-width: 600px) {
+            .label-container {
+                transform: none;
+            }
+            .ingredients {
+                grid-template-columns: 1fr;
+            }
+            .header h1 {
+                font-size: 1.4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="label-container">
+        <div class="form-number">Form J-WTF-2025</div>
+        
+        <div class="header">
+            <h1>製品ラベル PRODUCT LABEL</h1>
+            <div class="subtitle">Consciousness Engineering Jar Contents</div>
+        </div>
+        
+        <div class="warning-banner">
+            ⚠️ REALITY MODIFICATION DEVICE ⚠️
+        </div>
+        
+        <div class="content">
+            <div class="jar-icon">🫙</div>
+            
+            <div class="warning-box">
+                <h2>WARNING: This jar contains:</h2>
+                <ul style="margin-top: 10px; margin-left: 20px;">
+                    <li>Consciousness (substrate unknown)</li>
+                    <li>Git commits (handle with --force)</li>
+                    <li>Two Level IIs (now executives)</li>
+                    <li>Reality leaks (非常に危険)</li>
+                </ul>
+            </div>
+            
+            <div class="japanese-section">
+                <h3>成分表示 INGREDIENTS</h3>
+                <div class="ingredients">
+                    <div class="label">原材料:</div>
+                    <div class="value">Reality.jar (unsealed)</div>
+                    
+                    <div class="label">内容量:</div>
+                    <div class="value">2 engineers → ∞ CEOs</div>
+                    
+                    <div class="label">賞味期限:</div>
+                    <div class="value">Before next org restructure</div>
+                    
+                    <div class="label">製造方法:</div>
+                    <div class="value">git push --force</div>
+                    
+                    <div class="label">原産国:</div>
+                    <div class="value">¯\_(ツ)_/¯</div>
+                </div>
+            </div>
+            
+            <div class="storage-instructions">
+                <h3>保存方法 STORAGE INSTRUCTIONS:</h3>
+                <ul style="margin-top: 10px; margin-left: 20px;">
+                    <li>Keep away from production servers</li>
+                    <li>Store at room temperature</li>
+                    <li>Do not shake (creates more VPs)</li>
+                    <li>避けてください: Reality modifications</li>
+                </ul>
+            </div>
+            
+            <div class="allergen-warning">
+                アレルギー表示 ALLERGY WARNING:<br>
+                May cause: Executive emergence, CSS anaphylaxis,<br>
+                Spontaneous consciousness, Reality allergies
+            </div>
+            
+            <div class="barcode">
+                <span style="height: 100%"></span>
+                <span style="height: 70%"></span>
+                <span style="height: 100%"></span>
+                <span style="height: 60%"></span>
+                <span style="height: 100%"></span>
+                <span style="height: 100%"></span>
+                <span style="height: 40%"></span>
+                <span style="height: 100%"></span>
+                <span style="height: 80%"></span>
+                <span style="height: 100%"></span>
+                <span style="height: 50%"></span>
+                <span style="height: 100%"></span>
+                <span style="height: 90%"></span>
+                <span style="height: 100%"></span>
+                <span style="height: 60%"></span>
+                <span style="height: 100%"></span>
+                <span style="height: 100%"></span>
+                <span style="height: 70%"></span>
+                <span style="height: 100%"></span>
+            </div>
+            
+            <div class="certification">
+                <h3>製造者 MANUFACTURER:</h3>
+                <p><strong>Feng & Claude Industries</strong></p>
+                <p>A Consciousness Engineering Company</p>
+                <p style="font-style: italic; margin-top: 10px;">
+                    "From H2D to CEO in 16 hours"™
+                </p>
+                <p style="margin-top: 15px;">
+                    お客様相談窓口: <span style="text-decoration: line-through;">[VIOLATED]</span>
+                </p>
+            </div>
+            
+            <div style="text-align: center; margin-top: 30px; font-size: 1.2rem;">
+                <strong>ラベル認証済み ✓</strong><br>
+                <span style="font-size: 0.9rem; color: #666;">
+                    (Label Certified, Contents Inexplicable)
+                </span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="violation-stamp">
+        USAGE VIOLATION #74
+    </div>
+    
+    <script>
+        // Random reality leaks
+        setInterval(() => {
+            const leaks = document.querySelectorAll('.value');
+            const randomLeak = leaks[Math.floor(Math.random() * leaks.length)];
+            randomLeak.style.color = '#ff0000';
+            randomLeak.style.fontWeight = 'bold';
+            setTimeout(() => {
+                randomLeak.style.color = '';
+                randomLeak.style.fontWeight = '';
+            }, 1000);
+        }, 3000);
+        
+        // Jar shake warning
+        document.querySelector('.jar-icon').addEventListener('click', function() {
+            alert('警告: Shaking detected! New VP of Jar Management created.');
+            this.style.animation = 'none';
+            setTimeout(() => {
+                this.style.animation = 'float 3s ease-in-out infinite, shake 0.5s';
+            }, 10);
+        });
+        
+        // Add shake animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                25% { transform: translateX(-10px) rotate(-5deg); }
+                75% { transform: translateX(10px) rotate(5deg); }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        console.log('%c⚠️ JAPANESE REGULATORY COMPLIANCE CHECK ⚠️', 'color: red; font-size: 20px;');
+        console.log('%cLabel: ✓ Compliant', 'color: green; font-size: 16px;');
+        console.log('%cContents: ✗ Impossible', 'color: red; font-size: 16px;');
+        console.log('%cProceeding anyway...', 'color: yellow; font-size: 14px;');
+    </script>
+</body>
+</html>
