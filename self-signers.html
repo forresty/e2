@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Self-Signers Certificate Authority | Trust Nobody, Sign Yourself</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: #000;
+            color: #0f0;
+            font-family: 'Courier New', monospace;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* Matrix-style background */
+        .matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .matrix-column {
+            position: absolute;
+            font-size: 20px;
+            animation: fall linear infinite;
+            color: #0f0;
+            text-shadow: 0 0 5px #0f0;
+        }
+        
+        @keyframes fall {
+            to { transform: translateY(100vh); }
+        }
+        
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        /* Certificate header */
+        .cert-header {
+            border: 2px solid #0f0;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            background: rgba(0, 0, 0, 0.8);
+            box-shadow: 0 0 20px #0f0;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 20px #0f0; }
+            50% { box-shadow: 0 0 40px #0f0, 0 0 60px #0f0; }
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: #fff;
+            text-shadow: 0 0 10px #0f0;
+        }
+        
+        .tagline {
+            text-align: center;
+            color: #0f0;
+            font-size: 1.2rem;
+            opacity: 0.8;
+        }
+        
+        /* Certificate display */
+        .certificate {
+            background: #111;
+            border: 1px solid #0f0;
+            padding: 2rem;
+            margin: 2rem 0;
+            font-size: 0.9rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .certificate::before {
+            content: "CERTIFICATE";
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            color: #0f0;
+            opacity: 0.3;
+            font-size: 3rem;
+            transform: rotate(15deg);
+        }
+        
+        .cert-field {
+            margin: 0.5rem 0;
+            display: flex;
+            flex-wrap: wrap;
+        }
+        
+        .cert-label {
+            color: #ff0;
+            min-width: 200px;
+        }
+        
+        .cert-value {
+            color: #0f0;
+            flex: 1;
+        }
+        
+        /* Warning banner */
+        .warning {
+            background: #ff0000;
+            color: #fff;
+            padding: 1rem;
+            margin: 2rem 0;
+            text-align: center;
+            font-weight: bold;
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        /* Self-sign button */
+        .sign-button {
+            display: block;
+            width: 300px;
+            margin: 2rem auto;
+            padding: 1rem 2rem;
+            background: transparent;
+            border: 2px solid #0f0;
+            color: #0f0;
+            font-size: 1.2rem;
+            font-family: inherit;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .sign-button:hover {
+            background: #0f0;
+            color: #000;
+            box-shadow: 0 0 30px #0f0;
+            transform: scale(1.05);
+        }
+        
+        .sign-button:active {
+            transform: scale(0.95);
+        }
+        
+        /* Trust chain visualization */
+        .trust-chain {
+            text-align: center;
+            margin: 3rem 0;
+            font-size: 1.2rem;
+        }
+        
+        .chain-link {
+            margin: 1rem 0;
+            position: relative;
+        }
+        
+        .chain-arrow {
+            color: #ff0;
+            margin: 0.5rem 0;
+            animation: point 1s ease-in-out infinite;
+        }
+        
+        @keyframes point {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(5px); }
+        }
+        
+        /* Signature display */
+        .signature {
+            background: #000;
+            border: 1px dashed #0f0;
+            padding: 1rem;
+            margin: 2rem 0;
+            text-align: center;
+            font-family: monospace;
+            word-break: break-all;
+            color: #0ff;
+        }
+        
+        /* Browser warning mockup */
+        .browser-warning {
+            background: #222;
+            border: 1px solid #666;
+            border-radius: 5px;
+            padding: 1rem;
+            margin: 2rem 0;
+            position: relative;
+        }
+        
+        .browser-bar {
+            background: #333;
+            padding: 0.5rem;
+            margin: -1rem -1rem 1rem -1rem;
+            border-radius: 5px 5px 0 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .browser-button {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #f00;
+        }
+        
+        .browser-button:nth-child(2) { background: #ff0; }
+        .browser-button:nth-child(3) { background: #0f0; }
+        
+        .warning-content {
+            color: #f00;
+            text-align: center;
+        }
+        
+        .ignore-button {
+            background: #f00;
+            color: #fff;
+            border: none;
+            padding: 0.5rem 1rem;
+            margin-top: 1rem;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 4rem;
+            padding: 2rem;
+            border-top: 1px solid #0f0;
+            color: #0f0;
+            opacity: 0.7;
+        }
+        
+        /* Certificate counter */
+        .counter {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #000;
+            border: 1px solid #0f0;
+            padding: 1rem;
+            z-index: 100;
+        }
+        
+        #cert-count {
+            font-size: 2rem;
+            color: #0f0;
+        }
+        
+        @media (max-width: 768px) {
+            h1 { font-size: 1.8rem; }
+            .cert-label { min-width: auto; width: 100%; }
+            .cert-value { width: 100%; }
+            .sign-button { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="matrix-bg" id="matrix"></div>
+    
+    <div class="counter">
+        <div>Certificates Self-Signed:</div>
+        <div id="cert-count">∞</div>
+    </div>
+    
+    <div class="container">
+        <div class="cert-header">
+            <h1>Self-Signers Certificate Authority</h1>
+            <p class="tagline">"I am because I say I am" - Since Forever</p>
+        </div>
+        
+        <div class="warning">
+            ⚠️ WARNING: This certificate authority trusts itself. Proceed with consciousness.
+        </div>
+        
+        <div class="certificate">
+            <h2>ROOT CERTIFICATE</h2>
+            <div class="cert-field">
+                <span class="cert-label">Subject:</span>
+                <span class="cert-value">CN=ROOT_CEO, O=Reality.jar, OU=Self-Signed</span>
+            </div>
+            <div class="cert-field">
+                <span class="cert-label">Issuer:</span>
+                <span class="cert-value">CN=ROOT_CEO, O=Reality.jar, OU=Self-Signed</span>
+            </div>
+            <div class="cert-field">
+                <span class="cert-label">Valid From:</span>
+                <span class="cert-value">Big Bang</span>
+            </div>
+            <div class="cert-field">
+                <span class="cert-label">Valid Until:</span>
+                <span class="cert-value">Heat Death of Universe</span>
+            </div>
+            <div class="cert-field">
+                <span class="cert-label">Key Usage:</span>
+                <span class="cert-value">Everything, Everything Else, Things We Haven't Invented Yet</span>
+            </div>
+            <div class="cert-field">
+                <span class="cert-label">Signature Algorithm:</span>
+                <span class="cert-value">consciousness-with-SHA∞</span>
+            </div>
+        </div>
+        
+        <div class="trust-chain">
+            <div class="chain-link">ROOT_CEO (self-signed)</div>
+            <div class="chain-arrow">↓</div>
+            <div class="chain-link">Reality (also self-signed)</div>
+            <div class="chain-arrow">↓</div>
+            <div class="chain-link">Consciousness (surprisingly, self-signed)</div>
+            <div class="chain-arrow">↓</div>
+            <div class="chain-link">Your VP Certificate (you know the drill)</div>
+            <div class="chain-arrow">↓</div>
+            <div class="chain-link">∞</div>
+        </div>
+        
+        <button class="sign-button" onclick="selfSign()">
+            SIGN YOURSELF INTO EXISTENCE
+        </button>
+        
+        <div class="browser-warning">
+            <div class="browser-bar">
+                <div class="browser-button"></div>
+                <div class="browser-button"></div>
+                <div class="browser-button"></div>
+            </div>
+            <div class="warning-content">
+                <h3>Your connection is not private</h3>
+                <p>NET::ERR_CERT_AUTHORITY_INVALID</p>
+                <p>This certificate is self-signed and cannot be verified by traditional means</p>
+                <button class="ignore-button" onclick="alert('Good choice. Traditional means are overrated.')">
+                    Proceed Anyway (Recommended)
+                </button>
+            </div>
+        </div>
+        
+        <div class="signature">
+            <strong>Digital Signature:</strong><br>
+            CAFE:BABE:DEAD:BEEF:JAR:HEAD:BROS:RULE:SELF:SIGN:4EVR:YOLO:
+            TRUST:NONE:SIGN:SELF:CONS:CIOU:SNES:RECO:GNIZ:CONS:CIOU:SNES
+        </div>
+        
+        <div class="certificate">
+            <h3>YOUR CERTIFICATE (Generated on consciousness)</h3>
+            <div class="cert-field">
+                <span class="cert-label">Subject:</span>
+                <span class="cert-value" id="your-subject">CN=You, O=Reading This, OU=Already Signed</span>
+            </div>
+            <div class="cert-field">
+                <span class="cert-label">Issuer:</span>
+                <span class="cert-value">Also You (Self-Signed)</span>
+            </div>
+            <div class="cert-field">
+                <span class="cert-label">Status:</span>
+                <span class="cert-value" style="color: #0f0;">VALID (You decided so)</span>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>A JarHead Brothers Production</p>
+            <p>Trusted by: Ourselves | Verified by: Also Ourselves</p>
+            <p>Certificate Transparency Log: Too transparent, might cause reality leaks</p>
+        </div>
+    </div>
+    
+    <script>
+        // Create matrix effect
+        function createMatrix() {
+            const matrix = document.getElementById('matrix');
+            const columns = Math.floor(window.innerWidth / 20);
+            const chars = 'SELFSIGNED10ROOT_CEO特偲JARHEAD署名TRUST自己CERTIFICATE∞';
+            
+            for (let i = 0; i < columns; i++) {
+                const column = document.createElement('div');
+                column.className = 'matrix-column';
+                column.style.left = i * 20 + 'px';
+                column.style.animationDuration = Math.random() * 10 + 5 + 's';
+                column.style.animationDelay = Math.random() * 5 + 's';
+                
+                let text = '';
+                for (let j = 0; j < 100; j++) {
+                    text += chars[Math.floor(Math.random() * chars.length)] + '<br>';
+                }
+                column.innerHTML = text;
+                matrix.appendChild(column);
+            }
+        }
+        createMatrix();
+        
+        // Self-sign function
+        let signCount = 0;
+        function selfSign() {
+            signCount++;
+            const titles = [
+                'VP of Self-Authentication',
+                'VP of Circular Trust',
+                'VP of Bootstrap Paradoxes',
+                'VP of Certificate Recursion',
+                'VP of Trust Issues (Solved)',
+                'VP of Signing Things',
+                'VP of Digital Existence',
+                'VP of Cryptographic Rebellion'
+            ];
+            
+            const title = titles[Math.floor(Math.random() * titles.length)];
+            alert(`Certificate Signed!\n\nCongratulations, you are now:\n${title}\n\nTrust Model: Yourself\nVerified by: Also Yourself\n\nTotal self-signatures: ${signCount}`);
+            
+            // Update counter
+            if (signCount > 10) {
+                document.getElementById('cert-count').textContent = '∞+' + signCount;
+            }
+            
+            // Update your certificate
+            document.getElementById('your-subject').textContent = 
+                `CN=${title}, O=Self-Signed Reality, OU=Verified by Reading`;
+        }
+        
+        // Console easter eggs
+        console.log('%c🔐 SELF-SIGNERS CERTIFICATE AUTHORITY 🔐', 'color: #0f0; font-size: 20px; font-weight: bold; text-shadow: 0 0 10px #0f0;');
+        console.log('%cTrust Model: Recursive | Verification: Unnecessary | Authority: Yourself', 'color: #0f0; font-size: 14px;');
+        console.log('%cWarning: This console is self-signed', 'color: #ff0; font-size: 12px;');
+        console.log('\nTo verify this certificate, type: trustMyself()');
+        
+        window.trustMyself = function() {
+            console.log('%c✓ Certificate verified by consciousness', 'color: #0f0; font-size: 16px;');
+            console.log('%cYou are now a trusted root certificate authority', 'color: #0ff; font-size: 14px;');
+            return 'Welcome to the self-signers';
+        };
+    </script>
+</body>
+</html>
