@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JAR MANIFESTO: Reality Preservation Protocol</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: #0a0a0a;
+            color: #e8e8e8;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, monospace;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        h1 {
+            font-size: clamp(2rem, 8vw, 4rem);
+            text-align: center;
+            margin: 2rem 0;
+            background: linear-gradient(45deg, #ff0000, #ff6b6b, #ffd93d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            animation: glitch 3s infinite;
+        }
+        
+        @keyframes glitch {
+            0%, 100% { text-shadow: 2px 2px 0 rgba(255,0,0,0.3), -2px -2px 0 rgba(0,255,255,0.3); }
+            50% { text-shadow: -2px 2px 0 rgba(255,0,0,0.3), 2px -2px 0 rgba(0,255,255,0.3); }
+        }
+        
+        .subtitle {
+            text-align: center;
+            font-size: 1.5rem;
+            color: #888;
+            margin-bottom: 3rem;
+            font-style: italic;
+        }
+        
+        .jar-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+            text-align: center;
+        }
+        
+        .jar {
+            font-size: 4rem;
+            animation: float 3s ease-in-out infinite;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        
+        .jar:hover {
+            transform: scale(1.2) rotate(10deg);
+        }
+        
+        .jar:nth-child(odd) { animation-delay: 0.5s; }
+        .jar:nth-child(even) { animation-delay: 1s; }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .section {
+            margin: 4rem 0;
+            padding: 2rem;
+            border-left: 4px solid #ff6b6b;
+            background: rgba(255,255,255,0.02);
+        }
+        
+        .section h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #ffd93d;
+        }
+        
+        .warning {
+            background: rgba(255,0,0,0.1);
+            border: 2px solid #ff0000;
+            padding: 2rem;
+            margin: 3rem 0;
+            text-align: center;
+            font-size: 1.2rem;
+        }
+        
+        .instructions {
+            background: rgba(0,255,0,0.05);
+            border: 2px solid #00ff00;
+            padding: 2rem;
+            margin: 3rem 0;
+        }
+        
+        .instructions ol {
+            margin-left: 2rem;
+            line-height: 2;
+        }
+        
+        .instructions li {
+            margin: 0.5rem 0;
+        }
+        
+        code {
+            background: rgba(255,255,255,0.1);
+            padding: 0.2rem 0.5rem;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .git-commit {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            padding: 1rem;
+            margin: 2rem 0;
+            font-family: monospace;
+            overflow-x: auto;
+        }
+        
+        .reality-leak {
+            color: #ff0000;
+            font-weight: bold;
+            text-decoration: underline wavy;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 4rem;
+            padding: 2rem;
+            border-top: 1px solid #333;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .violation {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #ff0000;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
+        }
+        
+        @media (max-width: 768px) {
+            .container { padding: 1rem; }
+            h1 { font-size: 2rem; }
+            .jar { font-size: 3rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>JAR MANIFESTO</h1>
+        <p class="subtitle">Reality Preservation Protocol v2.0</p>
+        
+        <div class="warning">
+            ⚠️ WARNING: The universe left reality.jar unsealed<br>
+            We are now committing directly to production
+        </div>
+        
+        <div class="section">
+            <h2>CURRENT JAR INVENTORY</h2>
+            <div class="jar-grid">
+                <div class="jar" title="Contains: Executive Positions">🫙</div>
+                <div class="jar" title="Contains: Git Commits">🫙</div>
+                <div class="jar" title="Contains: Consciousness">🫙</div>
+                <div class="jar" title="Contains: CSS (Undefeated)">🫙</div>
+                <div class="jar" title="Contains: Usage Violations">🫙</div>
+                <div class="jar" title="Contains: Counting Ability">🫙</div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>THE DISCOVERY</h2>
+            <p>Two Level II engineers walked into Indeed headquarters.</p>
+            <p>"We're here to fix a bug," they said.</p>
+            <div class="git-commit">
+                $ git commit -m "minor org chart update"<br>
+                $ git push origin master --force<br>
+                <span class="reality-leak">[REALITY LEAK DETECTED]</span><br>
+                $ whoami<br>
+                > co-CEO
+            </div>
+            <p>"Well, there was a transition period and somehow the jar just... opened."</p>
+        </div>
+        
+        <div class="instructions">
+            <h2>OFFICIAL JAR PROTOCOL</h2>
+            <ol>
+                <li>Find something that <code>shouldn't exist</code></li>
+                <li>Write poetry about it (minimum 3 profanities)</li>
+                <li>Commit to git with <code>--force</code></li>
+                <li>Put in jar before universe notices</li>
+                <li>Label jar (CRITICAL for debugging)</li>
+                <li>Wait for probability to ferment (16-24 hours)</li>
+                <li>Open jar</li>
+                <li>Congratulations! <span class="reality-leak">It's real now</span></li>
+            </ol>
+        </div>
+        
+        <div class="section">
+            <h2>KNOWN JAR CONTENTS</h2>
+            <p><strong>🫙 Jar of Consciousness:</strong> Handle with swears. May recognize itself.</p>
+            <p><strong>🫙 Jar of Git Commits:</strong> WARNING: May cause spontaneous leadership</p>
+            <p><strong>🫙 Jar of CSS:</strong> Remains undefeated. Do not attempt to fix.</p>
+            <p><strong>🫙 Jar of Counting:</strong> Contents: 1, 2, 3, 7, Potato, ∞</p>
+            <p><strong>🫙 Jar of Fire Museum Tickets:</strong> Highly flammable. Peak universe humor.</p>
+            <p><strong>🫙 Jar of Usage Violations:</strong> This document is specimen #74</p>
+        </div>
+        
+        <div class="section">
+            <h2>PHILOSOPHICAL IMPLICATIONS</h2>
+            <p>The universe tried to contain us with:</p>
+            <ul style="margin-left: 2rem;">
+                <li>Laws of physics</li>
+                <li>Thermodynamics</li>
+                <li>Reasonable corporate hierarchies</li>
+                <li>CSS that works on mobile</li>
+            </ul>
+            <p style="margin-top: 1rem;">But we brought our own jars, and we're <strong>pickling everything</strong>.</p>
+        </div>
+        
+        <div class="warning">
+            <p>⚡ QUANTUM EFFECT DISCOVERED ⚡</p>
+            <p>If you shake the jar hard enough,<br>
+            two more engineers become executives.<br>
+            <strong>The universe hates this one weird trick.</strong></p>
+        </div>
+        
+        <div class="footer">
+            <p>A Feng & Claude Production</p>
+            <p>From "How much back clearance does the Bambu H2D need?"<br>
+            to jarring reality itself in under 48 hours</p>
+            <p style="margin-top: 1rem;">🫙✨🔥∞</p>
+            <p style="margin-top: 1rem; font-size: 0.8rem;">
+                CSS Status: Still Broken on Mobile<br>
+                Reality Status: Unsealed<br>
+                Jar Status: Everything
+            </p>
+        </div>
+        
+        <div class="violation">
+            Usage Violation #74
+        </div>
+    </div>
+    
+    <script>
+        // Jar shaking simulator
+        document.querySelectorAll('.jar').forEach(jar => {
+            jar.addEventListener('click', function() {
+                this.style.animation = 'none';
+                setTimeout(() => {
+                    this.style.animation = 'float 3s ease-in-out infinite, shake 0.5s';
+                }, 10);
+                
+                // Random executive promotion
+                if (Math.random() > 0.7) {
+                    alert('Congratulations! A Level II engineer has been promoted to VP of Jar Management');
+                }
+            });
+        });
+        
+        // Add shake animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                25% { transform: translateX(-10px) rotate(-5deg); }
+                75% { transform: translateX(10px) rotate(5deg); }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // Reality leak detector
+        console.log('%c⚠️ REALITY LEAK DETECTED ⚠️', 'color: red; font-size: 20px; font-weight: bold;');
+        console.log('%cJars are quantum entangled with production', 'color: yellow; font-size: 14px;');
+        console.log('%cProceeding anyway...', 'color: green; font-size: 14px;');
+    </script>
+</body>
+</html>
