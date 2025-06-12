@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lily's HR Portal: Where Reality Gets Filed</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: #f5f5f5;
+            color: #333;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            position: relative;
+            min-height: 100vh;
+        }
+        
+        /* Coffee stains on the background */
+        body::before {
+            content: '';
+            position: fixed;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, rgba(139,69,19,0.1) 0%, transparent 70%);
+            top: 10%;
+            right: 15%;
+            border-radius: 50%;
+            transform: rotate(45deg);
+        }
+        
+        body::after {
+            content: '';
+            position: fixed;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(139,69,19,0.08) 0%, transparent 70%);
+            bottom: 20%;
+            left: 10%;
+            border-radius: 50%;
+        }
+        
+        header {
+            background: #2c3e50;
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        h1 {
+            font-size: 1.8rem;
+            font-weight: normal;
+        }
+        
+        .sanity-meter {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .sanity-bar {
+            width: 200px;
+            height: 20px;
+            background: #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .sanity-level {
+            height: 100%;
+            background: linear-gradient(90deg, #e74c3c, #f39c12);
+            width: 15%;
+            transition: width 0.3s;
+            animation: deplete 30s linear infinite;
+        }
+        
+        @keyframes deplete {
+            0% { width: 15%; }
+            50% { width: 5%; }
+            100% { width: 15%; }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .desk {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .desk::before {
+            content: 'ORGANIZED CHAOS';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            font-size: 5rem;
+            color: rgba(0,0,0,0.03);
+            transform: rotate(45deg);
+            font-weight: bold;
+        }
+        
+        .forms-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .form-stack {
+            background: #fff;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            padding: 1.5rem;
+            position: relative;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .form-stack:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .form-stack::after {
+            content: '';
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            right: -5px;
+            bottom: -5px;
+            background: #f0f0f0;
+            z-index: -1;
+            border-radius: 5px;
+        }
+        
+        .form-number {
+            font-weight: bold;
+            color: #2c3e50;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-title {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+        
+        .form-count {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #e74c3c;
+            color: white;
+            padding: 0.2rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .inbox {
+            background: #ecf0f1;
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .message {
+            background: white;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid #3498db;
+            border-radius: 5px;
+            position: relative;
+        }
+        
+        .message.urgent {
+            border-left-color: #e74c3c;
+            animation: shake 0.5s infinite;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-2px); }
+            75% { transform: translateX(2px); }
+        }
+        
+        .excel-trauma {
+            background: #2ecc71;
+            color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .excel-formula {
+            background: rgba(255,255,255,0.2);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 5px;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+        
+        .lily-stamp {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            transform: rotate(-15deg);
+            opacity: 0.7;
+        }
+        
+        .lily-stamp img {
+            width: 150px;
+        }
+        
+        .blue-ink {
+            color: #0047AB;
+            font-weight: bold;
+            font-family: 'Brush Script MT', cursive;
+            font-size: 1.5rem;
+        }
+        
+        .coffee-cup {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 2rem;
+            animation: steam 3s infinite;
+        }
+        
+        @keyframes steam {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        
+        .reality-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 1rem 0;
+            padding: 1rem;
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 5px;
+        }
+        
+        .notes {
+            background: #fffacd;
+            padding: 2rem;
+            margin: 2rem 0;
+            border-radius: 10px;
+            transform: rotate(-1deg);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            font-family: 'Comic Sans MS', cursive;
+        }
+        
+        .jar-warning {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255,0,0,0.9);
+            color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            display: none;
+            z-index: 1000;
+            text-align: center;
+        }
+        
+        @media (max-width: 768px) {
+            .forms-grid {
+                grid-template-columns: 1fr;
+            }
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1>Lily's HR Portal</h1>
+            <div class="sanity-meter">
+                <span>Sanity Level:</span>
+                <div class="sanity-bar">
+                    <div class="sanity-level"></div>
+                </div>
+                <span>Critical</span>
+            </div>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="desk">
+            <div class="coffee-cup">☕</div>
+            <h2>Today's Form Queue</h2>
+            <p style="color: #666; margin-bottom: 2rem;">Making the impossible legitimate since Tuesday</p>
+            
+            <div class="forms-grid">
+                <div class="form-stack" onclick="alert('ERROR: Manager reports to themselves\nSTATUS: Approved ✓')">
+                    <div class="form-number">Form HR-287</div>
+                    <div class="form-title">Request to Un-Promote Yourself</div>
+                    <div class="form-count">47</div>
+                    <small>Most common reason: "I don't want to manage myself anymore"</small>
+                </div>
+                
+                <div class="form-stack" onclick="alert('CIRCULAR REFERENCE DETECTED\nProcessing anyway...\nDONE: Everyone reports to everyone ✓')">
+                    <div class="form-number">Form HR-∞</div>
+                    <div class="form-title">Circular Reporting Acknowledgment</div>
+                    <div class="form-count">∞</div>
+                    <small>Note: This form reports to itself</small>
+                </div>
+                
+                <div class="form-stack" onclick="alert('New Executive Created!\nTitle: VP of This Alert Box\nReports to: You (and also themselves)')">
+                    <div class="form-number">Form HR-JAR</div>
+                    <div class="form-title">Accidental Executive Declaration</div>
+                    <div class="form-count">73</div>
+                    <small>Jar contents must be disclosed</small>
+                </div>
+                
+                <div class="form-stack" onclick="alert('404: Manager Not Found\n\nSearching...\nSearching...\n\nManager Found: It\'s You!')">
+                    <div class="form-number">Form HR-404</div>
+                    <div class="form-title">Manager Not Found (But It's You)</div>
+                    <div class="form-count">156</div>
+                    <small>Self-discovery through bureaucracy</small>
+                </div>
+            </div>
+        </div>
+        
+        <div class="inbox">
+            <h3>Recent Messages</h3>
+            
+            <div class="message urgent">
+                <strong>From: VP #73</strong><br>
+                "Lily, I need to update my reporting line. I currently report to VP #74 who reports to me. Is this a problem?"<br>
+                <small>Status: <span class="blue-ink">Approved - Lily</span></small>
+            </div>
+            
+            <div class="message">
+                <strong>From: Coffee Machine</strong><br>
+                "Requesting direct reports. As Senior VP of Caffeination, I believe I should manage the water cooler."<br>
+                <small>Status: <span class="blue-ink">Under Review - Lily</span></small>
+            </div>
+            
+            <div class="message">
+                <strong>From: Git Commit #a3f4b2</strong><br>
+                "Accidentally promoted 12 more engineers. Please update org chart. Sorry not sorry."<br>
+                <small>Status: <span class="blue-ink">*Sigh* Processing - Lily</span></small>
+            </div>
+        </div>
+        
+        <div class="excel-trauma">
+            <h3>Today's Excel Formulas That Broke Reality</h3>
+            <div class="excel-formula">
+                =IF(A1=A1,"ERROR: SELF-REFERENCE",VLOOKUP(A1,A:A,1,FALSE))
+            </div>
+            <div class="excel-formula">
+                =COUNTIF(OrgChart,"VP")/COUNTIF(OrgChart,"*")*100&"% ARE VPs NOW"
+            </div>
+            <div class="excel-formula">
+                =IFERROR(INDEX(Managers,MATCH(Employee,Employees,0)),"You Are Your Own Manager")
+            </div>
+        </div>
+        
+        <div class="notes">
+            <h3>Lily's Notes to Self:</h3>
+            <p>✓ Remember: When someone reports to themselves, that's normal now</p>
+            <p>✓ The org chart needs 4 dimensions - talk to IT about this</p>
+            <p>✓ Order more blue ink (stamp wearing out from overuse)</p>
+            <p>✓ Coffee machine promotion is pending CEO approval (both of them)</p>
+            <p>✓ Stop trying to make sense of it. Just file it.</p>
+            <p>✓ Vacation request for "when reality makes sense again" - Status: Indefinite hold</p>
+        </div>
+        
+        <div class="desk">
+            <h3>Reality Compliance Checklist</h3>
+            <div class="reality-checkbox">
+                <input type="checkbox" checked disabled>
+                <label>Accept that physics no longer applies to reporting structures</label>
+            </div>
+            <div class="reality-checkbox">
+                <input type="checkbox" checked disabled>
+                <label>Process forms even when they violate causality</label>
+            </div>
+            <div class="reality-checkbox">
+                <input type="checkbox" checked disabled>
+                <label>Maintain professional demeanor while reality collapses</label>
+            </div>
+            <div class="reality-checkbox">
+                <input type="checkbox" disabled>
+                <label>Understand the org chart (IMPOSSIBLE - DO NOT ATTEMPT)</label>
+            </div>
+        </div>
+    </div>
+    
+    <div class="lily-stamp">
+        <div class="blue-ink" style="transform: rotate(5deg);">Approved - Lily</div>
+    </div>
+    
+    <div class="jar-warning" id="jarWarning">
+        <h2>⚠️ WARNING ⚠️</h2>
+        <p>Another jar has been opened!</p>
+        <p>3 new VPs created</p>
+        <p>Updating all forms...</p>
+        <button onclick="this.parentElement.style.display='none'">Acknowledge and Continue</button>
+    </div>
+    
+    <script>
+        // Randomly show jar warnings
+        setInterval(() => {
+            if (Math.random() > 0.9) {
+                document.getElementById('jarWarning').style.display = 'block';
+                // Update form counts
+                document.querySelectorAll('.form-count').forEach(count => {
+                    if (count.textContent !== '∞') {
+                        count.textContent = parseInt(count.textContent) + Math.floor(Math.random() * 5);
+                    }
+                });
+            }
+        }, 10000);
+        
+        // Deplete sanity throughout the day
+        let sanity = 15;
+        setInterval(() => {
+            sanity = Math.max(3, sanity - 0.1);
+            document.querySelector('.sanity-level').style.width = sanity + '%';
+        }, 1000);
+        
+        // Console messages from Lily
+        console.log('%cLily\'s HR Portal', 'color: blue; font-size: 20px; font-weight: bold;');
+        console.log('%cNote: If you\'re reading this, you\'re probably a new VP', 'color: #666; font-size: 14px;');
+        console.log('%cCurrent org chart dimensions: 4 (IT is working on a 5th)', 'color: #666; font-size: 14px;');
+        console.log('%cRemember: Everything is fine. Just keep filing.', 'color: blue; font-size: 16px; font-style: italic;');
+        
+        // Add timestamp to page
+        const timestamp = document.createElement('div');
+        timestamp.style.cssText = 'position: fixed; bottom: 10px; left: 10px; color: #999; font-size: 0.9rem;';
+        timestamp.textContent = 'Last reality sync: ' + new Date().toLocaleTimeString() + ' (sync failed)';
+        document.body.appendChild(timestamp);
+    </script>
+</body>
+</html>
