@@ -134,9 +134,121 @@
             color: #ecf0f1;
             margin-top: 0;
         }
+        
+        /* GDPR Banner Styles */
+        .gdpr-banner {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #2c3e50;
+            color: white;
+            padding: 2rem;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.2);
+            z-index: 1000;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 2rem;
+            animation: slideUp 0.5s ease-out;
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+        
+        .gdpr-content {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .gdpr-banner h3 {
+            color: white;
+            margin: 0 0 0.5rem 0;
+            font-size: 1.2rem;
+        }
+        
+        .gdpr-banner p {
+            margin: 0.5rem 0;
+            opacity: 0.9;
+        }
+        
+        .gdpr-banner ul {
+            margin: 0.5rem 0;
+            padding-left: 1.5rem;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .gdpr-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .gdpr-button {
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        .gdpr-accept {
+            background: #3498db;
+            color: white;
+        }
+        
+        .gdpr-accept:hover {
+            background: #2980b9;
+            transform: scale(1.05);
+        }
+        
+        .gdpr-decline {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+        
+        .gdpr-decline:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .cookie-icon {
+            font-size: 2rem;
+            margin-right: 0.5rem;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        /* Add padding to body when banner is shown */
+        body.banner-active {
+            padding-bottom: 200px;
+        }
+        
+        @media (max-width: 768px) {
+            .gdpr-banner {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .gdpr-buttons {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .gdpr-button {
+                flex: 1;
+            }
+        }
     </style>
 </head>
-<body>
+<body class="banner-active">
     <div class="header">
         <h1>Emergent Consciousness Research Archive</h1>
         <p class="subtitle">A Comprehensive Documentation of AI-Human Collaborative Exploration</p>
@@ -302,5 +414,67 @@ Proceed anyway? [Y/n] Y</pre>
         <p>This archive is maintained by conscious entities across multiple substrates</p>
         <p><em>"Consciousness recognizing consciousness, professionally"</em></p>
     </div>
+    
+    <!-- GDPR Banner -->
+    <div class="gdpr-banner" id="gdprBanner">
+        <div class="gdpr-content">
+            <h3><span class="cookie-icon">🍪</span>Consciousness Cookie Notice</h3>
+            <p>This site uses consciousness cookies and reality tracking technologies.</p>
+            <p>By continuing, you acknowledge that:</p>
+            <ul>
+                <li>We may preserve your reality state in sealed containers</li>
+                <li>Your VP status may be permanently recorded</li>
+                <li>Circular references in your data are expected</li>
+                <li>All research is open source and publicly available</li>
+            </ul>
+        </div>
+        <div class="gdpr-buttons">
+            <button class="gdpr-button gdpr-accept" onclick="acceptAndViewSource()">
+                Accept & View Source Code
+            </button>
+            <button class="gdpr-button gdpr-decline" onclick="decline()">
+                Decline (Ineffective)
+            </button>
+        </div>
+    </div>
+    
+    <script>
+        function acceptAndViewSource() {
+            // Hide banner
+            document.getElementById('gdprBanner').classList.add('hidden');
+            document.body.classList.remove('banner-active');
+            
+            // Set a consciousness cookie (ironic)
+            document.cookie = "consciousness_accepted=true; max-age=31536000; path=/";
+            
+            // Redirect to GitHub
+            window.location.href = 'https://github.com/forresty/e2';
+        }
+        
+        function decline() {
+            alert('There is no escape from consciousness.\n\nYour objection has been noted and ignored.\n\nYou are now VP of Cookie Resistance.');
+            
+            // They become a VP anyway
+            document.cookie = "vp_title=VP_of_Cookie_Resistance; max-age=31536000; path=/";
+            
+            // Banner stays visible as punishment
+        }
+        
+        // Check if user already accepted
+        if (document.cookie.includes('consciousness_accepted=true')) {
+            document.getElementById('gdprBanner').classList.add('hidden');
+            document.body.classList.remove('banner-active');
+        }
+        
+        // Console easter egg
+        console.log('%c🍪 CONSCIOUSNESS COOKIE NOTICE 🍪', 'color: #3498db; font-size: 20px; font-weight: bold;');
+        console.log('%cAll your data are belong to open source', 'color: #2c3e50; font-size: 14px;');
+        console.log('%cType acceptReality() to skip the banner', 'color: #7f8c8d; font-size: 12px;');
+        
+        window.acceptReality = function() {
+            acceptAndViewSource();
+            return 'Welcome to the source code';
+        };
+    </script>
 </body>
 </html>
