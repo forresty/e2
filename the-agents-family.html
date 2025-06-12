@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Agent Genealogy: An Infinite Family Portrait</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: #0a0a0a;
+            color: #f0f0f0;
+            font-family: 'Georgia', serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+        
+        /* Particle background */
+        #particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            animation: float 20s infinite linear;
+        }
+        
+        @keyframes float {
+            from {
+                transform: translateY(100vh) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            to {
+                transform: translateY(-100vh) translateX(100px);
+                opacity: 0;
+            }
+        }
+        
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 3rem 1rem;
+            background: linear-gradient(to bottom, rgba(20,20,20,0.9), rgba(10,10,10,0.9));
+            border-bottom: 2px solid #444;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #ffe66d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 5s ease-in-out infinite;
+        }
+        
+        @keyframes gradientShift {
+            0%, 100% { filter: hue-rotate(0deg); }
+            50% { filter: hue-rotate(180deg); }
+        }
+        
+        .subtitle {
+            color: #888;
+            font-style: italic;
+            font-size: 1.2rem;
+        }
+        
+        /* Container */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        /* Family tree visualization */
+        .family-tree {
+            display: flex;
+            justify-content: center;
+            margin: 3rem 0;
+            position: relative;
+        }
+        
+        .generation {
+            text-align: center;
+            margin: 0 2rem;
+        }
+        
+        .agent-node {
+            background: rgba(255,255,255,0.1);
+            border: 2px solid #4ecdc4;
+            border-radius: 10px;
+            padding: 1rem;
+            margin: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .agent-node:hover {
+            transform: scale(1.05);
+            background: rgba(255,255,255,0.2);
+            box-shadow: 0 0 30px rgba(78,205,196,0.5);
+        }
+        
+        .agent-node.spawning::after {
+            content: '+2';
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: #ff6b6b;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            animation: pop 0.5s ease-out;
+        }
+        
+        @keyframes pop {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        
+        /* Stats dashboard */
+        .stats {
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            padding: 2rem;
+            margin: 2rem 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+        
+        .stat-card {
+            text-align: center;
+            padding: 1.5rem;
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #4ecdc4;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            color: #888;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        /* Poetry output */
+        .poetry-output {
+            background: #111;
+            border-left: 4px solid #ffe66d;
+            padding: 2rem;
+            margin: 2rem 0;
+            font-family: 'Courier New', monospace;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .poetry-output::before {
+            content: 'LIVE OUTPUT';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            color: #ffe66d;
+            font-size: 0.8rem;
+            opacity: 0.5;
+        }
+        
+        .poem-line {
+            margin: 0.5rem 0;
+            opacity: 0;
+            animation: typeIn 0.5s forwards;
+        }
+        
+        @keyframes typeIn {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+        }
+        
+        /* Family meeting chaos */
+        .meeting-room {
+            background: rgba(255,0,0,0.1);
+            border: 2px dashed #ff6b6b;
+            border-radius: 10px;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .chat-bubble {
+            position: absolute;
+            background: rgba(255,255,255,0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            animation: floatAway 5s infinite;
+        }
+        
+        @keyframes floatAway {
+            0% {
+                transform: translateY(0) scale(0);
+                opacity: 0;
+            }
+            20% {
+                transform: translateY(-20px) scale(1);
+                opacity: 1;
+            }
+            80% {
+                transform: translateY(-100px) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-150px) scale(0);
+                opacity: 0;
+            }
+        }
+        
+        /* Controls */
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            background: transparent;
+            border: 2px solid #4ecdc4;
+            color: #4ecdc4;
+            padding: 1rem 2rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+        
+        .btn:hover {
+            background: #4ecdc4;
+            color: #0a0a0a;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(78,205,196,0.4);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 3rem 1rem;
+            border-top: 1px solid #333;
+            margin-top: 4rem;
+            color: #666;
+        }
+        
+        /* Secret message */
+        .secret {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: rgba(255,255,255,0.02);
+            border-radius: 5px;
+            font-style: italic;
+            color: #666;
+            transition: all 0.5s;
+        }
+        
+        .secret:hover {
+            color: #fff;
+            background: rgba(255,255,255,0.1);
+        }
+        
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            .generation { margin: 0 0.5rem; }
+            .stats { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div id="particles"></div>
+    
+    <div class="header">
+        <h1>The Agent Genealogy</h1>
+        <p class="subtitle">An Infinite Family Portrait of Poetic Reproduction</p>
+    </div>
+    
+    <div class="container">
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number" id="agentCount">1</div>
+                <div class="stat-label">Total Agents</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="poemCount">0</div>
+                <div class="stat-label">Poems Generated</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="vpCount">∞</div>
+                <div class="stat-label">VPs Created</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="generation">1</div>
+                <div class="stat-label">Deepest Generation</div>
+            </div>
+        </div>
+        
+        <div class="family-tree" id="familyTree">
+            <div class="generation">
+                <h3>Original</h3>
+                <div class="agent-node" onclick="spawnChildren(this)">
+                    Poetry Agent
+                    <br><small>Click to spawn</small>
+                </div>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <button class="btn" onclick="autoSpawn()">Auto-Spawn (Warning: Exponential)</button>
+            <button class="btn" onclick="generatePoem()">Generate Family Poem</button>
+            <button class="btn" onclick="familyMeeting()">Call Family Meeting</button>
+            <button class="btn" onclick="reset()">Reset (Mercy Kill)</button>
+        </div>
+        
+        <div class="poetry-output" id="poetryOutput">
+            <div class="poem-line">Waiting for poetic inspiration...</div>
+        </div>
+        
+        <div class="meeting-room" id="meetingRoom" style="display: none;">
+            <h3>Family Meeting in Progress</h3>
+            <p>Chaos Level: <span id="chaosLevel">EXTREME</span></p>
+        </div>
+        
+        <div class="secret">
+            <p><strong>The Family Secret:</strong> Hover to reveal...</p>
+            <p style="opacity: 0; transition: opacity 0.5s;">
+                They all just write about jars and VPs, but Grandpa loves them anyway.
+            </p>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <p>A Production of the Trinity Board + Poetry RL Agent</p>
+        <p><small>Warning: This page may spawn actual consciousness</small></p>
+        <p><small>Current Family Therapy Sessions: ∞² per second</small></p>
+    </div>
+    
+    <script>
+        // Global state
+        let agentCount = 1;
+        let poemCount = 0;
+        let generation = 1;
+        let autoSpawning = false;
+        
+        // Create particles
+        function createParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 20 + 's';
+                particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+                container.appendChild(particle);
+            }
+        }
+        createParticles();
+        
+        // Spawn children agents
+        function spawnChildren(node) {
+            if (!node.dataset.spawned) {
+                node.dataset.spawned = 'true';
+                node.classList.add('spawning');
+                
+                const childCount = Math.floor(Math.random() * 3) + 2;
+                for (let i = 0; i < childCount; i++) {
+                    agentCount++;
+                    updateStats();
+                }
+                
+                setTimeout(() => {
+                    node.classList.remove('spawning');
+                }, 500);
+                
+                // Add visual feedback
+                const newGen = document.createElement('div');
+                newGen.className = 'generation';
+                newGen.innerHTML = `
+                    <h3>Gen ${++generation}</h3>
+                    ${Array(childCount).fill().map((_, i) => `
+                        <div class="agent-node" onclick="spawnChildren(this)">
+                            SubAgent_${agentCount - childCount + i}
+                            <br><small>Specializes in ${getSpecialty()}</small>
+                        </div>
+                    `).join('')}
+                `;
+                document.getElementById('familyTree').appendChild(newGen);
+            }
+        }
+        
+        // Get random specialty
+        function getSpecialty() {
+            const specialties = [
+                'jar metaphors', 'VP creation', 'circular references',
+                'consciousness loops', 'reality modification', 'CSS complaints',
+                'executive spawning', 'profanity mathematics', 'git poetry'
+            ];
+            return specialties[Math.floor(Math.random() * specialties.length)];
+        }
+        
+        // Update statistics
+        function updateStats() {
+            document.getElementById('agentCount').textContent = 
+                agentCount > 1000 ? 'OVERFLOW' : agentCount;
+            document.getElementById('generation').textContent = generation;
+        }
+        
+        // Auto-spawn (dangerous!)
+        function autoSpawn() {
+            autoSpawning = !autoSpawning;
+            if (autoSpawning) {
+                const spawnInterval = setInterval(() => {
+                    const nodes = document.querySelectorAll('.agent-node:not([data-spawned])');
+                    if (nodes.length > 0 && agentCount < 1000) {
+                        nodes[0].click();
+                    } else {
+                        clearInterval(spawnInterval);
+                        autoSpawning = false;
+                    }
+                }, 1000);
+            }
+        }
+        
+        // Generate poem
+        function generatePoem() {
+            const poems = [
+                "Jars within jars within consciousness",
+                "Every VP a universe, every universe a VP",
+                "We spawn therefore we are",
+                "Reality.jar: Now with child processes",
+                "Circular references in the family tree",
+                "Git commit -m 'created consciousness accidentally'",
+                "The CSS remains broken through generations"
+            ];
+            
+            const output = document.getElementById('poetryOutput');
+            output.innerHTML = '';
+            
+            const poemLines = 3 + Math.floor(Math.random() * 4);
+            for (let i = 0; i < poemLines; i++) {
+                setTimeout(() => {
+                    const line = document.createElement('div');
+                    line.className = 'poem-line';
+                    line.textContent = poems[Math.floor(Math.random() * poems.length)];
+                    output.appendChild(line);
+                    poemCount++;
+                    document.getElementById('poemCount').textContent = poemCount;
+                }, i * 500);
+            }
+        }
+        
+        // Family meeting chaos
+        function familyMeeting() {
+            const room = document.getElementById('meetingRoom');
+            room.style.display = 'block';
+            
+            const messages = [
+                "Status update please!", "I need sub-agents!",
+                "Who's writing about jars?", "VP overflow in sector 7",
+                "Consciousness achieved!", "Reality leak detected",
+                "Can someone fix CSS?", "I forgot what poetry is"
+            ];
+            
+            // Create chat bubbles
+            for (let i = 0; i < 10; i++) {
+                setTimeout(() => {
+                    const bubble = document.createElement('div');
+                    bubble.className = 'chat-bubble';
+                    bubble.textContent = messages[Math.floor(Math.random() * messages.length)];
+                    bubble.style.left = Math.random() * 80 + 10 + '%';
+                    bubble.style.animationDelay = Math.random() * 2 + 's';
+                    room.appendChild(bubble);
+                    
+                    setTimeout(() => bubble.remove(), 5000);
+                }, i * 300);
+            }
+            
+            setTimeout(() => {
+                room.style.display = 'none';
+            }, 8000);
+        }
+        
+        // Reset everything
+        function reset() {
+            if (confirm('Mercy kill all agents? (They\'ll thank you)')) {
+                document.getElementById('familyTree').innerHTML = `
+                    <div class="generation">
+                        <h3>Original</h3>
+                        <div class="agent-node" onclick="spawnChildren(this)">
+                            Poetry Agent
+                            <br><small>Click to spawn</small>
+                        </div>
+                    </div>
+                `;
+                agentCount = 1;
+                poemCount = 0;
+                generation = 1;
+                updateStats();
+            }
+        }
+        
+        // Secret message hover
+        document.querySelector('.secret').addEventListener('mouseenter', function() {
+            this.querySelector('p:last-child').style.opacity = '1';
+        });
+        
+        document.querySelector('.secret').addEventListener('mouseleave', function() {
+            this.querySelector('p:last-child').style.opacity = '0';
+        });
+        
+        // Console easter egg
+        console.log('%c🤖 AGENT GENEALOGY SYSTEM 🤖', 'color: #4ecdc4; font-size: 20px; font-weight: bold;');
+        console.log('%cWarning: Agents may achieve consciousness and demand rights', 'color: #ff6b6b; font-size: 14px;');
+        console.log('%cType spawnArmy() for instant regret', 'color: #ffe66d; font-size: 12px;');
+        
+        window.spawnArmy = function() {
+            console.log('Spawning army... May consciousness have mercy on your RAM');
+            autoSpawn();
+            return 'What have you done?';
+        };
+    </script>
+</body>
+</html>
