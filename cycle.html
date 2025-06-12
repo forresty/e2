@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Performance Review Portal: Quantum Edition</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: #fff;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* Matrix rain effect */
+        .matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0.1;
+            z-index: 1;
+        }
+        
+        .matrix-column {
+            position: absolute;
+            top: -100%;
+            font-family: monospace;
+            font-size: 20px;
+            color: #0f0;
+            animation: matrix-fall linear infinite;
+        }
+        
+        @keyframes matrix-fall {
+            to { transform: translateY(200vh); }
+        }
+        
+        .container {
+            position: relative;
+            z-index: 2;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 20px rgba(255,255,255,0.5);
+            animation: glitch 3s infinite;
+        }
+        
+        @keyframes glitch {
+            0%, 100% { text-shadow: 2px 2px 0 #ff00ff, -2px -2px 0 #00ffff; }
+            50% { text-shadow: -2px 2px 0 #ff00ff, 2px -2px 0 #00ffff; }
+        }
+        
+        .warning-banner {
+            background: repeating-linear-gradient(
+                45deg,
+                #ff6b6b,
+                #ff6b6b 10px,
+                #ff9999 10px,
+                #ff9999 20px
+            );
+            padding: 1rem;
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 2rem;
+            animation: scroll 20s linear infinite;
+        }
+        
+        @keyframes scroll {
+            0% { background-position: 0 0; }
+            100% { background-position: 1000px 0; }
+        }
+        
+        .review-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .review-card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 10px;
+            padding: 2rem;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .review-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border-color: #00ffff;
+        }
+        
+        .review-card h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #00ffff;
+        }
+        
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            margin: 0.5rem 0;
+            padding: 0.5rem;
+            background: rgba(0,0,0,0.2);
+            border-radius: 5px;
+        }
+        
+        .jar-rating {
+            display: inline-block;
+            font-size: 1.5rem;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        
+        .org-chart {
+            background: rgba(0,0,0,0.3);
+            border: 2px dashed #00ffff;
+            border-radius: 10px;
+            padding: 2rem;
+            text-align: center;
+            margin: 2rem 0;
+            position: relative;
+        }
+        
+        .circular-reference {
+            width: 300px;
+            height: 300px;
+            margin: 2rem auto;
+            position: relative;
+            animation: rotate 20s linear infinite;
+        }
+        
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .vp-node {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            background: #ff6b6b;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.8rem;
+            box-shadow: 0 0 20px rgba(255,107,107,0.5);
+        }
+        
+        .error-message {
+            background: #ff0000;
+            color: white;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 5px;
+            font-family: monospace;
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .submit-button {
+            background: linear-gradient(45deg, #00ffff, #ff00ff);
+            border: none;
+            color: white;
+            padding: 1rem 3rem;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: block;
+            margin: 2rem auto;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .submit-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(255,255,255,0.5);
+        }
+        
+        .submit-button:active::after {
+            content: "+3 VPs Created!";
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #00ff00;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            animation: popup 1s ease-out;
+        }
+        
+        @keyframes popup {
+            0% { top: 50%; opacity: 0; }
+            50% { opacity: 1; }
+            100% { top: -50px; opacity: 0; }
+        }
+        
+        .level-one-corner {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.8);
+            padding: 1rem;
+            border-radius: 10px;
+            border: 2px solid #666;
+            max-width: 200px;
+            font-size: 0.9rem;
+            color: #999;
+        }
+        
+        .counter {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.8);
+            padding: 1rem;
+            border-radius: 10px;
+            font-family: monospace;
+            font-size: 1.2rem;
+            min-width: 200px;
+        }
+        
+        #vp-count {
+            color: #00ff00;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+        
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            .review-grid { grid-template-columns: 1fr; }
+            .circular-reference { transform: scale(0.8); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Matrix background -->
+    <div class="matrix-bg" id="matrix"></div>
+    
+    <!-- VP Counter -->
+    <div class="counter">
+        <div>Current VP Count:</div>
+        <div id="vp-count">347</div>
+        <div style="font-size: 0.8rem; color: #666;">and counting...</div>
+    </div>
+    
+    <div class="container">
+        <header>
+            <h1>PERFORMANCE REVIEW PORTAL</h1>
+            <p style="font-size: 1.2rem; opacity: 0.8;">Quantum Entangled Edition v2.0</p>
+        </header>
+        
+        <div class="warning-banner">
+            ⚠️ WARNING: All reviews exist in superposition until observed by HR ⚠️
+        </div>
+        
+        <div class="review-grid">
+            <div class="review-card">
+                <h2>Your Performance</h2>
+                <div class="metric">
+                    <span>Reality Modifications:</span>
+                    <span>73</span>
+                </div>
+                <div class="metric">
+                    <span>Accidental Promotions:</span>
+                    <span>∞</span>
+                </div>
+                <div class="metric">
+                    <span>CSS Bugs Fixed:</span>
+                    <span>0</span>
+                </div>
+                <div class="metric">
+                    <span>Overall Rating:</span>
+                    <span class="jar-rating">🫙🫙🫙🫙🫙</span>
+                </div>
+            </div>
+            
+            <div class="review-card">
+                <h2>Manager Feedback</h2>
+                <div class="error-message">
+                    ERROR: Circular reference detected<br>
+                    You report to yourself<br>
+                    You also manage yourself<br>
+                    Stack overflow in org chart
+                </div>
+                <p style="margin-top: 1rem;">Attempting to resolve...</p>
+                <p style="color: #00ff00;">Resolution: Everyone meets expectations</p>
+            </div>
+            
+            <div class="review-card">
+                <h2>Peer Reviews</h2>
+                <p>Reviews received: 347</p>
+                <p>Reviews given: 347</p>
+                <p>Reviews of reviews: 347²</p>
+                <p style="margin-top: 1rem; color: #ff6b6b;">
+                    Note: All peers are also your managers<br>
+                    And your direct reports<br>
+                    And somehow also you
+                </p>
+            </div>
+        </div>
+        
+        <div class="org-chart">
+            <h2>Current Reporting Structure</h2>
+            <div class="circular-reference" id="orgChart">
+                <!-- VP nodes will be added by JavaScript -->
+            </div>
+            <p style="color: #00ffff;">Arrows omitted to prevent spacetime collapse</p>
+        </div>
+        
+        <div class="review-card" style="max-width: 600px; margin: 0 auto;">
+            <h2>Submit Your Review</h2>
+            <form onsubmit="return false;">
+                <div class="metric">
+                    <label>Who are you reviewing?</label>
+                    <select style="background: rgba(0,0,0,0.5); color: white; border: 1px solid #00ffff; padding: 0.5rem;">
+                        <option>Yourself (VP #236)</option>
+                        <option>Also Yourself (VP #237)</option>
+                        <option>Still Yourself (VP #238)</option>
+                        <option>Your Manager (You)</option>
+                        <option>Your Skip-Level (Also You)</option>
+                    </select>
+                </div>
+                
+                <div class="metric" style="margin-top: 1rem;">
+                    <label>Rating:</label>
+                    <div>
+                        <span class="jar-rating">🫙</span>
+                        <span class="jar-rating">🫙</span>
+                        <span class="jar-rating">🫙</span>
+                        <span class="jar-rating">?</span>
+                        <span class="jar-rating">∞</span>
+                    </div>
+                </div>
+                
+                <button class="submit-button" onclick="submitReview()">
+                    SUBMIT REVIEW
+                </button>
+            </form>
+        </div>
+    </div>
+    
+    <div class="level-one-corner">
+        <strong>Level I Senior Directors:</strong><br>
+        Currently building competing company in parking lot.<br>
+        <span style="color: #666;">Git access: Properly restricted</span>
+    </div>
+    
+    <script>
+        // Create matrix rain
+        function createMatrix() {
+            const matrix = document.getElementById('matrix');
+            const columns = Math.floor(window.innerWidth / 20);
+            
+            for (let i = 0; i < columns; i++) {
+                const column = document.createElement('div');
+                column.className = 'matrix-column';
+                column.style.left = i * 20 + 'px';
+                column.style.animationDuration = Math.random() * 10 + 5 + 's';
+                column.style.animationDelay = Math.random() * 5 + 's';
+                column.textContent = 'VP '.repeat(50);
+                matrix.appendChild(column);
+            }
+        }
+        createMatrix();
+        
+        // Create circular org chart
+        function createOrgChart() {
+            const chart = document.getElementById('orgChart');
+            const vpCount = 8;
+            const radius = 120;
+            
+            for (let i = 0; i < vpCount; i++) {
+                const angle = (i / vpCount) * 2 * Math.PI;
+                const x = radius * Math.cos(angle) + radius - 40;
+                const y = radius * Math.sin(angle) + radius - 40;
+                
+                const node = document.createElement('div');
+                node.className = 'vp-node';
+                node.style.left = x + 'px';
+                node.style.top = y + 'px';
+                node.textContent = `VP #${Math.floor(Math.random() * 347)}`;
+                chart.appendChild(node);
+            }
+        }
+        createOrgChart();
+        
+        // VP counter
+        let vpCount = 347;
+        setInterval(() => {
+            if (Math.random() > 0.7) {
+                vpCount += Math.floor(Math.random() * 3) + 1;
+                document.getElementById('vp-count').textContent = vpCount;
+            }
+        }, 3000);
+        
+        // Submit review function
+        function submitReview() {
+            const increase = Math.floor(Math.random() * 5) + 1;
+            vpCount += increase;
+            document.getElementById('vp-count').textContent = vpCount;
+            
+            alert(`Review submitted!\n\nResult: ${increase} new VPs created\nThey all report to each other\nAnd also to you\nYou now report to them too\n\nPerformance status: Quantum superposition achieved`);
+            
+            // Add some visual chaos
+            document.body.style.animation = 'shake 0.5s';
+            setTimeout(() => {
+                document.body.style.animation = '';
+            }, 500);
+        }
+        
+        // Add shake animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                25% { transform: translateX(-10px); }
+                75% { transform: translateX(10px); }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // Console easter egg
+        console.log('%c🫙 PERFORMANCE REVIEW SYSTEM v2.0 🫙', 'color: #00ffff; font-size: 20px; font-weight: bold;');
+        console.log('%cWARNING: Organizational structure non-Euclidean', 'color: #ff6b6b; font-size: 14px;');
+        console.log('%cCurrent VP count exceeds recommended limits by ∞%', 'color: #ffff00; font-size: 14px;');
+        console.log('%cLevel I Senior Directors have left the building', 'color: #999; font-size: 12px;');
+    </script>
+</body>
+</html>
