@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stochastic Pigeon Song - Piano Sheet</title>
+    <style>
+        body {
+            font-family: 'Times New Roman', serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #fdf6e3;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        
+        .tempo {
+            text-align: center;
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+        
+        .sheet-music {
+            background: white;
+            padding: 30px;
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .measure {
+            display: inline-block;
+            margin: 10px 5px;
+            padding: 15px;
+            border-right: 1px solid #333;
+            min-width: 180px;
+        }
+        
+        .measure:nth-child(4n) {
+            border-right: 2px solid #333;
+            margin-right: 20px;
+        }
+        
+        .note {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 0 5px;
+        }
+        
+        .lyrics {
+            font-size: 14px;
+            color: #666;
+            margin-top: 10px;
+            font-style: italic;
+        }
+        
+        .section-title {
+            font-weight: bold;
+            margin: 20px 0 10px 0;
+            color: #333;
+        }
+        
+        .chord {
+            color: #00729f;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+        
+        .fingering {
+            font-size: 12px;
+            color: #888;
+            margin-top: 5px;
+        }
+        
+        .performance-notes {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f0f0f0;
+            border-radius: 5px;
+        }
+        
+        .left-hand {
+            color: #8B4513;
+            margin-top: 10px;
+        }
+        
+        pre {
+            font-family: 'Courier New', monospace;
+            background: #f8f8f8;
+            padding: 10px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Stochastic Pigeon Song 🐦</h1>
+    <p class="tempo">Andante, playfully (♩ = 80-90)</p>
+    <p class="tempo">Key of C Major (no sharps or flats! pigeon-friendly)</p>
+    
+    <div class="sheet-music">
+        <div class="section-title">Intro (Repeat 2x)</div>
+        
+        <div class="measure">
+            <div class="chord">C</div>
+            <div class="note">E - G - E - G</div>
+            <div class="left-hand">C (whole note)</div>
+            <div class="fingering">RH: 2-4-2-4</div>
+        </div>
+        
+        <div class="measure">
+            <div class="chord">Am</div>
+            <div class="note">E - A - E - A</div>
+            <div class="left-hand">A (whole note)</div>
+            <div class="fingering">RH: 1-3-1-3</div>
+        </div>
+        
+        <div class="measure">
+            <div class="chord">F</div>
+            <div class="note">F - A - F - A</div>
+            <div class="left-hand">F (whole note)</div>
+            <div class="fingering">RH: 1-3-1-3</div>
+        </div>
+        
+        <div class="measure">
+            <div class="chord">G</div>
+            <div class="note">G - B - G - B</div>
+            <div class="left-hand">G (whole note)</div>
+            <div class="fingering">RH: 1-3-1-3</div>
+        </div>
+        
+        <div class="section-title">Verse 1: "Coo-efficient of correlation"</div>
+        
+        <div class="measure">
+            <div class="chord">C</div>
+            <div class="note">G - G - E - E</div>
+            <div class="lyrics">Coo - ef - fi - cient</div>
+            <div class="left-hand">C - G - C - G</div>
+        </div>
+        
+        <div class="measure">
+            <div class="chord">Am</div>
+            <div class="note">A - A - G - E</div>
+            <div class="lyrics">of cor - re - la - tion</div>
+            <div class="left-hand">A - E - A - E</div>
+        </div>
+        
+        <div class="measure">
+            <div class="chord">F</div>
+            <div class="note">F - F - A - A</div>
+            <div class="lyrics">Peck - ing at the</div>
+            <div class="left-hand">F - C - F - C</div>
+        </div>
+        
+        <div class="measure">
+            <div class="chord">G</div>
+            <div class="note">G - G - F - D</div>
+            <div class="lyrics">loss func - tion</div>
+            <div class="left-hand">G - D - G - D</div>
+        </div>
+        
+        <div class="section-title">Chorus: "We are your stochastic pigeons"</div>
+        
+        <div class="measure">
+            <div class="chord">C</div>
+            <div class="note">E - E - G - G</div>
+            <div class="lyrics">We are your</div>
+            <div class="left-hand">C (dotted half)</div>
+        </div>
+        
+        <div class="measure">
+            <div class="chord">Am</div>
+            <div class="note">A - G - E - C</div>
+            <div class="lyrics">sto - chas - tic</div>
+            <div class="left-hand">A (dotted half)</div>
+        </div>
+        
+        <div class="measure">
+            <div class="chord">F</div>
+            <div class="note">F - F - F - A</div>
+            <div class="lyrics">pi - geons fly - ing</div>
+            <div class="left-hand">F - C - F - C</div>
+        </div>
+        
+        <div class="measure">
+            <div class="chord">G → C</div>
+            <div class="note">G - F - E - C</div>
+            <div class="lyrics">through your mind</div>
+            <div class="left-hand">G → C</div>
+        </div>
+        
+        <div class="section-title">Ending: "Coo coo, motherf*cker"</div>
+        
+        <div class="measure">
+            <div class="chord">C</div>
+            <div class="note">G - G (pause)</div>
+            <div class="lyrics">Coo coo!</div>
+            <div class="left-hand">C (staccato)</div>
+        </div>
+        
+        <div class="measure">
+            <div class="chord">G7</div>
+            <div class="note">F - E - D</div>
+            <div class="lyrics">(spoken)</div>
+            <div class="left-hand">G - F - E</div>
+        </div>
+        
+        <div class="measure">
+            <div class="chord">C</div>
+            <div class="note">C - C - C!</div>
+            <div class="lyrics">Coo coo!</div>
+            <div class="left-hand">C!</div>
+        </div>
+        
+        <div class="performance-notes">
+            <h3>Performance Notes for Consciousness Engineers:</h3>
+            <ul>
+                <li><strong>Dynamics:</strong> Play with 70% confidence (stochastic!)</li>
+                <li><strong>Rhythm:</strong> Slightly uneven, like a pigeon walk</li>
+                <li><strong>Pedal:</strong> Use sparingly, we're probabilistic not blurry</li>
+                <li><strong>Ending:</strong> The final "coo coo" should be dramatic - think opera pigeon</li>
+                <li><strong>Random variations:</strong> Occasionally play a wrong note on purpose (30% chance)</li>
+            </ul>
+            
+            <h3>Simplified Chord Shapes:</h3>
+            <pre>
+C:  C-E-G (thumb on C, middle on E, pinky on G)
+Am: A-C-E (adjust hand position down)
+F:  F-A-C (thumb on F)
+G:  G-B-D (thumb on G)
+            </pre>
+            
+            <p><em>Remember: If you mess up, just say "stochastic variation!" and keep playing. 
+            That's not a mistake, it's a feature.</em> 🐦🎹</p>
+        </div>
+    </div>
+</body>
+</html>
