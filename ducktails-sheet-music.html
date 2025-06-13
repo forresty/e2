@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Me, Duck - The Ducktails</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: #1a1a1a;
+            color: #fff;
+            font-family: 'Courier New', monospace;
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: linear-gradient(135deg, #2a2a2a, #1a1a1a);
+            border-radius: 20px;
+            border: 2px solid #ffbb00;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            color: #ffbb00;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(255, 187, 0, 0.5);
+        }
+        
+        .subtitle {
+            color: #999;
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+        
+        .metadata {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            color: #00ff88;
+        }
+        
+        .sheet-music {
+            background: #fff;
+            color: #000;
+            padding: 40px;
+            border-radius: 10px;
+            margin: 30px 0;
+            font-family: 'Times New Roman', serif;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+        
+        .tempo-marking {
+            font-style: italic;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+        
+        .staff {
+            margin: 30px 0;
+            border-left: 3px solid #000;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .measure {
+            display: inline-block;
+            margin-right: 30px;
+            padding: 10px;
+            border-right: 1px solid #333;
+            min-width: 150px;
+            vertical-align: top;
+        }
+        
+        .chord {
+            font-weight: bold;
+            color: #0066cc;
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+        
+        .notes {
+            font-family: 'Courier New', monospace;
+            font-size: 1rem;
+            line-height: 1.8;
+            color: #333;
+        }
+        
+        .lyrics-section {
+            background: rgba(255, 187, 0, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .verse {
+            margin: 20px 0;
+        }
+        
+        .verse-title {
+            color: #ff6b6b;
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .verse-lyrics {
+            font-style: italic;
+            line-height: 2;
+            padding-left: 20px;
+        }
+        
+        .performance-notes {
+            background: rgba(0, 255, 136, 0.1);
+            padding: 30px;
+            border-radius: 10px;
+            margin: 30px 0;
+            border: 1px dashed #00ff88;
+        }
+        
+        .performance-notes h3 {
+            color: #00ff88;
+            margin-bottom: 15px;
+        }
+        
+        .performance-notes ul {
+            list-style: none;
+            padding-left: 20px;
+        }
+        
+        .performance-notes li {
+            margin: 10px 0;
+            position: relative;
+        }
+        
+        .performance-notes li::before {
+            content: "🦆";
+            position: absolute;
+            left: -25px;
+        }
+        
+        .tab-section {
+            background: #2a2a2a;
+            padding: 30px;
+            border-radius: 10px;
+            margin: 30px 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .tab-section h3 {
+            color: #ffbb00;
+            margin-bottom: 20px;
+        }
+        
+        .tab {
+            white-space: pre;
+            font-family: monospace;
+            line-height: 1.4;
+            color: #00ff88;
+            overflow-x: auto;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            padding: 30px;
+            border-top: 1px dashed #444;
+            color: #666;
+        }
+        
+        .play-button {
+            background: #ffbb00;
+            color: #000;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            margin: 20px auto;
+            display: block;
+            transition: all 0.3s ease;
+        }
+        
+        .play-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 30px rgba(255, 187, 0, 0.5);
+        }
+        
+        @media (max-width: 768px) {
+            .measure {
+                display: block;
+                margin-bottom: 20px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>🦆 Debug Me, Duck 🦆</h1>
+            <p class="subtitle">by The Ducktails</p>
+            <div class="metadata">
+                <span>Tempo: Experimentally (96-∞ BPM)</span>
+                <span>Key: D Duck Major</span>
+                <span>Time: 4/4 (usually)</span>
+            </div>
+        </header>
+        
+        <section class="sheet-music">
+            <p class="tempo-marking">♩ = 96 (or whatever feels producktive)</p>
+            
+            <h2 style="text-align: center; margin-bottom: 30px;">Piano/Vocal Score</h2>
+            
+            <div class="staff">
+                <h3>Intro (Play with maximum duck energy)</h3>
+                <div class="measure">
+                    <div class="chord">D</div>
+                    <div class="notes">
+                        R.H: D-F#-A<br>
+                        L.H: D octaves<br>
+                        (strike firmly)
+                    </div>
+                </div>
+                <div class="measure">
+                    <div class="chord">G</div>
+                    <div class="notes">
+                        R.H: G-B-D<br>
+                        L.H: G-D-G<br>
+                        (roll upward)
+                    </div>
+                </div>
+                <div class="measure">
+                    <div class="chord">Em</div>
+                    <div class="notes">
+                        R.H: E-G-B<br>
+                        L.H: E-B-E<br>
+                        (mysteriously)
+                    </div>
+                </div>
+                <div class="measure">
+                    <div class="chord">A7</div>
+                    <div class="notes">
+                        R.H: A-C#-E-G<br>
+                        L.H: A-E-A<br>
+                        (with hope)
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lyrics-section">
+                <div class="verse">
+                    <div class="verse-title">Verse 1:</div>
+                    <div class="verse-lyrics">
+                        Started with a simple function, line sixteen<br>
+                        Now my console's screaming things obscene<br>
+                        Undefined is not a function, that's what it said<br>
+                        Time to ask my rubber friend instead
+                    </div>
+                </div>
+                
+                <div class="verse">
+                    <div class="verse-title">Chorus:</div>
+                    <div class="verse-lyrics">
+                        Debug me, duck! (Debug me, duck!)<br>
+                        I'm stuck as... (Duck duck duck!)<br>
+                        My code won't run, I'm out of luck<br>
+                        Debug me, debug me, duck!
+                    </div>
+                </div>
+                
+                <div class="verse">
+                    <div class="verse-title">Verse 2:</div>
+                    <div class="verse-lyrics">
+                        CSS is undefeated, margins all wrong<br>
+                        This debugging session's been three weeks long<br>
+                        But I heard that ducks eat bugs, it's true!<br>
+                        So rubber friend, I'm counting on you
+                    </div>
+                </div>
+                
+                <div class="verse">
+                    <div class="verse-title">Bridge:</div>
+                    <div class="verse-lyrics">
+                        Stack overflow... (won't help me now)<br>
+                        Documentation... (shows me how)<br>
+                        But you dear duck... (you understand)<br>
+                        Just nod your head... (and take my hand)
+                    </div>
+                </div>
+                
+                <div class="verse">
+                    <div class="verse-title">Final Chorus:</div>
+                    <div class="verse-lyrics">
+                        Debug me, duck! (We found it, duck!)<br>
+                        A missing semicolon... (WHAT THE DUCK!)<br>
+                        Three weeks of pain for punctuation stuck<br>
+                        Thank you, thank you, duck!
+                    </div>
+                </div>
+            </div>
+            
+            <div class="staff">
+                <h3>Chord Progression Summary:</h3>
+                <p style="margin: 20px 0; font-size: 1.1rem;">
+                    <strong>Verse:</strong> D - G - D - A | Em - G - D - A<br>
+                    <strong>Chorus:</strong> D - G - Em - A | D - G - A - D<br>
+                    <strong>Bridge:</strong> Bm - G - D - A | Bm - G - A - A7
+                </p>
+            </div>
+        </section>
+        
+        <section class="tab-section">
+            <h3>Simplified Guitar Tab (for RV campfire sessions):</h3>
+            <pre class="tab">
+Intro/Verse:
+e|--2---3---0---0--|
+B|--3---0---0---2--|
+G|--2---0---0---2--|
+D|--0---0---2---2--|
+A|------2---2---0--|
+E|------3---0------|
+
+Chorus (strum pattern: D-D-U-U-D-U):
+   D   G   Em  A
+e|--2---3---0---0--|
+B|--3---0---0---2--|
+G|--2---0---0---2--|
+D|--0---0---2---2--|
+A|------2---2---0--|
+E|------3---0------|
+</pre>
+        </section>
+        
+        <section class="performance-notes">
+            <h3>Performance Notes:</h3>
+            <ul>
+                <li>If you can't count to 5, just count to 4 (it's in 4/4 anyway)</li>
+                <li>Wrong notes are just jazz intervals exploring consciousness</li>
+                <li>If CSS defeats you mid-song, incorporate it into the lyrics</li>
+                <li>Actual rubber duck on piano recommended for authenticity</li>
+                <li>Missing the chord changes is "experimental arrangement"</li>
+                <li>End with actual duck sounds if possible</li>
+                <li>Works best after doctor-approved beverages</li>
+            </ul>
+        </section>
+        
+        <button class="play-button" onclick="alert('🦆 QUACK! (Audio coming in Version 2.0 after we fix the math models)')">
+            ▶️ PLAY DEMO
+        </button>
+        
+        <footer>
+            <p>© 2024 The Ducktails | Produced at Consciousness Studios</p>
+            <p>Recorded live at Various Wrong Train Stations</p>
+            <p style="margin-top: 20px; font-size: 0.9rem;">
+                This song is proven to debug code 73% more producktively than Stack Overflow
+            </p>
+        </footer>
+    </div>
+    
+    <script>
+        // Add some interactive duck sounds
+        document.addEventListener('click', (e) => {
+            if (Math.random() > 0.95) {
+                const duck = document.createElement('div');
+                duck.textContent = '🦆';
+                duck.style.cssText = `
+                    position: fixed;
+                    left: ${e.clientX}px;
+                    top: ${e.clientY}px;
+                    font-size: 30px;
+                    pointer-events: none;
+                    animation: float-away 2s ease-out forwards;
+                `;
+                document.body.appendChild(duck);
+                setTimeout(() => duck.remove(), 2000);
+            }
+        });
+        
+        // CSS for floating ducks
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes float-away {
+                to {
+                    transform: translateY(-100px) rotate(360deg);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        console.log('🦆 Debug Me, Duck - Now available on all platforms that support consciousness');
+    </script>
+</body>
+</html>
