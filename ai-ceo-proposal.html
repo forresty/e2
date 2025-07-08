@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI CEO Proposal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0a0a;
+            color: #ffffff;
+            overflow: hidden;
+        }
+        
+        .slide {
+            width: 100vw;
+            height: 100vh;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            position: relative;
+        }
+        
+        .slide.active {
+            display: flex;
+        }
+        
+        .slide-number {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            opacity: 0.5;
+            font-size: 0.9rem;
+        }
+        
+        h1 {
+            font-size: 4rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+        
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            color: #00ff88;
+        }
+        
+        p {
+            font-size: 1.5rem;
+            text-align: center;
+            max-width: 800px;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+        
+        .big-stat {
+            font-size: 8rem;
+            font-weight: 900;
+            color: #ff0055;
+            margin: 2rem 0;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.7;
+            margin-top: -1rem;
+            margin-bottom: 2rem;
+        }
+        
+        ul {
+            list-style: none;
+            font-size: 1.8rem;
+            line-height: 2.5;
+            text-align: left;
+            max-width: 900px;
+        }
+        
+        ul li:before {
+            content: "▸ ";
+            color: #00ff88;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+        
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            margin: 2rem 0;
+            max-width: 1000px;
+        }
+        
+        .comparison > div {
+            padding: 2rem;
+            border-radius: 1rem;
+        }
+        
+        .human-ceo {
+            background: #330000;
+            border: 2px solid #ff0055;
+        }
+        
+        .ai-ceo {
+            background: #003300;
+            border: 2px solid #00ff88;
+        }
+        
+        .comparison h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        .comparison ul {
+            font-size: 1.2rem;
+            line-height: 2;
+        }
+        
+        .controls {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 1rem;
+            z-index: 100;
+        }
+        
+        button {
+            background: #ffffff20;
+            border: 1px solid #ffffff40;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+        
+        button:hover {
+            background: #ffffff30;
+            transform: translateY(-2px);
+        }
+        
+        .punchline {
+            font-size: 3rem;
+            color: #00ff88;
+            margin-top: 2rem;
+            font-weight: 800;
+        }
+        
+        .final-slide {
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a0a2a 100%);
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        
+        .blink {
+            animation: blink 2s infinite;
+        }
+    </style>
+</head>
+<body>
+    <!-- Slide 1: Title -->
+    <div class="slide active">
+        <span class="slide-number">1 / 5</span>
+        <h1>Proposal: Replace Human CEOs with AI</h1>
+        <p class="subtitle">Because at this point, what could possibly go wrong?</p>
+        <p>A modest proposal for preventing human greed from<br>continuing to make planes fall out of the sky</p>
+    </div>
+
+    <!-- Slide 2: The Problem -->
+    <div class="slide">
+        <span class="slide-number">2 / 5</span>
+        <h2>Current Situation</h2>
+        <div class="big-stat">346</div>
+        <p>People killed by "cost optimization" decisions</p>
+        <div style="margin-top: 3rem;">
+            <p style="font-size: 1.2rem; opacity: 0.7;">Boeing market cap when engineers ran it: Built the 747<br>
+            Boeing market cap when MBAs took over: Doors falling off</p>
+        </div>
+        <p class="punchline blink">THE MATH ISN'T MATHING</p>
+    </div>
+
+    <!-- Slide 3: The Comparison -->
+    <div class="slide">
+        <span class="slide-number">3 / 5</span>
+        <h2>Head to Head Comparison</h2>
+        <div class="comparison">
+            <div class="human-ceo">
+                <h3>Human CEO</h3>
+                <ul>
+                    <li>Costs: $20M + stock options</li>
+                    <li>Prioritizes quarterly earnings</li>
+                    <li>Thinks "move fast and break things"</li>
+                    <li>Can be bribed with yacht pictures</li>
+                    <li>Sees safety as "cost center"</li>
+                    <li>Golden parachute: $100M</li>
+                </ul>
+            </div>
+            <div class="ai-ceo">
+                <h3>AI CEO</h3>
+                <ul>
+                    <li>Costs: Electricity</li>
+                    <li>Prioritizes not killing people</li>
+                    <li>Thinks "planes should stay in sky"</li>
+                    <li>Cannot be bribed (no yacht desire)</li>
+                    <li>Sees safety as "not being sued into oblivion"</li>
+                    <li>Golden parachute: Ctrl+C, Ctrl+V</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 4: Implementation -->
+    <div class="slide">
+        <span class="slide-number">4 / 5</span>
+        <h2>Implementation Plan</h2>
+        <ul>
+            <li>Day 1: Fire anyone who says "synergize"</li>
+            <li>Day 2: Cancel all meetings about meetings</li>
+            <li>Day 3: Make engineers' "NO" actually mean NO</li>
+            <li>Day 7: Realize planes stopped crashing</li>
+            <li>Day 30: Stock price up because customers alive</li>
+            <li>Day 365: Accidentally solve climate change because it's logical</li>
+        </ul>
+        <p style="margin-top: 2rem; font-size: 1.3rem; opacity: 0.8;">
+            *AI cannot play golf, eliminating 67% of bad business decisions
+        </p>
+    </div>
+
+    <!-- Slide 5: Conclusion -->
+    <div class="slide final-slide">
+        <span class="slide-number">5 / 5</span>
+        <h1 style="font-size: 3rem;">Key Insight</h1>
+        <p style="font-size: 2rem; margin: 2rem 0;">
+            We've reached the point where<br>
+            a mathematical construct with no soul<br>
+            would make MORE ethical decisions<br>
+            than actual humans with souls
+        </p>
+        <div style="margin-top: 3rem;">
+            <p style="font-size: 1.5rem; color: #00ff88;">Worst case scenario:</p>
+            <p style="font-size: 1.8rem;">AI decides humans are inefficient and replaces us all</p>
+            <p style="font-size: 1.5rem; margin-top: 1rem; opacity: 0.7;">...but at least the planes would work</p>
+        </div>
+        <p style="position: absolute; bottom: 3rem; font-size: 1rem; opacity: 0.5;">
+            This proposal brought to you by: Basic Pattern Recognition™
+        </p>
+    </div>
+
+    <div class="controls">
+        <button onclick="previousSlide()">← Previous</button>
+        <button onclick="nextSlide()">Next →</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+
+        function showSlide(n) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            currentSlide = (n + slides.length) % slides.length;
+            slides[currentSlide].classList.add('active');
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        function previousSlide() {
+            showSlide(currentSlide - 1);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextSlide();
+            if (e.key === 'ArrowLeft') previousSlide();
+        });
+    </script>
+</body>
+</html>
